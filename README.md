@@ -1,2 +1,2 @@
-# sl_pockets
-Pocket Comparison
+# Git Repository Schueller Lab
+Target prediction for small molecules
