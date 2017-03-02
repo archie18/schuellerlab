@@ -1,2 +1,1 @@
-# sl_pockets
-Pocket Comparison
+#Git Repository Schueller Lab
