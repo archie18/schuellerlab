@@ -7,9 +7,10 @@
  * Remark: My first C++ program
  * 
  * @Author: Andreas Schueller <aschueller@bio.puc.cl>
- * @Version: 0.3 [2017-02-24]
+ * @Version: 0.3.1 [2017-03-02]
  * 
  * HISTORY
+ * 2017-03-02    0.3.1    Moved class SimilarityMatrix to separate files
  * 2017-02-24    0.3      Using mmap to read similarity matrix.
  *                        Added fold range option
  * 2017-02-22    0.2.2    Number of threads now user defined
@@ -47,7 +48,7 @@
 using namespace TCLAP;
 using namespace std;
 
-const string VERSION = "0.3";
+const string VERSION = "0.3.1";
 
 mutex myMutex;
 
