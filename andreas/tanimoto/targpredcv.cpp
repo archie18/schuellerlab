@@ -7,9 +7,10 @@
  * Remark: My first C++ program
  * 
  * @Author: Andreas Schueller <aschueller@bio.puc.cl>
- * @Version: 0.3.1 [2017-03-02]
+ * @Version: 0.3.2 [2017-03-02]
  * 
  * HISTORY
+ * 2017-03-03    0.3.2    Set flag MAP_NORESERVE for mmap
  * 2017-03-02    0.3.1    Moved class SimilarityMatrix to separate files
  * 2017-02-24    0.3      Using mmap to read similarity matrix.
  *                        Added fold range option
@@ -48,7 +49,7 @@
 using namespace TCLAP;
 using namespace std;
 
-const string VERSION = "0.3.1";
+const string VERSION = "0.3.2";
 
 mutex myMutex;
 

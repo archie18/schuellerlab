@@ -70,7 +70,7 @@ void SimilarityMatrix::mmapFile(string filename) {
     int fd = open(filename.c_str(), O_RDONLY, 0);
     assert(fd != -1);
     //Execute mmap
-    this->_mmapBuffer = (float*) mmap(NULL, filesize, PROT_READ, MAP_PRIVATE, fd, 0);
+    this->_mmapBuffer = (float*) mmap(NULL, filesize, PROT_READ, MAP_PRIVATE | MAP_NORESERVE, fd, 0);
     assert(this->_mmapBuffer != MAP_FAILED);
     close(fd);
     
