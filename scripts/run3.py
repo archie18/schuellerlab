@@ -4,85 +4,72 @@ Example:
 python run3.py > output.txt
 """
 
-
 import os
 import sys
-import ROC_by_Metric_parameters_paralell as roc
 import pandas as pd
 from sklearn.metrics import roc_curve, auc
 import datetime
 import string
+import numpy
 
-casosCO = ['1.5','2.0','2.5','3.0','3.5'] #Cuttoff
-casosCB = ['" CA "']
-#casosCB = ['" CA "', '" CA , CB "', '" CA ,_ACC,_DON"', '" CA , CB ,_ACC,_DON"']#Calpha o Cbeta
-casosCQ = ['5','7','10','15'] #Numero de cliques
-#ph4=[0,1]
+cutoffs = ['1.5','2.0','2.5','3.0','3.5'] #Cuttoff
+atomtypes = ['" CA "', '" CA , CB "'] #Calpha o Cbeta
+#atomtypes = ['" CA "', '" CA , CB "', '" CA ,ACC ,DON "', '" CA , CB ,ACC ,DON "'] #Calpha o Cbeta
+atomtype_labels = ['CA', 'CACB', 'CA_ACC_DON', 'CACB_ACC_DON'] #Calpha o Cbeta
+cliquesizes = ['5','7','10'] #Numero de cliques
+pocket_cutoff = '6.0'
+
 parameters='Parameters_'
 plot_folder='homogeneous/plots'
+output_folder='./homogeneous/Output'
 opt=[]
+atomtype_label = ''
+def create_filename(atomtype, cutoff, cliquesize, pocket_cutoff):
+	filename = parameters+atomtype_labels[atomtypes.index(atomtype)]+'_'+cutoff+'_'+cliquesize+'_'+pocket_cutoff+'_output1.out'
+	out_path = atomtype_labels[atomtypes.index(atomtype)]+'_'+cutoff+'_'+cliquesize+'_'+pocket_cutoff
 
-for a in casosCB:
+	return output_folder+'/'+out_path+'/'+filename
 
-	if len(a)==6:
-		cacb='CA'
-	if len(a)==11:
-		cacb='CACB'
-	if len(a)==16:
-		cacb='CA_ACC_DON'
-	if len(a)==21:
-		cacb='CACB_ACC_DON'
-	for b in casosCO:
-		for c in casosCQ:
-			name_file = parameters+a+'_'+b+'_'+c+'_6.0_output1.out'
-			out_path = a+'_'+b+'_'+c+'_6.0'
-			opt.append('./homogeneous/Output/'+out_path+'/'+name_file)
-for carb in casosCB:
-	for ph in ph4:
-		if ph==0:
-			ph4_val='woPh4'
-   		else:
-			ph4_val='wPh4'
-		for i in casosCO:
-			for l in casosCQ: 
-				name_file=parameters+i+'_'+carb+'_'+l+'_'+ph4_val+'_6.0_output1.out'
-				out_path=carb+'_'+ph4_val+'_'+i+'_'+l+'_'+'6.0'
-				opt.append('./homogeneous/Output/'+out_path+'/'+name_file)
-linea = opt				
-#for linea in opt:				
-#	print linea
-				#roc.r(opt,plot_folder)
-#Parallel(n_jobs=8)(delayed(roc.r)(inpt,plot_folder) for inpt in opt)
-#for inpt in opt:
-#	roc.r(inpt, plot_folder)
+
+combinations = []
+for cutoff in cutoffs:
+	for atomtype in atomtypes:
+		for cliquesize in cliquesizes:
+			combinations.append({'cutoff':cutoff, 'atomtype':atomtype, 'cliquesize':cliquesize})
+
+
+linea = opt
+#print opt
+#sys.exit()				
+
 flag=0
-for input_file in opt:
-	if not os.path.isfile(input_file):
-		class Error(Exception):
-			pass
-		raise Error("ERROR: file "+input_file+" not found")
+# check if input files exist
+#for combination in combinations:
+#	filename = create_filename(combination['atomtype'], combination['cutoff'], combination['cliquesize'], pocket_cutoff)
+#	if not os.path.isfile(filename):
+#		sys.stderr.write("Warning: File not found: "+filename+"\n")
+
+# create directory for plot data
 if not os.path.exists(plot_folder):
 	os.makedirs(plot_folder)
 
-for input_file in opt:
+for combination in combinations:
+	filename = create_filename(combination['atomtype'], combination['cutoff'], combination['cliquesize'], pocket_cutoff)
+	sys.stderr.write(filename + ' ...')
+	if not os.path.isfile(filename):
+		sys.stderr.write(" SKIP (File not found)\n")
+		continue
+
 	# read output of "2[ab]._[click|apoc]_all_vs_all.py"
-	table = pd.read_csv(input_file, delim_whitespace=True)
+	table = pd.read_csv(filename, delim_whitespace=True)
 	metrics = [col for col in table][4:]
 	classes = list(table["class1"])
 	classes.extend(list(table["class2"]))
 	classes = set(classes)
 	#classes.remove("None")
 	
-
-	#get the name of the combination
-	algo= input_file
-	lista = string.split(algo,'_')
-	del lista[0:5]
-	del lista[4:6]
-	cadena = ' '.join(lista)
-	#print cadena
 	# create folder for plotting data for file
-	folder = plot_folder+os.path.sep+input_file.replace(os.path.sep,"_")
+	folder = plot_folder + os.path.sep + filename.replace(os.path.sep,"_")
 	if not os.path.exists(folder):
 		os.makedirs(folder)
 	
@@ -135,20 +122,19 @@ for input_file in opt:
 	#print "=== File:", input_file, "===" 
 	#print "\t" + "\t".join(classes)
 	if (flag == 0):
-		print "Cuttoff CACB Ncliques ph4 Score " + "\t".join(classes)
+		print "Atomtypes Cuttoff Ncliques Distance Score " + "\t".join(classes) + "\t" + "Mean"
 		flag +=1
 	#number = 0
 	#var = 0
-	
+	line2 = []
 	for metric in roc_auc:
 		line = str(metric)
 		for clss in roc_auc[metric]:
 			line = line + "\t" + str(roc_auc[metric][clss])
-		print cadena + ' ' +line 
-#z=0		
-#i=0
-#while i<len(linea):
-#	for x in range(0,11):
-#		print linea[z]
-#	z+=1
-#	i+=1
+		print combination['atomtype'].replace('"', '').replace(' ', '').replace(',', '_') + '\t' + combination['cutoff'] + '\t' + combination['cliquesize'] + '\t' + pocket_cutoff + '\t' + line +"\t" + str(numpy.mean(roc_auc[metric].values()))
+	
+	sys.stderr.write(' OK\n')
+
+
+
+
