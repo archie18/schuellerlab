@@ -130,11 +130,6 @@ void interFileToFilteredAndClust(string filename, vector<vector<size_t> > cluste
 	outFiltered.close();
 }
 
-/* Random generator function */
-int myrandom (int i){
-	return rand()%i;
-}
-
 
 int main(int argc, char** argv) {
 	clock_t tStart = clock();
@@ -255,6 +250,9 @@ int main(int argc, char** argv) {
 	clustersToUniqfile(clusters,ligIds,uniqFile);
 	// Read interaction file and write filtered and interaction-clusterIDcol files
 	interFileToFilteredAndClust(interactionsFile, clusters);
-	printf("Time taken: %.2fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
+	FILE * pFile;
+	pFile = fopen ("time_" + cutoff + ".txt","w");
+	fprintf(pFile, "Time taken: %.2fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
+	fclose(pFile);
 	return 0;
 }
