@@ -12,6 +12,7 @@
 #include <time.h>
 #include <random>
 #include <chrono>
+#include <sstream>
 #include <tclap/CmdLine.h>
 #include "simmat.h"
 
@@ -251,7 +252,11 @@ int main(int argc, char** argv) {
 	// Read interaction file and write filtered and interaction-clusterIDcol files
 	interFileToFilteredAndClust(interactionsFile, clusters);
 	FILE * pFile;
-	pFile = fopen ("time_" + cutoff + ".txt","w");
+	ostringstream ss;
+	ss << cutoff;
+	string s(ss.str());
+	string outF = "time_"+s+".txt";
+	pFile = fopen (outF.c_str(),"w");
 	fprintf(pFile, "Time taken: %.2fs\n", (double)(clock() - tStart)/CLOCKS_PER_SEC);
 	fclose(pFile);
 	return 0;
