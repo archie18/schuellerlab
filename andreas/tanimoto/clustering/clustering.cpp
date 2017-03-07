@@ -66,10 +66,13 @@ void ReadLigs(string filename, map<size_t, vector<string> > &ligIds){
 }
 
 /*Use the clusters vector of vectors to write a clusters file*/
-void clustersTofile(vector<vector<size_t> > clusters, string name){
+void clustersTofile(vector<vector<size_t> > clusters, string name, float cutoff){
 	ofstream outClustGroups;
 	string clustTof;
-	clustTof = name + ".clusters";
+	ostringstream ss;
+        ss << cutoff;
+        string s(ss.str());
+	clustTof = name + ".clusters." + s;
         outClustGroups.open (clustTof);
         outClustGroups << "Clusters" << endl;
         for (int i = 0; i < clusters.size(); i++) {
@@ -83,10 +86,13 @@ void clustersTofile(vector<vector<size_t> > clusters, string name){
 }
 
 /*Use the clusters vector of vectors and the ligand map of vectors to write a new .ul.co file*/
-void clustersToUniqfile(vector<vector<size_t> > clusters, map<size_t, vector<string> > ligIds, string name){
+void clustersToUniqfile(vector<vector<size_t> > clusters, map<size_t, vector<string> > ligIds, string name, float cutoff){
 	ofstream outClust;
 	string ulFiltof;
-	ulFiltof = name + ".clust";
+	ostringstream ss;
+        ss << cutoff;
+        string s(ss.str());
+	ulFiltof = name + ".clust." + s;
         outClust.open (ulFiltof);
         for (int i = 0; i < clusters.size(); i++) {
                 outClust << ligIds[clusters[i][0]][0] << "\t"  << ligIds[clusters[i][0]][1] << "\t" << clusters[i][0] << endl;
@@ -95,17 +101,20 @@ void clustersToUniqfile(vector<vector<size_t> > clusters, map<size_t, vector<str
 }
 
 /*Read interactions file and write a new one with new column with the cluster number */
-void interFileToFilteredAndClust(string filename, vector<vector<size_t> > clusters){
+void interFileToFilteredAndClust(string filename, vector<vector<size_t> > clusters, float cutoff){
 	ifstream inToInt (filename);
 	ofstream outFiltered;
 	string interFiltof;
-	interFiltof = filename + ".fil";
+	ostringstream ss;
+        ss << cutoff;
+        string s(ss.str());
+	interFiltof = filename + ".fil." + s;
         outFiltered.open (interFiltof);
         string first_l;
         getline(inToInt,first_l);
         ofstream outIntclust;
 	string interClustIdtof;
-	interClustIdtof = filename + ".clust";
+	interClustIdtof = filename + ".clust." + s;
         outIntclust.open (interClustIdtof);
         outIntclust << first_l << "\tClusterID" << endl;
 	outFiltered << first_l << endl;
