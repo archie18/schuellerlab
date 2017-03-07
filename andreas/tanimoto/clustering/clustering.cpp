@@ -255,11 +255,11 @@ int main(int argc, char** argv) {
 	}	
 		
 	// Write clusters to file of clusters
-	clustersTofile(clusters,interactionsFile);
+	clustersTofile(clusters,interactionsFile,cutoff);
 	// Write filtered .ul.co file
-	clustersToUniqfile(clusters,ligIds,uniqFile);
+	clustersToUniqfile(clusters,ligIds,uniqFile,cutoff);
 	// Read interaction file and write filtered and interaction-clusterIDcol files
-	interFileToFilteredAndClust(interactionsFile, clusters);
+	interFileToFilteredAndClust(interactionsFile,clusters,cutoff);
 	FILE * pFile;
 	ostringstream ss;
 	ss << cutoff;
