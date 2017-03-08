@@ -13,8 +13,8 @@ import string
 import numpy
 
 cutoffs = ['1.5','2.0','2.5','3.0','3.5'] #Cuttoff
-atomtypes = ['" CA "', '" CA , CB "'] #Calpha o Cbeta
-#atomtypes = ['" CA "', '" CA , CB "', '" CA ,ACC ,DON "', '" CA , CB ,ACC ,DON "'] #Calpha o Cbeta
+#atomtypes = ['" CA "', '" CA , CB "'] #Calpha o Cbeta
+atomtypes = ['" CA "', '" CA , CB "', '" CA ,ACC ,DON "', '" CA , CB ,ACC ,DON "'] #Calpha o Cbeta
 atomtype_labels = ['CA', 'CACB', 'CA_ACC_DON', 'CACB_ACC_DON'] #Calpha o Cbeta
 cliquesizes = ['5','7','10'] #Numero de cliques
 pocket_cutoff = '6.0'
