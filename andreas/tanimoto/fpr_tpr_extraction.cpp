@@ -51,10 +51,18 @@ vector<string> split(const string &s, char delim) {
     split(s, delim, back_inserter(elems));
     return elems;
 }
-
+/*
+struct roc_point
+    {
+        double true_positive_rate;
+        double false_positive_rate;
+        double detection_threshold;
+    };
+*/
 int main(int argc, char** argv){
-	vector<size_t> truep;
-	vector<float> pred;
+	vector<double> truep;
+	vector<double> pred;
+	//vector <double> roc_curve;
 	if(argc<=5){
 		ifstream ch15Fp2 (argv[1]);
 		//ifstream ch15Mol (argv[2]);
@@ -67,7 +75,7 @@ int main(int argc, char** argv){
 			//float tanNum = ConvertStringToFloat<float>(s);
 			if(isFloat(s) or s=="-99"){
 				double tanNum = stof (s);
-                        	size_t tpoNum = (size_t) stoull(tokens[6]);
+                        	double tpoNum = (double) stoull(tokens[6]);
                                 pred.push_back (tanNum);
                                 truep.push_back (tpoNum);
 			}
@@ -80,6 +88,7 @@ int main(int argc, char** argv){
 		//float fpr;
 		//float tpr;
 		dlib::compute_roc_curve(truep,pred);   // DOESN'T HAVE ANY USAGE DOCUMENTATION ON INET
+		//cout << roc_curve.size() << endl;
 		//cout << setprecision(10);
 		//cout << "pred en posicion 0: " << pred[0] << endl << "tamaño vector truep: " << truep[0] << endl;
 	}
