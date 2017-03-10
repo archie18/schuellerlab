@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -10,27 +11,26 @@
 #include <random>
 #include <cstdlib>
 #include <time.h>
-#include <random>
 #include <chrono>
 #include <sstream>
-#include <tclap/CmdLine.h>
+#include <dlib/statistics.h>
+#include <stdexcept>
+//#include <tclap/CmdLine.h>
 
 /* FPR & TPR extraction from 4 .out from targpredcv */
 
-using namespace TCLAP;
+//using namespace TCLAP;
 using namespace std;
+//using namespace dlib;
 const string VERSION = "1.0";
 
-/*
-template <class T>
-class array {
-  public:
-   array (int size) {a = new T[size];}
-   T sub (int i) { a[i];}
-
-  private:
-    *T a;
-}*/
+bool isFloat( string myString ) {
+    std::istringstream iss(myString);
+    float f;
+    iss >> noskipws >> f; // noskipws considers leading whitespace invalid
+    // Check the entire string was consumed and if either failbit or badbit is set
+    return iss.eof() && !iss.fail(); 
+}
 
 /**
  *  *  * STL split string
@@ -53,25 +53,40 @@ vector<string> split(const string &s, char delim) {
 }
 
 int main(int argc, char** argv){
+	vector<size_t> truep;
+	vector<float> pred;
 	if(argc<=5){
 		ifstream ch15Fp2 (argv[1]);
-		ifstream ch15Mol (argv[2]);
-		ifstream ch22Fp2 (argv[3]);
-		ifstream ch22Mol (argv[4]);
+		//ifstream ch15Mol (argv[2]);
+		//ifstream ch22Fp2 (argv[3]);
+		//ifstream ch22Mol (argv[4]);
 		string line;
-		vector<long> pred;
-		vector<int> truep;
 		while(getline(ch15Fp2,line)){
 			vector<string> tokens = split(line,'\t');
-			long tanNum = (long) stoull(tokens[3]);
-			size_t tpoNum = (size_t) stoull(tokens[6]);
-			//pred.push_back(tanNum);
-			//truep.push_back(tpoNum);			
+			string s = tokens[3];
+			//float tanNum = ConvertStringToFloat<float>(s);
+			if(isFloat(s) or s=="-99"){
+				double tanNum = stof (s);
+                        	size_t tpoNum = (size_t) stoull(tokens[6]);
+                                pred.push_back (tanNum);
+                                truep.push_back (tpoNum);
+			}
+			else{
+				cout << "Corrupt field value: " << s << " please check your input file." << endl;
+			}
 		}
+		int sum = accumulate(truep.begin(), truep.end(), 0);
+		cout << "Number of Tps: " << sum << endl;
+		//float fpr;
+		//float tpr;
+		dlib::compute_roc_curve(truep,pred);   // DOESN'T HAVE ANY USAGE DOCUMENTATION ON INET
+		//cout << setprecision(10);
+		//cout << "pred en posicion 0: " << pred[0] << endl << "tamaño vector truep: " << truep[0] << endl;
 	}
 	else{
 		cout << "Missing argument?" << endl;
 	}
+
 	//extractFprTpr();
 	return 0;
 }
