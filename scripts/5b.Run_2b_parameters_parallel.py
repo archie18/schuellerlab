@@ -45,7 +45,7 @@ casosCO = ['1.5','2.0','2.5','3.0','3.5'] #Cutoff
 casosCQ = ['5','7','10'] #Numero de cliques
 
 
-Parallel(n_jobs=8)(delayed(runner.pocket_compare)(atomtypes, cutoff, cliquesize, dist, workdir, best=1, resume=args.resume) for atomtypes in casosCB for cutoff in casosCO for cliquesize in casosCQ)
+Parallel(n_jobs=8, verbose=11)(delayed(runner.pocket_compare)(atomtypes, cutoff, cliquesize, dist, workdir, best=1, resume=args.resume) for atomtypes in casosCB for cutoff in casosCO for cliquesize in casosCQ)
 
 
 

@@ -58,10 +58,7 @@ def openfile(filename):
 
 
 def runclick(query_pocket, target_pocket, outpath, clique_filename, resume):
-	print "query_pocket:", query_pocket
-	print "target_pocket:", target_pocket
-	print "outpath:", outpath
-	print "CLICK:", CLICK
+	
 	"""
 	Function to run click - does the main work
 	"""
