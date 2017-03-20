@@ -11,17 +11,21 @@ from sklearn.metrics import roc_curve, auc
 import datetime
 import string
 import numpy
+import argparse
 
+parser = argparse.ArgumentParser()
+parser.add_argument('-p', '--path',    required=True, help='path to folder of folders with pockets')
+args = parser.parse_args()
 cutoffs = ['1.5','2.0','2.5','3.0','3.5'] #Cuttoff
-atomtypes = ['" CA "', '" CA , CB "'] #Calpha o Cbeta
-#atomtypes = ['" CA "', '" CA , CB "', '" CA ,ACC ,DON "', '" CA , CB ,ACC ,DON "'] #Calpha o Cbeta
+#atomtypes = ['" CA "', '" CA , CB "'] #Calpha o Cbeta
+atomtypes = ['" CA "', '" CA , CB "', '" CA ,ACC ,DON "', '" CA , CB ,ACC ,DON "'] #Calpha o Cbeta
 atomtype_labels = ['CA', 'CACB', 'CA_ACC_DON', 'CACB_ACC_DON'] #Calpha o Cbeta
 cliquesizes = ['5','7','10'] #Numero de cliques
 pocket_cutoff = '6.0'
 
 parameters='Parameters_'
-plot_folder='homogeneous/plots'
-output_folder='./homogeneous/Output'
+plot_folder=args.path+'/plots'
+output_folder='./'+args.path+'/Output'
 opt=[]
 atomtype_label = ''
 def create_filename(atomtype, cutoff, cliquesize, pocket_cutoff):
