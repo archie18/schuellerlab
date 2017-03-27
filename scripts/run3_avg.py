@@ -15,6 +15,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-p', '--path',    required=True, help='path to folder of folders with pockets')
+parser.add_argument('-a', '--auc',    required=False,default='0', help='0 to ligand AUC 1 to code and class AUC')
 args = parser.parse_args()
 cutoffs = ['1.5','2.0','2.5','3.0','3.5'] #Cuttoff
 #atomtypes = ['" CA "', '" CA , CB "'] #Calpha o Cbeta
@@ -122,6 +123,8 @@ for combination in combinations:
 			for metric in metrics:
 				fpr, tpr, _ = roc_curve(true, pred[metric], drop_intermediate=False)
 				roc_auc[metric][clss][code] = auc(fpr, tpr)
+				if args.auc=='1':
+					print combination['atomtype'].replace('"', '').replace(' ', '').replace(',', '_') + '\t' + combination['cutoff'] + '\t' + combination['cliquesize'] + '\t' + pocket_cutoff + '\t' +metric+ '\t' +code+ '\t' + clss + '\t' + str(roc_auc[metric][clss][code])
 				# write plotting data
 				pd.DataFrame([fpr, tpr]).transpose().to_csv(
 					folder+os.path.sep+metric+"_"+clss+"_"+code+".csv", header=False, index=False, sep="\t")
@@ -142,7 +145,8 @@ for combination in combinations:
 			median = numpy.median(roc_auc[metric][clss].values())
 			medians.append(median)
 			line = line + "\t" + str(median)
-		print combination['atomtype'].replace('"', '').replace(' ', '').replace(',', '_') + '\t' + combination['cutoff'] + '\t' + combination['cliquesize'] + '\t' + pocket_cutoff + '\t' + line +"\t" + str(numpy.mean(medians))
+		if args.auc=='0':
+			print combination['atomtype'].replace('"', '').replace(' ', '').replace(',', '_') + '\t' + combination['cutoff'] + '\t' + combination['cliquesize'] + '\t' + pocket_cutoff + '\t' + line +"\t" + str(numpy.mean(medians))
 	
 	sys.stderr.write('OK\n')
 
