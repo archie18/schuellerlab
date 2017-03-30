@@ -52,70 +52,104 @@ float SilhoutteScore(string clustersFile, string matrixFile){
     string line;
     //size_t ClustSeedAndOthers[][];
     //int j=0;
-    size_t s;
-    vector<size_t> seeds;
+    map <size_t, vector<size_t> > LigClusters;
+    string s;
     while(getline(inClust,line)){
-        vector<string> tokens1 = split(line,' ');
-        s = (size_t) stoull(tokens1[1]);
-        seeds.push_back(s);
-    }
-    //cout << seeds[0] << " " <<seeds[1]<<" "<<seeds[2]<<" "<< seeds[3]<< endl;
-    inClust.close();
-    ifstream inClust2 (clustersFile);
-    string first_l2;
-    getline(inClust2,first_l2);
-    string line2;
-    size_t i, r;
-    float Ai=0, Bi=0, Ci=0, sum=0, Dist=0, Dist2=0, sil=0;
-    vector<float> silhoutte;
-    vector<float> C;
-    while(getline(inClust2,line2)){
-        vector<string> tokens = split(line2,' ');
-        //cout << tokens[1] << endl;
-        Ai=0;
-        Bi=0;
-        sum=0;
-        Dist=0;
-        Dist2=0;
-        C.clear();
-        if(tokens.size() <= 2){
-            i = (size_t) stoull(tokens[1]);
-            for (vector<size_t>::iterator it = seeds.begin(); it != seeds.end(); ++it){
-                if(i!=*it){
-                    Dist2=1-simMat.at(i,*it);
-                    //cout << Dist2 << endl;
-                    C.push_back(Dist2);
-                }
-            }
-            //cout << C[0] << endl;
+        vector<string> tokens = split(line,' ');
+        s = tokens[0];
+        s.pop_back();
+        size_t ClustNum = stoi(s);
+        if(tokens.size()<=2){
+            vector<size_t> co;
+            co.push_back((size_t) stoull(tokens[1]));
+            LigClusters[ClustNum]=co;
         }
         else{
-            i = (size_t) stoull(tokens[1]);
-            #pragma omp parallel for	
-            for(int x=2;x<tokens.size();x++){
-                r = (size_t) stoull(tokens[x]);
-                Dist = 1-simMat.at(i,r);
-                //cout << "Dist: " << Dist << " ";
-                sum = sum+Dist;
-                //cout << "Sum: " << sum << " ";
+            vector<size_t> co;
+            for(int i=1;i<tokens.size();i++){
+                co.push_back((size_t) stoull(tokens[i]));
             }
-            //cout << endl;
-            for (vector<size_t>::iterator it = seeds.begin(); it != seeds.end(); ++it){
-                if(i!=*it){
-                    Dist2=1-simMat.at(i,*it);
-                    //cout << Dist2 << endl;
-                    C.push_back(Dist2);
-                }
-            }
-            //cout << C[0] << endl;
-        }
-        Ai = sum/(tokens.size()-1);
-        //cout << "El valor a(i) para el cluster " << tokens[0] << " es: " << Ai <<  endl;
-        float Bi = *min_element(begin(C),end(C));
-        sil=(Bi-Ai)/(max(Ai,Bi));
-        silhoutte.push_back(sil);
+            LigClusters[ClustNum]=co;
+        }   
     }
-    inClust2.close();
+    inClust.close();
+    //cout << "Numero de clusters aers: " << LigClusters[1] << endl;
+
+    size_t i, r;
+    int clust;
+    float Ai=0, Bi=0, Ci=0, sumA=0, sumC=0, Dist=0, Dist2=0, sil=0, avC=0, avA=0;
+    vector<float> silhoutte;
+    vector<float> C;
+    vector<float> averageC;
+    #pragma parallel for
+    for( const auto& pair : LigClusters ){
+            //cout << "key: " << pair.first << "  value: [  " ;
+            for( size_t x = 0 ; x < pair.second.size() ; ++x ){
+                //cout << "El vector del cluster actual ("<<pair.first<<") mide: " << pair.second.size() << "\n" << endl;
+                if(pair.second.size() == 1){
+                    i = pair.second[x];
+                    Ai=0;
+                    sil=0;
+                    averageC.clear();
+                    for(const auto& pair2 : LigClusters){
+                        Bi=0;
+                        if(i!=pair2.second[0]){
+                            //clust = pair2.first;
+                            Dist=0;
+                            sumC=0;
+                            avC=0;
+                            for(size_t y = 0 ; y < pair2.second.size();++y){
+                                Dist=1-simMat.at(i,pair2.second[y]);
+                                sumC=sumC+Dist;
+                            }
+                            avC=sumC/pair2.second.size();
+                            //cout << avC << endl;
+                            averageC.push_back(avC);
+                            //cout << averageC[0]<<endl;
+                        }                        
+                    }
+                    Bi=*min_element(begin(averageC),end(averageC));
+                    sil=(Bi-Ai)/(max(Ai,Bi));
+                    silhoutte.push_back(sil);
+                }
+
+                else{
+                    Ai=0;
+                    sil=0;
+                    averageC.clear();
+                    i = pair.second[x];
+                    for(const auto& pair2 : LigClusters){
+                        if(pair.first==pair2.first){
+                            for( size_t y = 0 ; y < pair.second.size() ; ++y){
+                                if(i!=pair.second[y]){
+                                    Dist=0;
+                                    sumA=0;
+                                    Dist=1-simMat.at(i,pair.second[y]);
+                                    sumA=sumA+Dist;
+                                }
+                            }
+                            Ai=sumA/pair.second.size();
+                            continue;
+                        }
+                        else{
+                            Dist=0;
+                            sumC=0;
+                            avC=0;
+                            for(size_t y = 0 ; y < pair2.second.size() ; ++y){
+                                Dist=1-simMat.at(i,pair2.second[y]);
+                                sumC=sumC+Dist;
+                            }
+                            avC=sumC/pair2.second.size();
+                            averageC.push_back(avC); 
+                        }
+                    }
+                    Bi=*min_element(begin(averageC),end(averageC));
+                    sil=(Bi-Ai)/(max(Ai,Bi));
+                    silhoutte.push_back(sil);
+                }  
+                //cout << pair.second[i] << "  " ;
+            }
+    }
     float sil_sum=0;
     float sil_prom=0;
     for (vector<float>::iterator iSil = silhoutte.begin(); iSil != silhoutte.end(); ++iSil){
