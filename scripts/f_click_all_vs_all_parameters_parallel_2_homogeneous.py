@@ -96,9 +96,11 @@ def runclick(query_pocket, target_pocket, outpath, clique_filename, resume):
 		seq_similarity = 0
 		aascore08 = 0
 		aascore05 = 0
+		num_residuo= ''
 		for line in cliquefile:
 			if flag:
-    				if line.split()[2] in AAGROUPS and line.split()[6] in AAGROUPS:
+				
+    				if line.split()[2] in AAGROUPS and line.split()[6] in AAGROUPS and line.split()[1] != num_residuo :
 					# If same group
         				if AAGROUPS[line.split()[2]] == AAGROUPS[line.split()[6]]:
             					seq_similarity += 1
@@ -111,8 +113,10 @@ def runclick(query_pocket, target_pocket, outpath, clique_filename, resume):
     				else:
         				aascore08 += 0.8
         				aascore05 += 0.5
+				num_residuo=line.split()[1]
 			if 'Chain' in line:
     				flag = True
+			
 
 		# Calculate final scores
 		seq_similarity /= float(matched_atoms_count)
