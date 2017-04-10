@@ -1,6 +1,8 @@
 /* Silhoutte implementation in c++ to obtain the silhoutte score for each clustering cutoff 
  * Autor: Mauricio Ruiz Moraga
  * Version 1.0 2017-03-22
+ * Compilation: g++5.4.0 -std=c++11 -fopenmp silhoutte.cpp simmat.cpp -o silhoutte
+ * Execution: ./silhoutte -m upper_triangular_matrix -c clusters_file -i number_of_total_ligands
  * */
 
 #include <iostream>
@@ -41,24 +43,23 @@ vector<string> split(const string &s, char delim) {
 }
 
 /* Silhoutte function */
-float SilhoutteScore(string clustersFile, string matrixFile){
+float SilhoutteScore(string clustersFile, string matrixFile, int iesquantity){
     // Read upper triangular similarity matrix
     SimilarityMatrix simMat;
     simMat.mmapFile(matrixFile);
     ifstream inClust (clustersFile);
     string first_l;
     getline(inClust,first_l);
-    //cout << first_l << endl;
     string line;
-    //size_t ClustSeedAndOthers[][];
-    //int j=0;
     map <size_t, vector<size_t> > LigClusters;
     string s;
+    vector<size_t> vectorkeys;
     while(getline(inClust,line)){
         vector<string> tokens = split(line,' ');
         s = tokens[0];
         s.pop_back();
         size_t ClustNum = stoi(s);
+        vectorkeys.push_back(ClustNum);
         if(tokens.size()<=2){
             vector<size_t> co;
             co.push_back((size_t) stoull(tokens[1]));
@@ -73,70 +74,64 @@ float SilhoutteScore(string clustersFile, string matrixFile){
         }   
     }
     inClust.close();
-    //cout << "Numero de clusters aers: " << LigClusters[1] << endl;
-
-    size_t i, r;
-    int clust;
-    float Ai=0, Bi=0, Ci=0, sumA=0, sumC=0, Dist=0, Dist2=0, sil=0, avC=0, avA=0;
-    vector<float> silhoutte;
-    vector<float> C;
-    vector<float> averageC;
-    #pragma parallel for
-    for( const auto& pair : LigClusters ){
-            //cout << "key: " << pair.first << "  value: [  " ;
-            for( size_t x = 0 ; x < pair.second.size() ; ++x ){
-                //cout << "El vector del cluster actual ("<<pair.first<<") mide: " << pair.second.size() << "\n" << endl;
-                if(pair.second.size() == 1){
-                    i = pair.second[x];
-                    Ai=0;
-                    sil=0;
+    vector<vector<float>> sil_store(vectorkeys.size());
+    for(int p = 0; p < sil_store.size() ; p++){
+        sil_store[p].resize(LigClusters.at(p).size());
+    }
+    float silhoutte=0;
+    cout << "Entrando seccion paralela" << endl;
+    #pragma omp parallel for reduction(+:silhoutte)
+    for( int j = 0; j < vectorkeys.size(); ++j){
+        auto key = vectorkeys[j];
+        auto& value = LigClusters.at(key);
+        vector<float> averageC(vectorkeys.size()-1);
+	for( size_t x = 0 ; x < value.size() ; ++x ){
+                if(value.size() == 1){
+                    size_t i = value[x];
+                    float Ai=0;
+                    float sil=0;
+                    float Bi=0;
                     averageC.clear();
                     for(const auto& pair2 : LigClusters){
-                        Bi=0;
                         if(i!=pair2.second[0]){
-                            //clust = pair2.first;
-                            Dist=0;
-                            sumC=0;
-                            avC=0;
+                            float sumC=0;
+                            float avC=0;
                             for(size_t y = 0 ; y < pair2.second.size();++y){
-                                Dist=1-simMat.at(i,pair2.second[y]);
+                                float Dist=1-simMat.at(i,pair2.second[y]);
                                 sumC=sumC+Dist;
                             }
                             avC=sumC/pair2.second.size();
-                            //cout << avC << endl;
                             averageC.push_back(avC);
-                            //cout << averageC[0]<<endl;
                         }                        
                     }
                     Bi=*min_element(begin(averageC),end(averageC));
                     sil=(Bi-Ai)/(max(Ai,Bi));
-                    silhoutte.push_back(sil);
+                    silhoutte+=sil;
                 }
-
                 else{
-                    Ai=0;
-                    sil=0;
+                    float Ai=0;
+                    float sil=0;
                     averageC.clear();
-                    i = pair.second[x];
+                    float Bi=0;
+                    size_t i = value[x];
                     for(const auto& pair2 : LigClusters){
-                        if(pair.first==pair2.first){
-                            for( size_t y = 0 ; y < pair.second.size() ; ++y){
-                                if(i!=pair.second[y]){
-                                    Dist=0;
-                                    sumA=0;
-                                    Dist=1-simMat.at(i,pair.second[y]);
+                        if(key==pair2.first){
+                            float sumA=0;
+                            //#pragma omp parallel for reduction(+:sumA)
+                            for( size_t y = 0 ; y < value.size() ; ++y){
+                                if(i!=value[y]){
+                                    float Dist=1-simMat.at(i,value[y]);
                                     sumA=sumA+Dist;
                                 }
                             }
-                            Ai=sumA/pair.second.size();
+                            Ai=sumA/value.size();
                             continue;
                         }
                         else{
-                            Dist=0;
-                            sumC=0;
-                            avC=0;
+                            float sumC=0;
+                            float avC=0;
                             for(size_t y = 0 ; y < pair2.second.size() ; ++y){
-                                Dist=1-simMat.at(i,pair2.second[y]);
+                                float Dist=1-simMat.at(i,pair2.second[y]);
                                 sumC=sumC+Dist;
                             }
                             avC=sumC/pair2.second.size();
@@ -145,39 +140,38 @@ float SilhoutteScore(string clustersFile, string matrixFile){
                     }
                     Bi=*min_element(begin(averageC),end(averageC));
                     sil=(Bi-Ai)/(max(Ai,Bi));
-                    silhoutte.push_back(sil);
+                    silhoutte+=sil;
                 }  
-                //cout << pair.second[i] << "  " ;
-            }
+        }
     }
-    float sil_sum=0;
-    float sil_prom=0;
-    for (vector<float>::iterator iSil = silhoutte.begin(); iSil != silhoutte.end(); ++iSil){
-        sil_sum=sil_sum+*iSil;
-    }
-    sil_prom=sil_sum/silhoutte.size();
-    return sil_prom;
+    cout << "Done" << endl;
+    float silhoutteF = silhoutte/iesquantity;
+    return silhoutteF;
 }
 
 int main(int argc, char** argv) {
     string clustersFile;
     string matrixFile;
+    int iesquantity;
     try{
         CmdLine cmd("Slihoutte score calc", ' ', VERSION);
         ValueArg<string> clustArg("c", "clu", "Clusters file", true, "Chembl22_lig2prot_max.txt.co.clusters.0.9","string");
         cmd.add( clustArg );
         ValueArg<string> matArg("m", "mat", "Upper triangular similarity matrix, binary", true, "Chembl22_lig2prot_max.txt.smi.fpt.bin.tanmat", "string");
         cmd.add( matArg );
+        ValueArg<int> iesArg("i", "ies", "Ligands quantity", false, 0, "int");
+        cmd.add( iesArg );
         // Parse the args.
         cmd.parse( argc, argv );
         // Get the value parsed by each arg. 
         clustersFile = clustArg.getValue();
         matrixFile = matArg.getValue();
+        iesquantity = iesArg.getValue();
     } catch (ArgException &e) { // catch any exceptions
         cerr << "Error: " << e.error() << " for arg " << e.argId() << endl;
     }
     //cout << clustersFile << " " << matrixFile << endl; 
-    float sil = SilhoutteScore(clustersFile,matrixFile);
+    float sil = SilhoutteScore(clustersFile,matrixFile,iesquantity);
     cout << "The Silhoutte score for the input clusterin is: " << sil << endl;
     return 0;
 }
