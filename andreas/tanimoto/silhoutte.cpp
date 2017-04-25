@@ -1,8 +1,6 @@
 /* Silhoutte implementation in c++ to obtain the silhoutte score for each clustering cutoff 
  * Autor: Mauricio Ruiz Moraga
  * Version 1.0 2017-03-22
- * Compilation: g++5.4.0 -std=c++11 -fopenmp silhoutte.cpp simmat.cpp -o silhoutte
- * Execution: ./silhoutte -m upper_triangular_matrix -c clusters_file -i number_of_total_ligands
  * */
 
 #include <iostream>
