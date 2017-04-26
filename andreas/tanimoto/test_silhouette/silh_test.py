@@ -16,22 +16,22 @@ def readmat(filename):
         distmat = np.empty([n,n])
         for i in range(n):
             for j in range(n):
-                distmat[i][j] = getdist(data,n,i,j)
+                distmat[i][j] = 1.0 - getsim(data,n,i,j)
         return distmat,n
 
 ## Funcion para retornar el valor correspondiente a la coordenada
-def getdist(data, n, i, j):
+def getsim(data, n, i, j):
     #print ('n=', n, ' i=', i, ' j=', j)
     #print (data)
     if i == j:
-        return 1 # Return 1.0 for comparison of same indices
+        return 1.0 # Return 1.0 for comparison of same indices
     # Flip indices
     elif i > j:
         temp = i
         i = j
         j = temp    
     
-    return 1-data[int(i*n+j - (i+1)*(i+2)/2)]
+    return data[int(i*n+j - (i+1)*(i+2)/2)]
 
 ## Ingreso de matriz y archivo clusters por parametro
 X,n=readmat(sys.argv[1])
