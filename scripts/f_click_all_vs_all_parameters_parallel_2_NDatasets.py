@@ -74,7 +74,9 @@ def runclick(query_pocket, target_pocket, outpath, clique_filename, resume):
 	# Clique file not found, timeout reached? Return dummy values
 	if not os.path.isfile(clique_filename):
 		return Scores(RMSD=4.0, SO=0.0, Srel=0.0, RMSD_aascore05=0.0, RMSD_aascore08=0.0, seq_similarity=0.0, Srel_aascore08=0.0, Srel_aascore05=0.0, SO_aascore08=0.0, SO_aascore05=0.0, tanimoto=0.0)
-
+	#Delete .1.pdb files
+	os.remove(outpath+'/'+ query_pocket[:-4]+'-'+target_pocket[:-4]+'.1.pdb')
+	os.remove(outpath+'/'+ target_pocket[:-4]+'-'+query_pocket[:-4]+'.1.pdb')
 	# Open clique file
 	cliquefile = openfile(clique_filename)
 
