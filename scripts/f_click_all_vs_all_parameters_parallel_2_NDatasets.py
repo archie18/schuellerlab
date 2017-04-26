@@ -74,9 +74,7 @@ def runclick(query_pocket, target_pocket, outpath, clique_filename, resume):
 	# Clique file not found, timeout reached? Return dummy values
 	if not os.path.isfile(clique_filename):
 		return Scores(RMSD=4.0, SO=0.0, Srel=0.0, RMSD_aascore05=0.0, RMSD_aascore08=0.0, seq_similarity=0.0, Srel_aascore08=0.0, Srel_aascore05=0.0, SO_aascore08=0.0, SO_aascore05=0.0, tanimoto=0.0)
-	#Delete .1.pdb files
-	os.remove(outpath+'/'+ query_pocket[:-4]+'-'+target_pocket[:-4]+'.1.pdb')
-	os.remove(outpath+'/'+ target_pocket[:-4]+'-'+query_pocket[:-4]+'.1.pdb')
+	
 	# Open clique file
 	cliquefile = openfile(clique_filename)
 
@@ -287,6 +285,11 @@ def pocket_compare(atomtypes, cutoff, cliquesize, dist, workdir, best=1, resume=
             
                 		outfile.write(str(codes[i])+" "+str(codes[j])+" "+ str(classes[i])+" "+str(classes[j])+" "+  str(RMSD)+" "+str(SO)+" "+str(Srel) + " " +str(tanimoto) +" " + str(seq_similarity) + " " + str(RMSD_aascore08)+" "+ str(RMSD_aascore05)+ " " + str(Srel_aascore08)+" "+ str(Srel_aascore05)+ " " + str(SO_aascore08)+" "+ str(SO_aascore05)+ '\n')
                 		#print (str(codes[i])+" "+str(codes[j])+" "+ str(classes[i])+" "+str(classes[j])+" "+  str(RMSD)+" "+str(SO)+" "+str(Srel) + " " + str(RMSD_aascore08)+" "+ str(RMSD_aascore05)+ " " + str(Srel_aascore08)+" "+ str(Srel_aascore05)+ " " + str(SO_aascore08)+" "+ str(SO_aascore05))
-				
+	#Delete .1.pdb files
+	#for archivo in os.listdir(output_path1):
+		#if archivo[-6:]=='.1.pdb':
+			#os.remove(output_path1+'/'+archivo)
+			#os.remove(output_path2+'/'+archivo)
+	
     	sys.stdout.flush()
     	sys.stderr.write("Finished in " + str(datetime.now() - startTime) + "\n")
