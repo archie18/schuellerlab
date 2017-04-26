@@ -5,6 +5,7 @@ from sklearn.metrics import roc_curve, auc
 import argparse
 import os
 import datetime
+import numpy
 
 # parse arguments
 #parser = argparse.ArgumentParser()
