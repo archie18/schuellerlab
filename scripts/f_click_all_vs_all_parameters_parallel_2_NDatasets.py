@@ -157,9 +157,9 @@ def pocket_compare(atomtypes, cutoff, cliquesize, dist, workdir, best=1, resume=
 	if not os.path.exists(workdir+'/Output/'+out_path+'/click_fold2'):
 		shutil.copytree(actual_path+'/'+workdir+'/pockets_folder', workdir+'/Output/'+out_path+'/click_fold2')
 	if not os.path.exists(workdir+'/Output/'+out_path+'/click_fold1/classification.txt'):
-		os.symlink(actual_path+'/classification.txt',workdir+'/Output/'+out_path+'/click_fold1/classification.txt')
+		os.symlink(actual_path+'/'+workdir+'/classification.txt',workdir+'/Output/'+out_path+'/click_fold1/classification.txt')
 	if not os.path.exists(workdir+'/Output/'+out_path+'/click_fold2/classification.txt'):
-		os.symlink(actual_path+'/classification.txt',workdir+'/Output/'+out_path+'/click_fold2/classification.txt')
+		os.symlink(actual_path+'/'+workdir+'/classification.txt',workdir+'/Output/'+out_path+'/click_fold2/classification.txt')
 	#############################################################		
 			
 	print '-------------'
