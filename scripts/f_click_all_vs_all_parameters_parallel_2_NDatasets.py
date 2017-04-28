@@ -12,7 +12,7 @@ import signal
 import collections
 
 # Global constants
-CLICK   = '/CLUSTERFS/homes/cponce/Click_multiple/click'
+CLICK   = 'click'
 TIMEOUT = 3000 # seconds
 AAGROUPS = {'L': 1, 'V': 1, 'I': 1, 'M': 1, 'C': 1, 'A': 2, 'G': 2, 'S': 3, 'T': 3, 'P': 4, 'F': 5, 'Y': 5, 'W': 5, 'E': 6, 'D': 6, 'N': 6, 'Q': 6, 'K': 7, 'R': 7, 'H': 8}
 
