@@ -66,11 +66,6 @@ os.system(chmod+dst)
 os.system(dst)
 
 #Now run PocketExtractor.svl
-src = './PocketExtractor.svl'
-dst = './'+workdir+'/PocketExtractor.svl'
-if not os.path.exists(dst):
-	copyfile(src, dst)
-
 
 src = './PE.sh'
 dst = './'+workdir+'/PE.sh'
