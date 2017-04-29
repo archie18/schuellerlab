@@ -17,7 +17,7 @@ def openfile(filename):
 		
 def main():
 	if len(sys.argv) != 3:
-		print "Usage: block_PDBbind.py <pocket pdb> <protein pdb>"
+		print "Usage: block_PDBbind.py <pocket pdb> <protein pdb> "
 		sys.exit()
 	else:
 		pdb_pocket = openfile(sys.argv[1])
@@ -40,6 +40,7 @@ def main():
 		cont_res = 0
 		for line in pdb_protein:
 			if line[0:4] == "ATOM":
+				
 				atm_protein.append(line)
 				tok = list(line)
 				tok.pop(21)

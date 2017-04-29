@@ -3,7 +3,7 @@
 
 """
 Example:
-python apoc.py -f class
+python apoc.py -f class -p Folder
 """
 
 import csv
@@ -16,30 +16,33 @@ import collections
 parser = argparse.ArgumentParser()
 
 parser.add_argument('-f', '--file',    required=True, help='name of file with codes')
+parser.add_argument('-p', '--path', required=True, help='folder to save the apoc results')
 
 args = parser.parse_args()
-
+workdir  = args.path
 dataset = "./"+args.file
 
 #Parse all the pockets in a file that apoc can read and compare
 
 tupla = []
-for algo in open(dataset):  #armar sentencias
-	Codes = collections.namedtuple('Codes',['code', 'het','hetname'])
-	algo = algo.replace('\n','') #remove if '\n' 
-	s = algo.split(" ")
-	
-	pdb=s[0]+"_"+s[1]
+for i in open(dataset):  #armar sentencias
+	Codes = collections.namedtuple('Codes',['code', 'het','hetname','chain'])
+	i = i.replace('\n','') #remove if '\n' 
+	s = i.split(" ")
+	cad = s[3]
+	pdb=s[0]
 	het_file = s[0]+"_"+s[1]
 	het_name = s[1]
 
 	#print pdb
 	#print het_file
-	tupla.append(Codes(code=pdb,het=het_file, hetname=het_name))
+	tupla.append(Codes(code=pdb,het=het_file, hetname=het_name,chain=cad))
 	
-if not os.path.exists('./block_PDBs'):
-	os.makedirs('./block_PDBs')
+if not os.path.exists(workdir):
+	os.makedirs(workdir)
+if not os.path.exists('./'+workdir+'/block_PDBs'):
+	os.makedirs('./'+workdir+'/block_PDBs')
 with open('test','w') as f:
 	for l in tupla:
-		cmd = "python 1._block_PDBbind.py ./pockets/"+l.code+"_pocket_6.0.pdb ./pdbs/"+l.code+".pdb > ./block_PDBs/"+l.code+"_block.pdb"
+		cmd = "python 1._block_PDBbind.py ./"+workdir+"/Proteins/pockets/"+l.het+"_pocket_6.0.pdb ./"+workdir+"/"+l.code+".pdb > ./"+workdir+"/block_PDBs/"+l.het+"_block.pdb"
 		os.system(cmd)
