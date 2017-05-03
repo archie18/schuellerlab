@@ -49,7 +49,7 @@ def runmif(code , het):
 		os.mkdir('./hive/mifView')	
 	sph_file = ''
 	sph_file = code+"_"+het+"_sph_"
-	for i in range (20):
+	for i in range (50):
 		mif_filename= "./clefts/"+sph_file+str(i)+".pdb"
 		if os.path.isfile(mif_filename):
 			cmd=mif_sw+" -p ./hive/"+code+"h.pdb -g "+mif_filename+" -o ./mifs -l "+het+" -r 3 -t "+code+" -z 1"
