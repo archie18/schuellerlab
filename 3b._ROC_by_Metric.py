@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Example:
-python 3a._ROC_by_Metric.py -i input_file
+python 3a._ROC_by_Metric.py -i input_file -f class
 """
 
 
@@ -11,14 +11,17 @@ import argparse
 import os
 import datetime
 import numpy
+import collections
+import sys
 
 # parse arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('-i', '--input',   required=True, help='output file(s) of apoc_all_vs_all.py', nargs='+')
+parser.add_argument('-f', '--file',      required=True, help='classification file (.txt)')
 parser.add_argument('--plot_folder',   required=False, default="plots", 
 	help='folder to write plotting data (default: plots)')
 args = parser.parse_args()
-
+dataset = "./"+args.file
 # check if input files exist
 for input_file in args.input:
 	if not os.path.isfile(input_file):
@@ -29,6 +32,19 @@ for input_file in args.input:
 # create directory for plot data
 if not os.path.exists(args.plot_folder):
     os.makedirs(args.plot_folder)
+
+tupla = []
+for i in open(dataset):  #armar sentencias
+	Codes = collections.namedtuple('Codes',['code', 'het','hetname','chain','TP'])
+	i = i.replace('\n','') #remove if '\n' 
+	s = i.split(" ")
+	cad = s[3]
+	pdb=s[0]
+	het_file = s[0]+"_"+s[1]
+	het_name = s[1]
+	truepositive = s[5]
+	tupla.append(Codes(code=pdb,het=het_file, hetname=het_name,chain=cad,TP=truepositive))
+
 
 for input_file in args.input:
 	# read output of "2[ab]._[click|apoc]_all_vs_all.py"
@@ -74,12 +90,34 @@ for input_file in args.input:
 		for i in list(tbl1.index):
 			for metric in metrics:
 				pred[metric][clss].append(tbl1.get_value(i,metric))
-			true[clss].append(tbl1.get_value(i,"class1") == tbl1.get_value(i,"class2"))
+			#true[clss].append(tbl1.get_value(i,"class1") == tbl1.get_value(i,"class2"))
+			for j in tupla:
+				if (tbl1.get_value(i,"class1")== j.hetname):
+					tp1=j.TP
+				if (tbl1.get_value(i,"class1")== j.hetname):
+					tp2=j.TP
+			
+			if(tp1== "TP" and tp2 == "TP"):
+				#print tp1,tp2
+				true[clss].append(True)
+			else:
+				true[clss].append(False)
+		#print true
+		#print len(true[clss])	
+		#sys.exit(1)
 		for i in list(tbl2.index):
 			for metric in metrics:
 				pred[metric][clss].append(tbl2.get_value(i,metric))
-			true[clss].append(tbl2.get_value(i,"class1") == tbl2.get_value(i,"class2"))
-		
+			#true[clss].append(tbl2.get_value(i,"class1") == tbl2.get_value(i,"class2"))
+			for j in tupla:
+				if (tbl2.get_value(i,"class1")== j.hetname):
+					tp1=j.TP
+				if (tbl2.get_value(i,"class1")== j.hetname):
+					tp2=j.TP
+			if(tp1== "TP" and tp2 == "TP"):
+				true[clss].append(True)
+			else:
+				true[clss].append(False)
 		# ROC AUC by class
 		for metric in metrics:
 			fpr[metric][clss], tpr[metric][clss], _ = roc_curve(
@@ -101,3 +139,11 @@ for input_file in args.input:
 		print line+ "\t" +  str(numpy.mean(roc_auc[metric].values()))+"\t" + str(numpy.mean(medians))
 	
 	
+
+
+
+
+
+
+
+

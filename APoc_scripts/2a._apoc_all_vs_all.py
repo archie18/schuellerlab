@@ -17,14 +17,13 @@ import os
 startTime = datetime.now()
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-c', '--classif',      required=True, help='classification file (.txt)')
+parser.add_argument('-f', '--file',      required=True, help='classification file (.txt)')
 parser.add_argument('-p', '--path',         required=True, help='path to block files folder')
 args = parser.parse_args()
 
-path = args.path+"/"
-filename = "./"+args.classif
+path = args.path
+filename = "./"+args.file
 tupla= []
-apoc = "apoc -fa 0 "
 # read classification file 
 
 for algo in open(filename):
@@ -47,15 +46,12 @@ for i in range(n-1):
 		segundo = path+pdb2.code+"_block.pdb"
 		
 		if (os.path.exists(primero) & os.path.exists(segundo)):
-			
 
-			apoc = check_output(["apoc", "-fa", "0", primero, segundo])
-#			cmd = apoc + primero + " "+ segundo
-#			apoc = os.system(cmd)
+			apoc = check_output(["apoc", "-fa", "0","-plen","1", primero, segundo])
 			for line in apoc.split("\n"):
 				if "PS-score" in line: scores1=line
 				if "RMSD" in line: scores2=line
-			scor1 = re.split('PS-score = |, P-value = |, Z-score = ', scores1)
+			scor1 = re.split("PS-score =|, P-value =|, Z-score =", scores1)
 			scor2 = re.split("RMSD =  |, Seq identity  = ", scores2)
 			PS = scor1[1]
 			p = scor1[2]
