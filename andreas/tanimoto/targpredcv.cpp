@@ -194,7 +194,7 @@ void printFoldLimits(vector<size_t> foldLimits, vector<size_t> &ligIds) {
     }
 }
 
-void fold(vector<size_t> foldLimits, int foldIdx, vector<size_t> threadLimits, int threadIdx, size_t nLigs, map<string, vector<size_t> > &targLigs, map<size_t, string> &ligChemblIds, SimilarityMatrix &simMat, vector<size_t> &ligIds) {
+void fold(vector<size_t> foldLimits, int foldIdx, vector<size_t> threadLimits, int threadIdx, map<string, vector<size_t> > &targLigs, map<size_t, string> &ligChemblIds, SimilarityMatrix &simMat, vector<size_t> &ligIds) {
     /*myMutex.lock();
     cerr << "Fold " << foldIdx << ", Thread " << threadIdx << " (Time elapsed: " << chrono::duration_cast<chrono::milliseconds>(chrono::high_resolution_clock::now() - startTime).count()/1000.0f << " sec.)" << endl;
     myMutex.unlock();*/
@@ -357,7 +357,7 @@ int main(int argc, char** argv) {
     }
     cerr << "Similarity matrix read (Time elapsed: " << chrono::duration_cast<chrono::milliseconds>(chrono::high_resolution_clock::now() - startTime).count()/1000.0f << " sec.)" << endl;
     
-    size_t nLigs = simMat.getNLigs();
+    size_t nLigs = ligChemblIds.size();
     
     // Some debug info
     cerr << "seed:               " << seed << endl;
@@ -367,15 +367,15 @@ int main(int argc, char** argv) {
     cerr << "interactionsFile:   " << interactionsFile << endl;
     cerr << "matrixFile:         " << matrixFile << endl;
     cerr << "nTargets:           " << targLigs.size() << endl;
-    cerr << "nLigs:              " << ligChemblIds.size() << endl;
-    cerr << "nLigs_simMat:       " << nLigs << endl;
+    cerr << "nLigs:              " << nLigs << endl;
+    cerr << "nLigs_simMat:       " << simMat.getNLigs() << endl;
     cerr << "parallel:           " << parallel << endl;
     cerr << "nThreads:           " << nThreads << endl;
     cerr << "mode:               " << mode << endl;
     cerr << "ignoreSizeMismatch: " << ignoreSizeMismatch << endl;
     cerr << endl;
     
-    if (nLigs != ligChemblIds.size()) {
+    if (nLigs != simMat.getNLigs()) {
         cerr << "Warning! Similarity matrix size and number of ligands in the interactions file do not match." << endl;
         if (!ignoreSizeMismatch) {
             cerr << "Use the -j command line switch to ignore." << endl << endl;
@@ -389,13 +389,17 @@ int main(int argc, char** argv) {
     // Create shuffled ligand IDs
     vector<size_t> ligIds = createLigIds(ligChemblIds);
     cerr << "Ligand IDs created (Time elapsed: " << chrono::duration_cast<chrono::milliseconds>(chrono::high_resolution_clock::now() - startTime).count()/1000.0f << " sec.)" << endl;
+    /*for(auto const& ligId: ligIds)
+        cout << ligId << " ";
+    cout << endl;*/
+
 
     // Generate cv folds
     //size_t foldLimits[nFolds + 1];
     vector<size_t> foldLimits = createFoldLimits(nFolds, nLigs);
     
     // Print folds for debug
-    // printFoldLimits(foldLimits, ligIds);
+    //printFoldLimits(foldLimits, ligIds);
 
     // Perform cross validation
     //vector<thread> threads;
@@ -416,7 +420,7 @@ int main(int argc, char** argv) {
             // Start threads
             vector<thread> threads;
             for (int threadIdx = 0; threadIdx < nThreads; threadIdx++) {
-                threads.push_back(thread(fold, foldLimits, foldIdx, threadLimits, threadIdx, nLigs, ref(targLigs), ref(ligChemblIds), ref(simMat), ref(ligIds)));
+                threads.push_back(thread(fold, foldLimits, foldIdx, threadLimits, threadIdx, ref(targLigs), ref(ligChemblIds), ref(simMat), ref(ligIds)));
             }
     
             // Wait for threads
@@ -428,7 +432,7 @@ int main(int argc, char** argv) {
         for (int foldIdx = startFold; foldIdx < endFold; foldIdx++) {
             // Generate single-threading package
             vector<size_t> threadLimits = createFoldLimits(1, foldLimits[foldIdx+1] - foldLimits[foldIdx]);
-            fold(foldLimits, foldIdx, threadLimits, 0, nLigs, targLigs, ligChemblIds, simMat, ligIds);
+            fold(foldLimits, foldIdx, threadLimits, 0, targLigs, ligChemblIds, simMat, ligIds);
         }
     }
 
