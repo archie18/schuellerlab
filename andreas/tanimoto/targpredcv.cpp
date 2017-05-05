@@ -54,7 +54,7 @@
 using namespace TCLAP;
 using namespace std;
 
-const string VERSION = "0.3.2";
+const string VERSION = "0.4";
 
 mutex myMutex;
 
