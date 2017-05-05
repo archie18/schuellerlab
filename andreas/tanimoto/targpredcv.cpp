@@ -7,9 +7,14 @@
  * Remark: My first C++ program
  * 
  * @Author: Andreas Schueller <aschueller@bio.puc.cl>
- * @Version: 0.3.2 [2017-03-02]
+ * @Version: 0.4 [2017-05-04]
  * 
  * HISTORY
+ * 2017-05-04    0.4      Made compatible with clustered data:
+ *                        - Added option to ignore size difference in the ligand count
+ *                        from the sim mat and the interaction file
+ *                        - Changed funcion createLigIds to use the same ids of the
+ *                        interaction file
  * 2017-03-03    0.3.2    Set flag MAP_NORESERVE for mmap
  * 2017-03-02    0.3.1    Moved class SimilarityMatrix to separate files
  * 2017-02-24    0.3      Using mmap to read similarity matrix.
@@ -129,11 +134,13 @@ void readTargLigs(string filename, map<string, vector<size_t> > &targLigs, map<s
 /**
  * Creates a vector of randomly shuffeld ligand IDs
  */
-vector<size_t> createLigIds(size_t nLigs) {
+vector<size_t> createLigIds(map<size_t, string> &ligChemblIds) {
     vector<size_t> ligIds;
-    for (size_t i = 0; i < nLigs; ++i) {
-        ligIds.push_back(i);
-    }
+    //for (size_t i = 0; i < nLigs; ++i) {
+    //    ligIds.push_back(i);
+    //}
+    for(auto const& ligChemblId: ligChemblIds)
+        ligIds.push_back(ligChemblId.first);
     random_shuffle( ligIds.begin(), ligIds.end() ); // Shuffle
     
     return ligIds;
@@ -269,6 +276,7 @@ int main(int argc, char** argv) {
     int mode;
     int startFold;
     int endFold; // Exclusive
+    bool ignoreSizeMismatch;
 
     // Wrap everything in a try block.  Do this every time, 
     // because exceptions will be thrown for problems. 
@@ -293,6 +301,8 @@ int main(int argc, char** argv) {
         cmd.add( modeArg );
         ValueArg<string> foldRangeArg("r", "range", "Fold range (1-based, end inclusive), e.g. '1' or '4-8' (default: all)", false, "all", "string");
         cmd.add( foldRangeArg );
+        SwitchArg ignoreSizeMismatchSwitch("j", "ignore", "Ignore ligand count mismatch (default: disabled)", false);
+        cmd.add( ignoreSizeMismatchSwitch );
 
         // Parse the args.
         cmd.parse( argc, argv );
@@ -305,6 +315,7 @@ int main(int argc, char** argv) {
         parallel = parallelSwitch.getValue();
         nThreads = threadsArg.getValue();
         mode = modeArg.getValue();
+        ignoreSizeMismatch = ignoreSizeMismatchSwitch.getValue();
         // Process fold range
         if (foldRangeArg.getValue() == "all") {
             startFold = 0;
@@ -349,27 +360,34 @@ int main(int argc, char** argv) {
     size_t nLigs = simMat.getNLigs();
     
     // Some debug info
-    cerr << "seed:             " << seed << endl;
-    cerr << "nFolds:           " << nFolds << endl;
-    cerr << "startFold         " << startFold << endl;
-    cerr << "endFold           " << endFold << endl;
-    cerr << "interactionsFile: " << interactionsFile << endl;
-    cerr << "matrixFile:       " << matrixFile << endl;
-    cerr << "nTargets:         " << targLigs.size() << endl;
-    cerr << "nLigs:            " << ligChemblIds.size() << endl;
-    cerr << "nLigs_simMat:     " << nLigs << endl;
-    cerr << "parallel:         " << parallel << endl;
-    cerr << "nThreads:         " << nThreads << endl;
-    cerr << "mode:             " << mode << endl;
+    cerr << "seed:               " << seed << endl;
+    cerr << "nFolds:             " << nFolds << endl;
+    cerr << "startFold           " << startFold << endl;
+    cerr << "endFold             " << endFold << endl;
+    cerr << "interactionsFile:   " << interactionsFile << endl;
+    cerr << "matrixFile:         " << matrixFile << endl;
+    cerr << "nTargets:           " << targLigs.size() << endl;
+    cerr << "nLigs:              " << ligChemblIds.size() << endl;
+    cerr << "nLigs_simMat:       " << nLigs << endl;
+    cerr << "parallel:           " << parallel << endl;
+    cerr << "nThreads:           " << nThreads << endl;
+    cerr << "mode:               " << mode << endl;
+    cerr << "ignoreSizeMismatch: " << ignoreSizeMismatch << endl;
     cerr << endl;
     
     if (nLigs != ligChemblIds.size()) {
-        cerr << "Error! Similarity matrix size and number of ligands in the interactions file do not match." << endl;
-        return(1); 
+        cerr << "Warning! Similarity matrix size and number of ligands in the interactions file do not match." << endl;
+        if (!ignoreSizeMismatch) {
+            cerr << "Use the -j command line switch to ignore." << endl << endl;
+            return(1); 
+        }
+        else {
+            cerr << "Warning ignored." << endl << endl;
+        }
     }
     
     // Create shuffled ligand IDs
-    vector<size_t> ligIds = createLigIds(nLigs);
+    vector<size_t> ligIds = createLigIds(ligChemblIds);
     cerr << "Ligand IDs created (Time elapsed: " << chrono::duration_cast<chrono::milliseconds>(chrono::high_resolution_clock::now() - startTime).count()/1000.0f << " sec.)" << endl;
 
     // Generate cv folds
