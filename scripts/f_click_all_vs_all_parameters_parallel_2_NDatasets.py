@@ -224,11 +224,19 @@ def pocket_compare(atomtypes, cutoff, cliquesize, dist, workdir, mode, resume=Fa
     	startTime = datetime.now()
 
     	# read files 
-    	classif = pd.read_csv(classif, "\t", header=None, names=["PBD_code","clss"])
-    	codes = classif["PBD_code"].tolist()
-    	classes = classif["clss"].tolist()
-   	n_codes = len(codes)
-
+	mun_colum = pd.read_csv(classif, "\t", header=None).columns
+	if mun_colum == 3:
+	    	classif = pd.read_csv(classif, " ", header=None, names=["PDB_code","clss", "bin_class"])
+	    	codes = classif["PDB_code"].tolist()
+	    	classes = classif["clss"].tolist()
+	   	n_codes = len(codes)
+		binary=True
+	elif mun_colum == 2:
+		classif = pd.read_csv(classif, " ", header=None, names=["PDB_code","clss"])
+	    	codes = classif["PDB_code"].tolist()
+	    	classes = classif["clss"].tolist()
+	   	n_codes = len(codes)
+		binary=False
 	#n_codes = 10 # Debug only
 
 
@@ -242,8 +250,10 @@ def pocket_compare(atomtypes, cutoff, cliquesize, dist, workdir, mode, resume=Fa
 				# Skip if both classes are None
                 		if (classif["clss"][i] == "None") & (classif["clss"][j] == "None"):
                     			continue # None vs None, moving on...
-				if (classif["PDB_code"][i] == classif["PDB_code"][j]):
+				if (classif["PDB_code"][i] ==  classif["PDB_code"][j]):
                     			continue # itself vs itself, moving on...
+				if binary and classif["bin_class"][i] == classif["bin_class"][j]):
+					continue # TN vs TN, movin on...
 				
 				# Target pocket path
                 		target_pocket = codes[j]+"_"+classes[j]+"_pocket_ph4_"+dist+".pdb"
