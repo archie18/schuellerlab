@@ -135,7 +135,7 @@ def avg(vals):
 	return float(sum(vals)) / len(vals)
 
 # Main function
-def pocket_compare(atomtypes, cutoff, cliquesize, dist, workdir, best=1, resume=False):
+def pocket_compare(atomtypes, cutoff, cliquesize, dist, workdir, mode, resume=False):
 	
 	if len(atomtypes)==6:
 		cacb='CA'
@@ -157,9 +157,9 @@ def pocket_compare(atomtypes, cutoff, cliquesize, dist, workdir, best=1, resume=
 	if not os.path.exists(workdir+'/Output/'+out_path+'/click_fold2'):
 		shutil.copytree(actual_path+'/'+workdir+'/pockets_folder', workdir+'/Output/'+out_path+'/click_fold2')
 	if not os.path.exists(workdir+'/Output/'+out_path+'/click_fold1/classification.txt'):
-		os.symlink(actual_path+'/classification.txt',workdir+'/Output/'+out_path+'/click_fold1/classification.txt')
+		os.symlink(actual_path+'/'+workdir+'/classification.txt',workdir+'/Output/'+out_path+'/click_fold1/classification.txt')
 	if not os.path.exists(workdir+'/Output/'+out_path+'/click_fold2/classification.txt'):
-		os.symlink(actual_path+'/classification.txt',workdir+'/Output/'+out_path+'/click_fold2/classification.txt')
+		os.symlink(actual_path+'/'+workdir+'/classification.txt',workdir+'/Output/'+out_path+'/click_fold2/classification.txt')
 	#############################################################		
 			
 	print '-------------'
@@ -219,16 +219,24 @@ def pocket_compare(atomtypes, cutoff, cliquesize, dist, workdir, best=1, resume=
     	#()'classif', required=True, help='classification file (.txt)')
     	#path_c1 y path_c2',    path to folder of pockets for firt click an second click
     	#params',        required=True, help='click parameter file (.inp)')
-   	 #best',    required=False, default=0, help='0 for mean, 1 for best of the two possible click runs')
+   	
     
     	startTime = datetime.now()
 
     	# read files 
-    	classif = pd.read_csv(classif, "\t", header=None, names=["PBD_code","clss"])
-    	codes = classif["PBD_code"].tolist()
-    	classes = classif["clss"].tolist()
-   	n_codes = len(codes)
-
+	mun_colum = pd.read_csv(classif, "\t", header=None).columns
+	if mun_colum == 3:
+	    	classif = pd.read_csv(classif, " ", header=None, names=["PDB_code","clss", "bin_class"])
+	    	codes = classif["PDB_code"].tolist()
+	    	classes = classif["clss"].tolist()
+	   	n_codes = len(codes)
+		binary=True
+	elif mun_colum == 2:
+		classif = pd.read_csv(classif, " ", header=None, names=["PDB_code","clss"])
+	    	codes = classif["PDB_code"].tolist()
+	    	classes = classif["clss"].tolist()
+	   	n_codes = len(codes)
+		binary=False
 	#n_codes = 10 # Debug only
 
 
@@ -238,11 +246,15 @@ def pocket_compare(atomtypes, cutoff, cliquesize, dist, workdir, best=1, resume=
         	for i in range(n_codes-1):
 			# Query pocket path
             		query_pocket = codes[i]+"_"+classes[i]+"_pocket_ph4_"+dist+".pdb" 
-            		for j in range(i+1, n_codes):
+            		for j in range(i+1,n_codes):
 				# Skip if both classes are None
                 		if (classif["clss"][i] == "None") & (classif["clss"][j] == "None"):
                     			continue # None vs None, moving on...
-
+				if (classif["PDB_code"][i] ==  classif["PDB_code"][j]):
+                    			continue # itself vs itself, moving on...
+				if binary and classif["bin_class"][i] == classif["bin_class"][j]):
+					continue # TN vs TN, movin on...
+				
 				# Target pocket path
                 		target_pocket = codes[j]+"_"+classes[j]+"_pocket_ph4_"+dist+".pdb"
 
@@ -257,7 +269,7 @@ def pocket_compare(atomtypes, cutoff, cliquesize, dist, workdir, best=1, resume=
 				scores1 = runclick(query_pocket, target_pocket, output_path1, clique_filename1, resume)
 				scores2 = runclick(target_pocket, query_pocket, output_path2, clique_filename2, resume)
 
-              			if best==1: 
+              			if mode=='b': 
                     			RMSD = min([scores1.RMSD, scores2.RMSD])
                     			SO   = max([scores1.SO, scores2.SO])
                     			Srel = max([scores1.Srel, scores2.Srel])
@@ -269,8 +281,8 @@ def pocket_compare(atomtypes, cutoff, cliquesize, dist, workdir, best=1, resume=
                     			SO_aascore08 = max([scores1.SO_aascore08, scores2.SO_aascore08])
                     			SO_aascore05 = max([scores1.SO_aascore05, scores2.SO_aascore05])
 		    			tanimoto = max([scores1.tanimoto, scores2.tanimoto])
-            
-                		else:
+                			outfile.write(str(codes[i])+" "+str(codes[j])+" "+ str(classes[i])+" "+str(classes[j])+" "+  str(RMSD)+" "+str(SO)+" "+str(Srel) + " " +str(tanimoto) +" " + str(seq_similarity) + " " + str(RMSD_aascore08)+" "+ str(RMSD_aascore05)+ " " + str(Srel_aascore08)+" "+ str(Srel_aascore05)+ " " + str(SO_aascore08)+" "+ str(SO_aascore05)+ '\n')            
+                		elif mode=='m':
                     			RMSD = avg([scores1.RMSD, scores2.RMSD])
                     			SO   = avg([scores1.SO, scores2.SO])
                     			Srel = avg([scores1.Srel, scores2.Srel])
@@ -282,8 +294,11 @@ def pocket_compare(atomtypes, cutoff, cliquesize, dist, workdir, best=1, resume=
                     			SO_aascore08 = avg([scores1.SO_aascore08, scores2.SO_aascore08])
                     			SO_aascore05 = avg([scores1.SO_aascore05, scores2.SO_aascore05])
 		    			tanimoto = avg([scores1.tanimoto, scores2.tanimoto])
-            
-                		outfile.write(str(codes[i])+" "+str(codes[j])+" "+ str(classes[i])+" "+str(classes[j])+" "+  str(RMSD)+" "+str(SO)+" "+str(Srel) + " " +str(tanimoto) +" " + str(seq_similarity) + " " + str(RMSD_aascore08)+" "+ str(RMSD_aascore05)+ " " + str(Srel_aascore08)+" "+ str(Srel_aascore05)+ " " + str(SO_aascore08)+" "+ str(SO_aascore05)+ '\n')
+                			outfile.write(str(codes[i])+" "+str(codes[j])+" "+ str(classes[i])+" "+str(classes[j])+" "+  str(RMSD)+" "+str(SO)+" "+str(Srel) + " " +str(tanimoto) +" " + str(seq_similarity) + " " + str(RMSD_aascore08)+" "+ str(RMSD_aascore05)+ " " + str(Srel_aascore08)+" "+ str(Srel_aascore05)+ " " + str(SO_aascore08)+" "+ str(SO_aascore05)+ '\n')            
+				elif mode=='a':
+                			outfile.write(str(codes[i])+" "+str(codes[j])+" "+ str(classes[i])+" "+str(classes[j])+" "+  str(scores1.RMSD)+" "+str(scores1.SO)+" "+str(scores1.Srel) + " " +str(scores1.tanimoto) +" " + str(scores1.seq_similarity) + " " + str(scores1.RMSD_aascore08)+" "+ str(scores1.RMSD_aascore05)+ " " + str(scores1.Srel_aascore08)+" "+ str(scores1.Srel_aascore05)+ " " + str(scores1.SO_aascore08)+" "+ str(scores1.SO_aascore05)+ '\n')            
+                            		outfile.write(str(codes[j])+" "+str(codes[i])+" "+ str(classes[j])+" "+str(classes[i])+" "+  str(scores2.RMSD)+" "+str(scores2.SO)+" "+str(scores2.Srel) + " " +str(scores2.tanimoto) +" " + str(scores2.seq_similarity) + " " + str(scores2.RMSD_aascore08)+" "+ str(scores2.RMSD_aascore05)+ " " + str(scores2.Srel_aascore08)+" "+ str(scores2.Srel_aascore05)+ " " + str(scores2.SO_aascore08)+" "+ str(scores2.SO_aascore05)+ '\n')            
+
                 		#print (str(codes[i])+" "+str(codes[j])+" "+ str(classes[i])+" "+str(classes[j])+" "+  str(RMSD)+" "+str(SO)+" "+str(Srel) + " " + str(RMSD_aascore08)+" "+ str(RMSD_aascore05)+ " " + str(Srel_aascore08)+" "+ str(Srel_aascore05)+ " " + str(SO_aascore08)+" "+ str(SO_aascore05))
 	#Delete .1.pdb files
 	#for archivo in os.listdir(output_path1):
