@@ -22,7 +22,7 @@ def openfile(filename):
 		
 def main():
 	if len(sys.argv) != 7:
-		print "Usage: pdb_parser2.py <pdb file> <hetatm name> <chain> <path> <name> <resnume>"
+		print "Usage: pdb_parser2.py <pdb file> <hetatm name> <chain> <path> <name> <resnum>"
 		n = len(sys.argv)
 		print n
 		sys.exit()
@@ -32,13 +32,8 @@ def main():
 		chain = sys.argv[3]
 		path = sys.argv[4]
 		name = sys.argv[5]
-		resnume= sys.argv[6]
-		#print resnume
-		#print pdb_file
-		#print het_atm
-		#print chain
-		#print path
-		#print name
+		resnum= sys.argv[6]
+
 		lig_path = "./"+path+"/Ligands/"
 		prot_path = "./"+path+"/Proteins/"
 
@@ -49,20 +44,14 @@ def main():
 			if line[0:4] == "ATOM":
 				atm_protein.append(line)
 			if line[0:6] =="HETATM":
-				if line[17:20] == het_atm:
-					if line[21:22] == chain:
-						if int(resnume) >= 1000:
-							if line[22:26]==resnume:
-								atm_ligand.append(line)
-						if int(resnume) >= 100:
-							if line[23:26]==resnume:
-								atm_ligand.append(line)
-						if int(resnume) >= 1000:
-							if line[24:26]==resnume:
-								atm_ligand.append(line)
-						else:
-							if line[25:26]==resnume:
-								atm_ligand.append(line)
+				if len(het_atm) == 2:
+					if line[18:20] == het_atm:
+						if int(line[22:26])==int(resnum):
+							atm_ligand.append(line)
+				else:
+					if line[17:20] == het_atm:
+						if int(line[22:26])==int(resnum):
+							atm_ligand.append(line)
 		atm_protein.append("TER")
 		atm_protein.append("END")
 		file_name = prot_path+name+".pdb"
