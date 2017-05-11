@@ -132,7 +132,10 @@ def runclick(query_pocket, target_pocket, outpath, clique_filename, resume):
 
 # Helper function to calculate the average/mean of two values
 def avg(vals):
-	return float(sum(vals)) / len(vals)
+	float_vals=[]
+	for number in vals:
+		float_vals.append(float(number))
+	return float(sum(float_vals)) / len(float_vals)
 
 # Main function
 def pocket_compare(atomtypes, cutoff, cliquesize, dist, workdir, mode, resume=False):
@@ -224,15 +227,15 @@ def pocket_compare(atomtypes, cutoff, cliquesize, dist, workdir, mode, resume=Fa
     	startTime = datetime.now()
 
     	# read files 
-	mun_colum = pd.read_csv(classif, "\t", header=None).columns
-	if mun_colum == 3:
-	    	classif = pd.read_csv(classif, " ", header=None, names=["PDB_code","clss", "bin_class"])
+	mun_colum = pd.read_csv(classif, "	", header=None).columns
+	if len(mun_colum) == 3:
+	    	classif = pd.read_csv(classif, "	", header=None, names=["PDB_code","clss", "bin_class"])
 	    	codes = classif["PDB_code"].tolist()
 	    	classes = classif["clss"].tolist()
 	   	n_codes = len(codes)
 		binary=True
-	elif mun_colum == 2:
-		classif = pd.read_csv(classif, " ", header=None, names=["PDB_code","clss"])
+	elif len(mun_colum) == 2:
+		classif = pd.read_csv(classif, "	", header=None, names=["PDB_code","clss"])
 	    	codes = classif["PDB_code"].tolist()
 	    	classes = classif["clss"].tolist()
 	   	n_codes = len(codes)
@@ -252,7 +255,7 @@ def pocket_compare(atomtypes, cutoff, cliquesize, dist, workdir, mode, resume=Fa
                     			continue # None vs None, moving on...
 				if (classif["PDB_code"][i] ==  classif["PDB_code"][j]):
                     			continue # itself vs itself, moving on...
-				if binary and classif["bin_class"][i] == classif["bin_class"][j]):
+				if binary and (classif["bin_class"][i]== "TN") & (classif["bin_class"][j]== "TN"):
 					continue # TN vs TN, movin on...
 				
 				# Target pocket path
