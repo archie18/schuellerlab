@@ -10,9 +10,13 @@
 //    Andreas Schueller <aschueller@bio.puc.cl>
 //
 // Version
-//     0.2.2_hack    [2016-11-28]
+//     0.3    [2017-05-10]
 //
 // History
+//     0.3      2017-05-10    Added GRE atom type for greasy carbons.
+//                            Rename _ACC to ACC and _DON to DON for better
+//                            compatibility with Click
+//                            Added option to extend pocket atoms to residues or not
 //     0.2.2_hack 2016-11-28  Adapted to work with Kahraman dataset
 //     0.2.2    2013-09-08    Added exclude_path option.
 //                            Undid some changes of 0.2.1 since they
@@ -28,7 +32,7 @@
 //
 #set main 'PocketExtractor'
 #set title 'PocketExtractor'
-#set version '0.2.2_hack'
+#set version '0.3'
 
 function _EditH;
 //function SelectionExtendResidueProximity;
@@ -44,20 +48,26 @@ const DEFAULT_OPTIONS = [
     ligandPath:     '.',
     write_ligand:   1,
     ph4_atom_names: 0,
-    exclude_paths:  []
+    exclude_paths:  [],
+    greasy:         0,
+    byRes:          1
 ];
 
-global function ph4AtomNames atoms
-    // _ACC - H-bond acceptors + tautomer acceptors not _POL
-    aSetName [ atoms | ((ph4_aAcceptor atoms or ph4_aTautomerAcceptor atoms) and not (ph4_aDonor atoms or ph4_aTautomerDonor atoms)), '_ACC' ];
-    // _DON - H-bond donors + tautomer donors not _POL
-    aSetName [ atoms | ((ph4_aDonor atoms or ph4_aTautomerDonor atoms) and not (ph4_aAcceptor atoms or ph4_aTautomerAcceptor atoms)), '_DON' ];
-    // _POL - Both H-bond acceptors and donors (including tautomer version)
-    //aSetName [ atoms | ((ph4_aDonor atoms or ph4_aTautomerDonor atoms) and (ph4_aAcceptor atoms or ph4_aTautomerAcceptor atoms)), '_POL' ];
-    //_GRE - atom with very hydrophobic character.
-    //aSetName [ atoms | ph4_aGrease atoms, '_GRE'];
-    // Get all atoms that are donors and acceptors at the same time (hydroxyls)
+global function ph4AtomNames [ atoms, greasy ]
+    // ACC - H-bond acceptors + tautomer acceptors not POL
+    aSetName [ atoms | ((ph4_aAcceptor atoms or ph4_aTautomerAcceptor atoms) and not (ph4_aDonor atoms or ph4_aTautomerDonor atoms)), 'ACC' ];
+    // DON - H-bond donors + tautomer donors not POL
+    aSetName [ atoms | ((ph4_aDonor atoms or ph4_aTautomerDonor atoms) and not (ph4_aAcceptor atoms or ph4_aTautomerAcceptor atoms)), 'DON' ];
+    // POL - Both H-bond acceptors and donors (including tautomer version)
+    //aSetName [ atoms | ((ph4_aDonor atoms or ph4_aTautomerDonor atoms) and (ph4_aAcceptor atoms or ph4_aTautomerAcceptor atoms)), 'POL' ];
+    // HYD - Hydrophobic atoms
+    //aSetName [ atoms | ph4_aHydrophobe atoms, 'HYD' ];
+    // GRE - atom with very hydrophobic character.
+    if istrue greasy then
+        aSetName [ atoms | ph4_aGrease atoms, 'GRE'];
+    endif
 
+    // Get all atoms that are donors and acceptors at the same time (hydroxyls)
     local accDon = atoms | ((ph4_aDonor atoms or ph4_aTautomerDonor atoms) and (ph4_aAcceptor atoms or ph4_aTautomerAcceptor atoms) /* Poner nueva condicion a setear?*/);
     // Create new atoms and copy the properties of the acceptor-donor atoms
     local copies = oCreate aResidue accDon;
@@ -69,11 +79,8 @@ global function ph4AtomNames atoms
     aSetTempFactor [ copies, aTempFactor accDon ];
     aSetOccupancy [ copies, aOccupancy accDon ];
     // Finally change the atom name of the original atoms to acceptor and of the copies to donor
-    aSetName [ copies, '_DON' ];
-    aSetName [ accDon, '_ACC' ];
-    
-    // _HYD - Hydrophobic atoms
-    //aSetName [ atoms | ph4_aHydrophobe atoms, '_HYD' ];
+    aSetName [ copies, 'DON' ];
+    aSetName [ accDon, 'ACC' ];
 
     // Return the copied atoms so we can add them to our pocket atoms
     return copies;
@@ -115,10 +122,13 @@ global function PocketExtractor options
 
             // Select ligand atoms
             aSetSelected [ cAtoms ligChains, 1 ];
-            // Select near residues
-            //SelectionExtendResidueProximity opt.cutoff;
-            // Extend selection to near residues
-            aSetSelected [_Atoms tok_cat ['asel >> ', totok opt.cutoff, ' >> res'], 1];
+            if istrue opt.byRes then
+                // Extend selection to near residues
+                aSetSelected [_Atoms tok_cat ['asel >> ', totok opt.cutoff, ' >> res'], 1];
+            else
+               // Extend selection to near atoms
+                aSetSelected [_Atoms tok_cat ['asel >> ', totok opt.cutoff], 1];
+            endif
             // Get pocket atoms with ligand
             local atoms = Atoms[];
             local pocket = atoms | aSelected atoms;
@@ -127,8 +137,14 @@ global function PocketExtractor options
             // Get pocket atoms without ligand
             local pocket_woLig = atoms | aSelected atoms;
 
+            // Add notByRes_ to pocket file name
+            local notByRes = '';
+            if isfalse opt.byRes then
+                notByRes = 'notByRes_';
+            endif
+
             // Write pocket in PDB format
-            local pocFileName = tok_cat [ pocketPath, '/', ftail fbase files[fileIdx], '_pocket_', token swrite [ '{f.1}', opt.cutoff ], '.pdb' ];
+            local pocFileName = tok_cat [ pocketPath, '/', ftail fbase files[fileIdx], '_pocket_', notByRes, token swrite [ '{f.1}', opt.cutoff ], '.pdb' ];
             if istrue opt.write_ligand then
                 fwrite_PDB [ pocFileName, pocket ];
             else
@@ -137,9 +153,16 @@ global function PocketExtractor options
 
             if istrue opt.ph4_atom_names then
                 // Rename atom names
-                local copies = ph4AtomNames pocket_woLig;
+                local copies = ph4AtomNames [pocket_woLig, opt.greasy];
+
+				// Add gre_ to pocket file name
+				local tokgre = '';
+				if istrue opt.greasy then
+					tokgre = 'gre_';
+				endif
+
                 // Save pocket with changed atom names
-                pocFileName = tok_cat [ pocketPath, '/', ftail fbase files[fileIdx], '_pocket_ph4_', token swrite [ '{f.1}', opt.cutoff ], '.pdb' ];
+                pocFileName = tok_cat [ pocketPath, '/', ftail fbase files[fileIdx], '_pocket_ph4_', tokgre, notByRes, token swrite [ '{f.1}', opt.cutoff ], '.pdb' ];
                 if istrue opt.write_ligand then
                     fwrite_PDB [ pocFileName, cat [pocket, copies] ];
                 else
