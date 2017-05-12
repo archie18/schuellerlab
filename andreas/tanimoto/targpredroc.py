@@ -27,9 +27,12 @@ with open(filename, 'r') as file:
         y_true.append(int(tokens[6]))
         
 print "Number of TPs: ", sum(y_true)
-fpr, tpr, _ = roc_curve(y_true, y_pred, drop_intermediate=False)
+fpr, tpr, thr = roc_curve(y_true, y_pred, drop_intermediate=False)
 roc_auc = auc(fpr, tpr)
 print "AUC: ", roc_auc
+print fpr
+print tpr
+print thr
 
 plt.figure()
 lw = 2
