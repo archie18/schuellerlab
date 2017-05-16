@@ -12,7 +12,7 @@ import signal
 import collections
 
 # Global constants
-CLICK   = 'click'
+CLICK   = '~/Documents/Click_multiple_2017/click'
 TIMEOUT = 3000 # seconds
 AAGROUPS = {'L': 1, 'V': 1, 'I': 1, 'M': 1, 'C': 1, 'A': 2, 'G': 2, 'S': 3, 'T': 3, 'P': 4, 'F': 5, 'Y': 5, 'W': 5, 'E': 6, 'D': 6, 'N': 6, 'Q': 6, 'K': 7, 'R': 7, 'H': 8}
 
@@ -132,7 +132,10 @@ def runclick(query_pocket, target_pocket, outpath, clique_filename, resume):
 
 # Helper function to calculate the average/mean of two values
 def avg(vals):
-	return float(sum(vals)) / len(vals)
+	float_vals=[]
+	for number in vals:
+		float_vals.append(float(number))
+	return float(sum(float_vals)) / len(float_vals)
 
 # Main function
 def pocket_compare(atomtypes, cutoff, cliquesize, dist, workdir, mode, resume=False):
@@ -224,15 +227,15 @@ def pocket_compare(atomtypes, cutoff, cliquesize, dist, workdir, mode, resume=Fa
     	startTime = datetime.now()
 
     	# read files 
-	mun_colum = pd.read_csv(classif, "\t", header=None).columns
-	if mun_colum == 3:
-	    	classif = pd.read_csv(classif, " ", header=None, names=["PDB_code","clss", "bin_class"])
+	mun_colum = pd.read_csv(classif, "	", header=None).columns
+	if len(mun_colum) == 3:
+	    	classif = pd.read_csv(classif, "	", header=None, names=["PDB_code","clss", "bin_class"])
 	    	codes = classif["PDB_code"].tolist()
 	    	classes = classif["clss"].tolist()
 	   	n_codes = len(codes)
 		binary=True
-	elif mun_colum == 2:
-		classif = pd.read_csv(classif, " ", header=None, names=["PDB_code","clss"])
+	elif len(mun_colum) == 2:
+		classif = pd.read_csv(classif, "	", header=None, names=["PDB_code","clss"])
 	    	codes = classif["PDB_code"].tolist()
 	    	classes = classif["clss"].tolist()
 	   	n_codes = len(codes)
@@ -252,7 +255,7 @@ def pocket_compare(atomtypes, cutoff, cliquesize, dist, workdir, mode, resume=Fa
                     			continue # None vs None, moving on...
 				if (classif["PDB_code"][i] ==  classif["PDB_code"][j]):
                     			continue # itself vs itself, moving on...
-				if binary and (classif["bin_class"][i] == classif["bin_class"][j]):
+				if binary and (classif["bin_class"][i]== "TN") & (classif["bin_class"][j]== "TN"):
 					continue # TN vs TN, movin on...
 				
 				# Target pocket path
@@ -307,4 +310,4 @@ def pocket_compare(atomtypes, cutoff, cliquesize, dist, workdir, mode, resume=Fa
 			#os.remove(output_path2+'/'+archivo)
 	
     	sys.stdout.flush()
-    	sys.stderr.write("Finished in " + str(datetime.now() - startTime) + "\n")
+sys.stderr.write("Finished in " + str(datetime.now() - startTime) + "\n")

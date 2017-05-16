@@ -26,7 +26,7 @@ pocket_cutoff = '6.0'
 
 parameters='Parameters_'
 plot_folder=args.path+'/plots'
-output_folder='./'+args.path+'/Output'
+output_folder='./'+args.path
 opt=[]
 atomtype_label = ''
 def create_filename(atomtype, cutoff, cliquesize, pocket_cutoff):
@@ -132,7 +132,7 @@ for combination in combinations:
 	#print
 	#print "=== File:", input_file, "===" 
 	#print "\t" + "\t".join(classes)
-	if (flag == 0):
+	if (flag == 0) and args.auc=='0':
 		print "Atomtypes Cuttoff Ncliques Distance Median(Score) " + "\t".join(classes) + "\t" + "Mean"
 		flag +=1
 	#number = 0

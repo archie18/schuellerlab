@@ -33,12 +33,13 @@ if not os.path.exists('./'+workdir+'/Ligands'):
 tupla= []
 #Read classification file
 for i in open(filename):
-	Codes = collections.namedtuple('Codes',['code', 'het','het_name','chain'])
+	Codes = collections.namedtuple('Codes',['code', 'het','het_name','chain','rsnum'])
 	i = i.replace('\n','') #remove if '\n'
 	s = i.split(' ')
 	pdb=s[0]
 	het_file = s[1]
 	het_nm = s[1]
+	resnum = s[2]
 	cad = s[3]
 	pdb_filename = pdb+".pdb"
 	pdb_file="./"+workdir+"/"+pdb_filename
@@ -48,11 +49,11 @@ for i in open(filename):
 		print "downloading..."
 		open(pdb_file,"w").write( urllib.urlopen(pdbid).read() )
 		print pdb_file
-	tupla.append(Codes(code=pdb,het=het_file, het_name=het_nm, chain=cad))
+	tupla.append(Codes(code=pdb,het=het_file, het_name=het_nm, chain=cad, rsnum=resnum))
 
 
 for l in tupla:
-	cmd = "python pdb_parser2.py ./"+workdir+"/"+l.code.upper()+".pdb "+l.het_name+" "+l.chain+" "+ workdir+" "+l.code+"_"+l.het_name 
+	cmd = "python pdb_parser2.py ./"+workdir+"/"+l.code.upper()+".pdb "+l.het_name+" "+l.chain+" "+ workdir+" "+l.code+"_"+l.het_name+" "+l.rsnum 
 	os.system(cmd)
 
 src = './test.sh'
