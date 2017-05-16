@@ -44,14 +44,14 @@ def main():
 			if line[0:4] == "ATOM":
 				atm_protein.append(line)
 			if line[0:6] =="HETATM":
-				if len(het_atm) == 2:
-					if line[18:20] == het_atm:
+				if line[21:22]==chain:
+					if line[18:20].strip() == het_atm:
 						if int(line[22:26])==int(resnum):
 							atm_ligand.append(line)
-				else:
-					if line[17:20] == het_atm:
-						if int(line[22:26])==int(resnum):
-							atm_ligand.append(line)
+					#if line[21:22]==' ':
+					#	if line[17:20] == het_atm:
+                                        #                if int(line[22:26])==int(resnum):
+                                       #                         atm_ligand.append(line)
 		atm_protein.append("TER")
 		atm_protein.append("END")
 		file_name = prot_path+name+".pdb"
