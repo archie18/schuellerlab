@@ -12,7 +12,7 @@ import signal
 import collections
 
 # Global constants
-CLICK   = 'click'
+CLICK   = '~/Documents/Click_multiple_2017/click'
 TIMEOUT = 3000 # seconds
 AAGROUPS = {'L': 1, 'V': 1, 'I': 1, 'M': 1, 'C': 1, 'A': 2, 'G': 2, 'S': 3, 'T': 3, 'P': 4, 'F': 5, 'Y': 5, 'W': 5, 'E': 6, 'D': 6, 'N': 6, 'Q': 6, 'K': 7, 'R': 7, 'H': 8}
 
@@ -310,4 +310,4 @@ def pocket_compare(atomtypes, cutoff, cliquesize, dist, workdir, mode, resume=Fa
 			#os.remove(output_path2+'/'+archivo)
 	
     	sys.stdout.flush()
-    	sys.stderr.write("Finished in " + str(datetime.now() - startTime) + "\n")
+sys.stderr.write("Finished in " + str(datetime.now() - startTime) + "\n")
