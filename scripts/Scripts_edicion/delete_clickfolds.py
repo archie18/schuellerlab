@@ -1,9 +1,10 @@
 import os 
 from subprocess import call
-
-folders= os.listdir(os.getcwd()+"/Output_old")
+import sys
+out_folder=sys.argv[1]
+folders= os.listdir(os.getcwd()+"/"+out_folder)
 for folder in folders:
-	path= os.getcwd()+"/Output_old/"+folder
+	path= os.getcwd()+"/"+out_folder+"/"+folder
 	call(['rm','-r',path+'/click_fold1'])
 	call(['rm','-r',path+'/click_fold2'])
 
