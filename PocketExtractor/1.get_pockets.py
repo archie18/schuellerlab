@@ -1,8 +1,19 @@
 #!/usr/bin/env python
-"""
-Example:
-python 1.get_pockets.py -f class_file -p Name_Of_Dataset
-"""
+
+####################################################
+##
+## Pipeline to extract pockets
+## Extracts binding pockets from a set
+##
+## Usage
+##    python 1.get_pockets.py -f class_file -p Name_Of_Dataset
+##
+## Version
+##     0.1    [2017-05-16]
+##
+## History
+##     0.1      2017-05-16    Initial version
+##
 
 import os
 import sys

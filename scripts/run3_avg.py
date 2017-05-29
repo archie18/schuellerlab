@@ -57,7 +57,8 @@ flag=0
 # create directory for plot data
 if not os.path.exists(plot_folder):
 	os.makedirs(plot_folder)
-
+if args.auc=='1':
+		print "Atomtypes Cuttoff Ncliques Distance Median(Score) Code Class AUC" 
 for combination in combinations:
 	filename = create_filename(combination['atomtype'], combination['cutoff'], combination['cliquesize'], pocket_cutoff)
 	sys.stderr.write(filename + ' ... ')
