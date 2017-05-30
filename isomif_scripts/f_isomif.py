@@ -14,7 +14,7 @@ import urllib
 
 getcleft_sw = "./GetCleft"
 reduce_sw = "./reduce.3.10.070814.linuxi386"
-mif_sw = "/work/isomif\ backup/isomif_tests/mif"
+mif_sw = "/work/isomifbackup/isomif_tests/mif"
 mifView_sw="perl ./mifView.pl"
 isomif_sw ="/work/isomifbackup/isomif_tests/isomif"
 isomifview_sw ="perl ./isoMifView.pl"
