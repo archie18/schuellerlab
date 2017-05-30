@@ -69,7 +69,7 @@ for algo in open(filename):
 	algo = algo.replace('\n','') #remove if '\n'
 	s = algo.split(" ")
 	pdb=s[0]
-	het_file = s[1]+s[2]+s[3]+s[4]
+	het_file = s[1]+s[2]+s[3]+'-'
 	hete = s[1]+s[2]+s[3]
 	pdb_filename = pdb+".pdb"
 	het_nm = s[1]
@@ -81,7 +81,7 @@ Parallel(n_jobs=8, verbose=11)(delayed(runner.downloadpdb)(pdb.code, workdir)for
 #run removeAltLoc for all pdb's
 src = './removeAltLoc.py'
 dst = workdir+'/hive/pdb/removeAltLoc.py'
-cmd=dst+' '+workdir
+cmd='python '+dst+' *.pdb'
 chmod="chmod a+x "
 if not os.path.exists(dst):
 	copyfile(src, dst)
@@ -92,14 +92,21 @@ DIR = workdir+'/hive/pdb'
 clefts= len([name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR, name))])
 total= len(tupla)
 if(clefts<total):
-	print "faltan clefts..."
+	print "faltan pdbs..."
 	sys.exit(1)
 
 #Step 1: RUN GetCleft
 print "GetCleft... "
 Parallel(n_jobs=8, verbose=11)(delayed(runner.rungetcleft)(getcleft.code, getcleft.het,getcleft.het_name, workdir)for getcleft in tupla)
-
-
+DIR = workdir+'/hive/clefts'
+clefts= len([name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR, name))])
+total= 2*len(tupla)
+if(clefts<total):
+	print "faltan clefts..."
+	sys.exit(1)
+else:
+	print "No faltan clefts..."
+	sys.exit(1)
 #Step 2: RUN reduce
 print "Adding hidrogens... "
 Parallel(n_jobs=8, verbose=11)(delayed(runner.runreduce)(runrdc.code,workdir)for runrdc in tupla)
