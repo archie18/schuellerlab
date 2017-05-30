@@ -76,7 +76,7 @@ for algo in open(filename):
 	tupla.append(Codes(code=pdb,het=het_file, heter=hete, het_name=het_nm))
 print len(tupla)
 print "Downloading PDBs..."
-Parallel(n_jobs=4, verbose=11)(delayed(runner.downloadpdb)(pdb.code, workdir)for pdb in tupla)
+Parallel(n_jobs=8, verbose=11)(delayed(runner.downloadpdb)(pdb.code, workdir)for pdb in tupla)
 
 #run removeAltLoc for all pdb's
 src = './removeAltLoc.py'
