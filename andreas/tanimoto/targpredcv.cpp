@@ -247,7 +247,8 @@ void fold(vector<size_t> foldLimits, int foldIdx, vector<size_t> threadLimits, i
             
             // Print output
             myMutex.lock();
-            cout << foldIdx << "\t" << ligIds[ligIdx] << "\t" << targIt->first << "\t" << maxSim << "\t";
+            // cout << foldIdx << "\t" << ligIds[ligIdx] << "\t" << targIt->first << "\t" << maxSim << "\t";
+            cout << foldIdx << "\t" << ligChemblIds[ligIds[ligIdx]] << "\t" << targIt->first << "\t" << maxSim << "\t";
             if (trainingSet.size()) {
                 cout << maxSimLigId << "\t" << ligChemblIds[maxSimLigId];
             } else { // Cover case where trainingSet as size zero

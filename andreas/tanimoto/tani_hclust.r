@@ -8,6 +8,8 @@ tanimoto <- function(x1, x2) {
 
 # 1-Tanimoto
 tcdist <- function(x1, x2) {
+        print(x1)
+        print(x2)
     return(1 - tanimoto(x1, x2))
 }
 
@@ -15,11 +17,12 @@ tcdist <- function(x1, x2) {
 custom.dist <- function(my.df, my.function) {
     mat <- matrix(0, ncol = nrow(my.df), nrow = nrow(my.df))
     colnames(mat) <- rownames(mat) <- rownames(my.df)
-    print(nrow(mat))
-    for(i in 1:nrow(mat)) {
-        for(j in 1:ncol(mat)) {
-                cat(i,j,"\n")
-            mat[i,j] <- my.function(my.df[i,],my.df[j,])
+    #print(nrow(mat))
+    for(i in 1:(nrow(mat)-1)) {
+        cat(i,"\n")
+        for(j in (i+1):ncol(mat)) {
+            #cat(i,j,"\n")
+            mat[j,i] <- my.function(my.df[i,],my.df[j,])
     }}
     return(as.dist(mat))
 }
