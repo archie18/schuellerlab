@@ -81,7 +81,7 @@ def enrichment(grouped):
         # Calculate enrichment
         data = grouped[ligid]
         data.sort(key=lambda x: x[1], reverse=True)
-        print data
+        #print data
         actives = []
         actives_count = 0
         for j, (yt, tp) in enumerate(data):
@@ -89,15 +89,17 @@ def enrichment(grouped):
             if j >= top_x[-1]:
                 break
             actives.append(actives_count)
-        print actives
-        print actives_count
-        for j,_ in enumerate(actives):
-            if actives_count > (j+1):
-                div = j+1
-            else:
-                div = actives_count
-            actives[j] /= float(div)
-        print actives
+        #print actives
+        #print actives_count
+        if actives_count > 0:
+            for j,_ in enumerate(actives):
+                if actives_count > (j+1):
+                    div = j+1
+                else:
+                    div = actives_count
+                actives[j] /= float(div)
+        #print actives
+        last_enrich = 0.0
         for j,x in enumerate(top_x):
             if x <= len(actives):
                 enrichments[j] += actives[x-1]
