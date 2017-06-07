@@ -71,52 +71,42 @@ def precision_recall(y_true, y_pred):
     #plt.show()
     plt.savefig('PR.png')
 
-def enrichment(y_true, y_pred, ligids):
-    # Assumes data already sorted by ligids
+def enrichment(grouped):
     top_x = [1, 5, 10, 15]
-    enrichments = [0.0, 0.0, 0.0, 0.0]
-    last_ligid = ligids[0]
-    data = []
-    ntargets = 0
-    for i in range(len(ligids) + 1):
-        if i >= len(ligids) or ligids[i] != last_ligid:
-            # Calculate enrichment
-            data.sort(key=lambda x: x[1], reverse=True)
-            #print data
-            enrich = []
-            actives = []
-            actives_count = 0
-            for j, (yt, tp) in enumerate(data):
-                actives_count += yt
-                if j < top_x[-1]:
-                    actives.append(actives_count)
-            #print actives
-            #print actives_count
-            for j,en in enumerate(actives):
-                if actives_count > (j+1):
-                    div = j+1
-                else:
-                    div = actives_count
-                actives[j] /= float(div)
-            #print actives
-            for j, x in enumerate(top_x):
-                if x < len(actives):
-                    enrichments[j] += actives[x]
-                    last_enrich = actives[x]
-                else:
-                    enrichments[j] += last_enrich
-                
-            # Update last ligid
-            if i < len(ligids):
-                last_ligid = ligids[i]
-            # Reset
-            data = []
-            ntargets += 1
-        if i < len(ligids):
-            data.append((y_true[i], y_pred[i]))
-            
-    for j, x in enumerate(top_x):
-        enrichments[j] /= ntargets
+    enrichments = []
+    for i,_ in enumerate(top_x):
+        enrichments.append(0.0)
+    
+    for ligid in grouped:
+        # Calculate enrichment
+        data = grouped[ligid]
+        data.sort(key=lambda x: x[1], reverse=True)
+        print data
+        actives = []
+        actives_count = 0
+        for j, (yt, tp) in enumerate(data):
+            actives_count += yt
+            if j >= top_x[-1]:
+                break
+            actives.append(actives_count)
+        print actives
+        print actives_count
+        for j,_ in enumerate(actives):
+            if actives_count > (j+1):
+                div = j+1
+            else:
+                div = actives_count
+            actives[j] /= float(div)
+        print actives
+        for j,x in enumerate(top_x):
+            if x <= len(actives):
+                enrichments[j] += actives[x-1]
+                last_enrich = actives[x-1]
+            else:
+                enrichments[j] += last_enrich
+        
+    for j,_ in enumerate(enrichments):
+        enrichments[j] /= len(grouped)
     print 'Enrichment'
     print top_x
     print enrichments
@@ -128,7 +118,7 @@ def main():
     # Parse input file (which is the output of targligpred)
     y_pred = []
     y_true = []
-    ligids = []
+    grouped = {}
     with open(filename, 'r') as file:
         for line in file:
             tokens = line.split()
@@ -136,13 +126,16 @@ def main():
             yt = int(tokens[6])
             y_pred.append(yp)
             y_true.append(yt)
-            ligids.append(tokens[1])
+            ligid = tokens[1]
+            if not ligid in grouped:
+                grouped[ligid] = [] # Lazy init
+            grouped[ligid].append((yt, yp))
     
     print "Number of TPs: ", sum(y_true)
     
     roc(y_true, y_pred)
     precision_recall(y_true, y_pred)
-    enrichment(y_true, y_pred, ligids)
+    enrichment(grouped)
 
 if __name__ == "__main__":
     main()
