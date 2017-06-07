@@ -7,9 +7,11 @@
  * Remark: My first C++ program
  * 
  * @Author: Andreas Schueller <aschueller@bio.puc.cl>
- * @Version: 0.4 [2017-05-04]
+ * @Version: 0.4.1 [2017-06-06]
  * 
  * HISTORY
+ * 2017-06-06    0.4.1    Now printing ChEMBL ID of query ligands in output instead of
+ *                        internal serial number
  * 2017-05-04    0.4      Made compatible with clustered data:
  *                        - Added option to ignore size difference in the ligand count
  *                        from the sim mat and the interaction file
@@ -54,7 +56,7 @@
 using namespace TCLAP;
 using namespace std;
 
-const string VERSION = "0.4";
+const string VERSION = "0.4.1";
 
 mutex myMutex;
 
