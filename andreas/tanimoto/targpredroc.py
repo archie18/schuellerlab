@@ -105,7 +105,7 @@ def enrichment(grouped, total_y_true):
                 div = total_y_true
             enrichments[idx] = accum_actives / float(div)
 
-    print 'Optimal X of Top-X:', total_y_true / len(grouped)
+    print 'Optimal X of Top-X:', total_y_true / float(len(grouped))
     print 'Top-X', '%Actives'
     for j,x in enumerate(top_x):
         print x, enrichments[j] * 100
