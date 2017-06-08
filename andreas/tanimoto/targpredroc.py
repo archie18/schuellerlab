@@ -24,7 +24,7 @@ def roc(y_true, y_pred):
     # Compute Receiver Operating Characteristic
     fpr, tpr, thr = roc_curve(y_true, y_pred, drop_intermediate=False)
     roc_auc = auc(fpr, tpr)
-    print "ROC AUC: ", roc_auc
+    print "ROC AUC:", roc_auc
     #acc = accuracy_score(y_true, y_pred)
     #print "Accurary: ", acc
     #print fpr
@@ -50,7 +50,7 @@ def precision_recall(y_true, y_pred):
     # Compute Precision-Recall and plot curve
     precision, recall, thr = precision_recall_curve(y_true, y_pred)
     average_precision = average_precision_score(y_true, y_pred) # Area under the PR curve
-    print "PR AUC: ", average_precision
+    print "PR AUC:", average_precision
     #precision_scr = precision_score(y_true, y_pred)
     #print "Precision score: ", precision_scr
     #recall_scr = recall_score(y_true, y_pred)
@@ -105,6 +105,7 @@ def enrichment(grouped, total_y_true):
                 div = total_y_true
             enrichments[idx] = accum_actives / float(div)
 
+    print 'Optimal X of Top-X:', total_y_true / len(grouped)
     print 'Top-X', '%Actives'
     for j,x in enumerate(top_x):
         print x, enrichments[j] * 100
@@ -130,7 +131,10 @@ def main():
             grouped[ligid].append((yt, yp))
     
     total_y_true = sum(y_true)
-    print "Number of TPs: ", total_y_true
+    print "Number of samples:", len(y_true)
+    print "Number of positives:", total_y_true
+    print "Number of negatives:", len(y_true) - total_y_true
+    print "Number of ligands:", len(grouped)
     
     roc(y_true, y_pred)
     precision_recall(y_true, y_pred)
