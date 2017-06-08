@@ -1,13 +1,12 @@
 -- table of values to potentially include
 -- CREATE TEMPORARY TABLE tmp_inter
-    --  SELECT  td.tid, cp.molregno, canonical_smiles, organism
+--     SELECT  cs.standard_inchi
 --    SELECT DISTINCT(concat(assays.assay_id,"_", td.tid, "_",  cp.molregno)) as uniq_inter_id, assays.assay_id, td.tid,td.pref_name, pp.accession, pp.description, do.source_domain_id, act.standard_value, cp.molregno, canonical_smiles, pp.organism  
 --     SELECT  assays.assay_id,  MIN(act.standard_value),AVG(act.standard_value) AS avg_val, MAX(act.standard_value)  
 --    SELECT  assays.assay_id, td.tid, pp.accession, pp.description, do.source_domain_id, MIN(act.standard_value),AVG(act.standard_value) AS avg_val, MAX(act.standard_value), cp.molregno, md.chembl_id, ms.synonyms, canonical_smiles, pp.organism -- por alguna razon esto arroja error 
-   -- SELECT   td.chembl_id, md.chembl_id, MIN(pp.accession), MIN(pp.description), MIN(do.source_domain_id), MIN(act.standard_value),AVG(act.standard_value) , MAX(act.standard_value), MIN(ms.synonyms), MIN(canonical_smiles),MIN(pp.organism), cs.standard_inchi -- por alguna razon esto arroja error 
-     SELECT cs.molregno , act.assay_id, act.activity_id, cs.standard_inchi, td.tid,  act.doc_id 
-	FROM assays
-INNER JOIN activities  as act ON assays.assay_id = act.assay_id  -- maestra tabla de interaaciones proteina-ligando
+    SELECT   td.chembl_id, md.chembl_id, MAX(pp.accession), MAX(pp.description), MAX(do.source_domain_id), MAX(act.standard_value),AVG(act.standard_value) , MAX(act.standard_value), MAX(ms.synonyms), MAX(canonical_smiles),MAX(pp.organism), MAX(cs.standard_inchi) -- por alguna razon esto arroja error 
+     FROM assays
+INNER JOIN activities  as act ON assays.assay_id = act.assay_id -- maestra tabla de interaaciones proteina-ligando
 INNER JOIN confidence_score_lookup as csl 
 INNER JOIN target_dictionary   as td  ON assays.tid = td.tid -- datos proteina target
 LEFT JOIN target_components   as tc  ON td.tid = tc.tid -- datos proteina
@@ -34,9 +33,9 @@ LEFT JOIN molecule_synonyms as ms  ON act.molregno = ms.molregno -- datos ligand
        --  AND cp.heavy_atoms < 80
        AND substring_index(trim(substring_index(substring_index(molfile,"\n",4),"\n",-1))," ",1) < 80 -- esto deberia ser atomos pesados menor a 80
        -- AND NOT EXISTS(SELECT * FROM tmptbl INNER JOIN WHERE molregno = 4899918645646465456645645)
-   GROUP BY td.chembl_id,md.chembl_id,cs.standard_inchi, cs.molregno, act.activity_id, act.doc_id, act.assay_id, td.tid -- agrupar por par proteina ligando
+   GROUP BY td.chembl_id,md.chembl_id -- agrupar por par proteina ligando
 -- GROUP BY act.assay_id 
-   --    HAVING MAX(act.standard_value) < 10000    -- esta linea define max o min en los archivos de salida
+       HAVING MAX(act.standard_value) < 10000    -- esta linea define max o min en los archivos de salida
 --       HAVING AVG(act.standard_value) < 10000 esta linea no funciona el AVG no funciona no entiendo porque.
 
 ;
