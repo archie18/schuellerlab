@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
 # Author: Andreas Schueller <aschueller@bio.puc.cl>
-# Version 0.2 2017-06-06
+# Version 0.2 2017-06-08
 # HISTORY
-# 2017-06-06    0.2      Added precision-recall analysis
+# 2017-06-08    0.2      Added precision-recall analysis and
+#                        enrichment analysis
 # 2017-02-26    0.1.1    Adapted to work with new output of targligcv
 # 2017-02-24    0.1      First version
 
@@ -71,47 +72,42 @@ def precision_recall(y_true, y_pred):
     #plt.show()
     plt.savefig('PR.png')
 
-def enrichment(grouped):
-    top_x = [1, 5, 10, 15]
+def enrichment(grouped, total_y_true):
+    # Calculate the percentage of actives found with top x rank
+    top_x = [1, 5, 10, 15, 20]
     enrichments = []
     for i,_ in enumerate(top_x):
         enrichments.append(0.0)
+    actives = []
+    for i in range(top_x[-1]):
+        actives.append(0)
+    actives_count = 0
     
+    # Get number of actives per rank
     for ligid in grouped:
         # Calculate enrichment
         data = grouped[ligid]
         data.sort(key=lambda x: x[1], reverse=True)
-        #print data
-        actives = []
-        actives_count = 0
         for j, (yt, tp) in enumerate(data):
-            actives_count += yt
             if j >= top_x[-1]:
                 break
-            actives.append(actives_count)
-        #print actives
-        #print actives_count
-        if actives_count > 0:
-            for j,_ in enumerate(actives):
-                if actives_count > (j+1):
-                    div = j+1
-                else:
-                    div = actives_count
-                actives[j] /= float(div)
-        #print actives
-        last_enrich = 0.0
-        for j,x in enumerate(top_x):
-            if x <= len(actives):
-                enrichments[j] += actives[x-1]
-                last_enrich = actives[x-1]
-            else:
-                enrichments[j] += last_enrich
-        
-    for j,_ in enumerate(enrichments):
-        enrichments[j] /= len(grouped)
-    print 'Enrichment'
-    print top_x
-    print enrichments
+            actives_count += yt
+            actives[j] += yt
+
+    # Calculate percentage of actives found
+    accum_actives = 0
+    for j in range(top_x[-1]):
+        accum_actives += actives[j]
+        if j+1 in top_x:
+            idx = top_x.index(j+1)
+            div = (j+1) * len(grouped)
+            if div > total_y_true:
+                div = total_y_true
+            enrichments[idx] = accum_actives / float(div)
+
+    print 'Top-X', '%Actives'
+    for j,x in enumerate(top_x):
+        print x, enrichments[j] * 100
     
 def main():
     #filename = 'parallel.out.10000'
@@ -133,11 +129,12 @@ def main():
                 grouped[ligid] = [] # Lazy init
             grouped[ligid].append((yt, yp))
     
-    print "Number of TPs: ", sum(y_true)
+    total_y_true = sum(y_true)
+    print "Number of TPs: ", total_y_true
     
     roc(y_true, y_pred)
     precision_recall(y_true, y_pred)
-    enrichment(grouped)
+    enrichment(grouped, total_y_true)
 
 if __name__ == "__main__":
     main()
