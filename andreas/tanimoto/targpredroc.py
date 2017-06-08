@@ -74,7 +74,7 @@ def precision_recall(y_true, y_pred):
 
 def enrichment(grouped, total_y_true):
     # Calculate the percentage of actives found with top x rank
-    top_x = [1, 5, 10, 15, 20]
+    top_x = [1, 5, 10, 15, 20, 30, 40, 50, 75, 100, 200, 500]
     enrichments = []
     for i,_ in enumerate(top_x):
         enrichments.append(0.0)
