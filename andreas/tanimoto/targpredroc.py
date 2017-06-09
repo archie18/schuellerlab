@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
 # Author: Andreas Schueller <aschueller@bio.puc.cl>
-# Version 0.2 2017-06-08
+# Version 0.2.1 2017-06-09
 # HISTORY
+# 2017-06-09    0.2.1    Added usage information and using input filename
+#                        as plot titles and plot filename prefix
 # 2017-06-08    0.2      Added precision-recall analysis and
 #                        enrichment analysis
 # 2017-02-26    0.1.1    Adapted to work with new output of targligcv
@@ -17,10 +19,11 @@ from sklearn.metrics import roc_curve, auc, accuracy_score
 from sklearn.metrics import precision_recall_curve
 from sklearn.metrics import average_precision_score
 from sklearn.metrics import f1_score, precision_score, recall_score
-import sys
+import sys, os
 
+VERSION = '0.2.1'
 
-def roc(y_true, y_pred):
+def roc(y_true, y_pred, title):
     # Compute Receiver Operating Characteristic
     fpr, tpr, thr = roc_curve(y_true, y_pred, drop_intermediate=False)
     roc_auc = auc(fpr, tpr)
@@ -41,12 +44,12 @@ def roc(y_true, y_pred):
     plt.ylim([0.0, 1.05])
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
-    plt.title('ROC curve')
+    plt.title('ROC curve: %s' % title)
     plt.legend(loc="lower right")
     #plt.show()
-    plt.savefig('ROC.png')
+    plt.savefig('%s.ROC.png' % title)
 
-def precision_recall(y_true, y_pred):
+def precision_recall(y_true, y_pred, title):
     # Compute Precision-Recall and plot curve
     precision, recall, thr = precision_recall_curve(y_true, y_pred)
     average_precision = average_precision_score(y_true, y_pred) # Area under the PR curve
@@ -67,10 +70,10 @@ def precision_recall(y_true, y_pred):
     plt.ylabel('Precision')
     plt.ylim([0.0, 1.05])
     plt.xlim([0.0, 1.0])
-    plt.title('Precision-Recall curve')
+    plt.title('Precision-Recall curve: %s' % title)
     plt.legend(loc="lower left")
     #plt.show()
-    plt.savefig('PR.png')
+    plt.savefig('%s.PR.png' % title)
 
 def enrichment(grouped, total_y_true):
     # Calculate the percentage of actives found with top x rank
@@ -111,7 +114,13 @@ def enrichment(grouped, total_y_true):
         print x, enrichments[j] * 100
     
 def main():
-    #filename = 'parallel.out.10000'
+    print '%s v%s' % (os.path.basename(sys.argv[0]), VERSION)
+    if len(sys.argv) < 2:
+        print 'Usage: python %s <output file of targpredcv>' % os.path.basename(sys.argv[0])
+        print 'This script will output statistics to stdout and save two plots as files:'
+        print '<output file of targpredcv>.ROC.png - Receiver operating characteristic curve' 
+        print '<output file of targpredcv>.PR.png - Precision recall curve'
+        sys.exit(1)
     filename = sys.argv[1];
 
     # Parse input file (which is the output of targligpred)
@@ -136,8 +145,8 @@ def main():
     print "Number of negatives:", len(y_true) - total_y_true
     print "Number of ligands:", len(grouped)
     
-    roc(y_true, y_pred)
-    precision_recall(y_true, y_pred)
+    roc(y_true, y_pred, filename)
+    precision_recall(y_true, y_pred, filename)
     enrichment(grouped, total_y_true)
 
 if __name__ == "__main__":
