@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
 # Author: Andreas Schueller <aschueller@bio.puc.cl>
-# Version 0.2.1 2017-06-09
+# Version 0.2.2 2017-06-09
 # HISTORY
+# 2017-06-09    0.2.2    Printing number of targets
 # 2017-06-09    0.2.1    Added usage information and using input filename
 #                        as plot titles and plot filename prefix
 # 2017-06-08    0.2      Added precision-recall analysis and
@@ -21,7 +22,7 @@ from sklearn.metrics import average_precision_score
 from sklearn.metrics import f1_score, precision_score, recall_score
 import sys, os
 
-VERSION = '0.2.1'
+VERSION = '0.2.2'
 
 def roc(y_true, y_pred, title):
     # Compute Receiver Operating Characteristic
@@ -127,6 +128,7 @@ def main():
     y_pred = []
     y_true = []
     grouped = {}
+    targets = {}
     with open(filename, 'r') as file:
         for line in file:
             tokens = line.split()
@@ -138,12 +140,15 @@ def main():
             if not ligid in grouped:
                 grouped[ligid] = [] # Lazy init
             grouped[ligid].append((yt, yp))
+            targetid = tokens[2]
+            targets[targetid] = True
     
     total_y_true = sum(y_true)
     print "Number of samples:", len(y_true)
     print "Number of positives:", total_y_true
     print "Number of negatives:", len(y_true) - total_y_true
     print "Number of ligands:", len(grouped)
+    print "Number of targets:", len(targets)
     
     roc(y_true, y_pred, filename)
     precision_recall(y_true, y_pred, filename)
