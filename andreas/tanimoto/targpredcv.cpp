@@ -2,6 +2,7 @@
  * targpredcv - Cross-validated target prediction
  * 
  * Build on Linux: g++ -O3 -std=c++0x -pthread simmat.cpp targpredcv.cpp -o targpredcv
+ * Build on Flamingo: g++5.4.0 -O3 -std=c++11 -pthread simmat.cpp targpredcv.cpp -o targpredcv
  * Build on Mac: clang++ -O3 -std=c++11 -pthread simmat.cpp targpredcv.cpp -o targpredcv
  *
  * Remark: My first C++ program
