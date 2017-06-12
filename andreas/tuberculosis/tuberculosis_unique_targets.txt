@@ -1,0 +1,47 @@
+I6YFP0	Biotin--acetyl-CoA-carboxylase ligase
+O53430	Mycothiol S-conjugate amidase
+O69638	Hydrolase, alpha/beta hydrolase fold family
+P71716	Bifunctional enzyme MbtA: salicyl-AMP ligase (SAL-AMP ligase) + salicyl-S-ArCP synthetase
+P95276	Epoxide hydrolase
+P96830	Uncharacterized protein
+P96878	Probable transmembrane carbonic anhydrase (Carbonate dehydratase) (Carbonic dehydratase)
+P96884	BirA bifunctional protein
+P9WFR9	Thymidylate synthase
+P9WG47	DNA gyrase subunit A
+P9WG57	Thymidylate synthase ThyX
+P9WGR1	Enoyl-[acyl-carrier-protein] reductase [NADH]
+P9WGY9	DNA-directed RNA polymerase subunit beta
+P9WH09	dTDP-4-dehydrorhamnose reductase
+P9WH75	Ribonucleoside-diphosphate reductase subunit alpha
+P9WI81	Serine/threonine-protein kinase PknB
+P9WIA1	Probable low molecular weight protein-tyrosine-phosphatase
+P9WIB9	Secreted chorismate mutase
+P9WIJ3	Peptide deformylase
+P9WIL5	Pantothenate synthetase
+P9WJM9	L-cysteine:1D-myo-inositol 2-amino-2-deoxy-alpha-D-glucopyranoside ligase
+P9WJN3	1D-myo-inositol 2-acetamido-2-deoxy-alpha-D-glucopyranoside deacetylase
+P9WKE1	Thymidylate kinase
+P9WKG5	2-C-methyl-D-erythritol 2,4-cyclodiphosphate synthase
+P9WKK7	Isocitrate lyase
+P9WMC1	HTH-type transcriptional regulator EthR
+P9WMN1	ATP phosphoribosyltransferase
+P9WMN3	Bifunctional protein GlmU
+P9WN95	Cell division protein FtsZ
+P9WNG3	3-oxoacyl-[acyl-carrier-protein] synthase 3
+P9WNP5	1,4-dihydroxy-2-naphthoyl-CoA synthase
+P9WNS1	1-deoxy-D-xylulose 5-phosphate reductoisomerase
+P9WNS3	1-deoxy-D-xylulose-5-phosphate synthase
+P9WNV1	DNA ligase A
+P9WNX1	Dihydrofolate reductase
+P9WP55	O-acetylserine sulfhydrylase
+P9WPJ7	Beta-carbonic anhydrase 1
+P9WPJ9	Carbonic anhydrase 2
+P9WPP1	Steroid C26-monooxygenase
+P9WPP7	Mycocyclosin synthase
+P9WPP9	Lanosterol 14-alpha demethylase
+P9WPX7	3-dehydroquinate dehydratase
+P9WQA3	Fructose-bisphosphate aldolase
+P9WQD7	3-oxoacyl-[acyl-carrier-protein] synthase 2
+P9WQD9	3-oxoacyl-[acyl-carrier-protein] synthase 1
+P9WQN9	Diacylglycerol acyltransferase/mycolyltransferase Ag85C
+P9WQP7	3 beta-hydroxysteroid dehydrogenase/Delta 5-->4-isomerase
