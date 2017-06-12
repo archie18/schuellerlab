@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
 # Author: Andreas Schueller <aschueller@bio.puc.cl>
-# Version 0.2.2 2017-06-09
+# Version 0.2.3 2017-06-12
 # HISTORY
+# 2017-06-12    0.2.3    Added percentages 2 to 4 to %actives output
 # 2017-06-09    0.2.2    Printing number of targets
 # 2017-06-09    0.2.1    Added usage information and using input filename
 #                        as plot titles and plot filename prefix
@@ -22,7 +23,7 @@ from sklearn.metrics import average_precision_score
 from sklearn.metrics import f1_score, precision_score, recall_score
 import sys, os
 
-VERSION = '0.2.2'
+VERSION = '0.2.3'
 
 def roc(y_true, y_pred, title):
     # Compute Receiver Operating Characteristic
