@@ -106,7 +106,11 @@ if(clefts<total):
 	sys.exit(1)
 else:
 	print "No faltan clefts..."
+<<<<<<< HEAD
 	
+=======
+
+>>>>>>> 0cf7759711c13f0c9cc943d76a727cc9955a498e
 #Step 2: RUN reduce
 print "Adding hidrogens... "
 Parallel(n_jobs=8, verbose=11)(delayed(runner.runreduce)(runrdc.code,workdir)for runrdc in tupla)
