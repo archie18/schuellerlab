@@ -32,7 +32,7 @@ if not os.path.exists(args.plot_folder):
 
 for input_file in args.input:
 	# read output of "2[ab]._[click|apoc]_all_vs_all.py"
-	table = pd.read_csv(input_file)#, delim_whitespace=True)
+	table = pd.read_csv(input_file, delim_whitespace=True)
 	metrics = [col for col in table][4:]
 	classes = list(table["class1"])
 	classes.extend(list(table["class2"]))

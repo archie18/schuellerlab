@@ -3,7 +3,7 @@
 
 """
 Example:
-python apoc.py -f class -p Folder
+python apoc.py -f class -p Folder 
 """
 
 import csv
@@ -26,17 +26,17 @@ dataset = "./"+args.file
 
 tupla = []
 for i in open(dataset):  #armar sentencias
-	Codes = collections.namedtuple('Codes',['code', 'het','hetname','chain'])
+	Codes = collections.namedtuple('Codes',['code', 'het','hetname'])
 	i = i.replace('\n','') #remove if '\n' 
 	s = i.split(" ")
-	cad = s[3]
+	
 	pdb=s[0]
 	het_file = s[0]+"_"+s[1]
 	het_name = s[1]
 
 	#print pdb
 	#print het_file
-	tupla.append(Codes(code=pdb,het=het_file, hetname=het_name,chain=cad))
+	tupla.append(Codes(code=pdb,het=het_file, hetname=het_name))
 	
 if not os.path.exists(workdir):
 	os.makedirs(workdir)

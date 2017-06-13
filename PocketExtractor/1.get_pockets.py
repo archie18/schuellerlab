@@ -9,9 +9,10 @@
 ##    python 1.get_pockets.py -f class_file -p Name_Of_Dataset
 ##
 ## Version
-##     0.1    [2017-05-16]
+##     0.2    [2017-06-09]
 ##
 ## History
+##     0.2      2017-06-09    removeAltLoc.py added 
 ##     0.1      2017-05-16    Initial version
 ##
 
@@ -61,6 +62,17 @@ for i in open(filename):
 		open(pdb_file,"w").write( urllib.urlopen(pdbid).read() )
 		print pdb_file
 	tupla.append(Codes(code=pdb,het=het_file, het_name=het_nm, chain=cad, rsnum=resnum))
+
+#Script to removeALt location
+src = './removeAltLoc.py'
+dst = './'+workdir+'/removeAltLoc.py'
+chmod="chmod a+x remove.sh"
+remove = "./remove.sh "+workdir
+#Copy bash script to workdir and execute 
+if not os.path.exists(dst):
+	copyfile(src, dst)
+os.system(chmod)
+os.system(remove)
 
 
 for l in tupla:

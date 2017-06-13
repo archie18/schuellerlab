@@ -2,7 +2,7 @@
 
 """
 Example:
-python 2a._apoc_all_vs_all.py -c class -p block_PDBs
+python 2a._apoc_all_vs_all.py -c class -p block_PDBs/
 """
 
 from subprocess import check_output
@@ -53,15 +53,15 @@ for i in range(n-1):
 				if "RMSD" in line: scores2=line
 			scor1 = re.split("PS-score =|, P-value =|, Z-score =", scores1)
 			scor2 = re.split("RMSD =  |, Seq identity  = ", scores2)
-			PS = scor1[1]
-			p = scor1[2]
-			Z = scor1[3]
-			RMSD = scor2[1]
-			Seqid = scor2[2]
+			PS = scor1[1].strip()
+			p = scor1[2].strip()
+			Z = scor1[3].strip()
+			RMSD = scor2[1].strip()
+			Seqid = scor2[2].strip()
 		
-			print  (pdb1.code+","+pdb2.code+","+
-				pdb1.het+","+pdb2.het+","+
-				PS+","+str(float(p))+","+Z+","+RMSD+","+Seqid
+			print  (pdb1.code+" "+pdb2.code+" *"+
+				pdb1.het+" *"+pdb2.het+" "+
+				PS+" "+str(float(p))+" "+Z+" "+RMSD+" "+Seqid
 				)
 			
 		#apoc = check_output(["apoc", "-fa", "0", primero, segundo])

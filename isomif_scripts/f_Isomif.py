@@ -64,9 +64,9 @@ def runisomif(pdb1, het1, pdb2, het2):
 	"""
 	if not os.path.exists('./hive/match/'):
 		os.mkdir('./hive/match/')
-	if pdb1 != pdb2:
-		cmd = isomif_sw+" -p1 ./mifs/"+pdb1+".mif -p2 ./mifs/"+pdb2+".mif -o ./hive/match/ -c 1 -l 1 -l1 "+het1+" -l2 "+het2
-		os.system(cmd)
+	#if pdb1 != pdb2:
+	cmd = isomif_sw+" -p1 ./mifs/"+pdb1+".mif -p2 ./mifs/"+pdb2+".mif -o ./hive/match/ -c 1 -l 1 -l1 "+het1+" -l2 "+het2
+	os.system(cmd)
 	sys.stdout.flush()
 
 

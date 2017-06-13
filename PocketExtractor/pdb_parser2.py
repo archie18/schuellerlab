@@ -45,30 +45,12 @@ def main():
 				
 				atm_protein.append(line)
 			if line[0:6] =="HETATM":
-<<<<<<< HEAD
-				
-				if len(het_atm) == 2:
-					if line[21:22]==chain:
-						if line[18:20] == het_atm:
-							if int(line[22:26])==int(resnum):
-								atm_ligand.append(line)
-				else:
-					if line[21:22]==chain:
-						if line[17:20] == het_atm:
-							if int(line[22:26])==int(resnum):
-								atm_ligand.append(line)
-					if line[21:22]==' ':
-						if line[17:20] == het_atm:
-							if int(line[22:26])==int(resnum):
-								atm_ligand.append(line)
-=======
 				if line[21:22]==chain:
 					if line[17:20].strip() == het_atm:
 						if int(line[22:26])==int(resnum):
 							atm_ligand.append(line)
 			if line[0:6]=="ENDMDL":
 				break
->>>>>>> d57534654d0a993ffaff510267418d87a791072d
 
 		atm_protein.append("TER")
 		atm_protein.append("END")
@@ -78,15 +60,10 @@ def main():
 		
 		atm_lig = []
 		for i in atm_ligand:
-<<<<<<< HEAD
-			#atm_lig.append(i[0:17]+"LIG     1     "+i[31:80])
-			atm_lig.append(i[0:80])
-=======
 			atm_lig.append(i[0:17]+"LIG     1    "+i[30:80])
 			#atm_lig.append(i[0:80])
->>>>>>> d57534654d0a993ffaff510267418d87a791072d
 		file_name = lig_path+name+".pdb"
 		with open(file_name,'w') as out_file:
 			out_file.write('\n'.join(atm_lig))
 if __name__ == "__main__":
-	main()				
+	main() 
