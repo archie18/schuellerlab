@@ -47,7 +47,7 @@ tupla= []
 for i in open(filename):
 	Codes = collections.namedtuple('Codes',['code', 'het','het_name','chain','rsnum'])
 	i = i.replace('\n','') #remove if '\n'
-	s = i.split(' ')
+	s = i.split('\t')
 	pdb=s[0]
 	het_file = s[1]
 	het_nm = s[1]
