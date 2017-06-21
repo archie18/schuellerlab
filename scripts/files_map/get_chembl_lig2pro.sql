@@ -4,7 +4,7 @@
 --    SELECT DISTINCT(concat(assays.assay_id,"_", td.tid, "_",  cp.molregno)) as uniq_inter_id, assays.assay_id, td.tid,td.pref_name, pp.accession, pp.description, do.source_domain_id, act.standard_value, cp.molregno, canonical_smiles, pp.organism  
 --     SELECT  assays.assay_id,  MIN(act.standard_value),AVG(act.standard_value) AS avg_val, MAX(act.standard_value)  
 --    SELECT  assays.assay_id, td.tid, pp.accession, pp.description, do.source_domain_id, MIN(act.standard_value),AVG(act.standard_value) AS avg_val, MAX(act.standard_value), cp.molregno, md.chembl_id, ms.synonyms, canonical_smiles, pp.organism -- por alguna razon esto arroja error 
-    SELECT   td.chembl_id, md.chembl_id, MAX(pp.accession), MAX(pp.description), MAX(do.source_domain_id), MAX(act.standard_value),AVG(act.standard_value) , MAX(act.standard_value), MAX(ms.synonyms), MAX(canonical_smiles),MAX(pp.organism), MAX(cs.standard_inchi) -- por alguna razon esto arroja error 
+    SELECT   td.chembl_id, md.chembl_id, MIN(pp.accession), MIN(pp.description), MIN(do.source_domain_id), MIN(act.standard_value),AVG(act.standard_value) , MAX(act.standard_value), MIN(ms.synonyms), MIN(canonical_smiles),MIN(pp.organism), MAX(cs.standard_inchi) -- por alguna razon esto arroja error 
      FROM assays
 INNER JOIN activities  as act ON assays.assay_id = act.assay_id -- maestra tabla de interaaciones proteina-ligando
 INNER JOIN confidence_score_lookup as csl 
