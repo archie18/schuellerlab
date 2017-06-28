@@ -73,6 +73,7 @@ def runclick(query_pocket, target_pocket, outpath, clique_filename, resume):
 	
 	# Clique file not found, timeout reached? Return dummy values
 	if not os.path.isfile(clique_filename):
+		sys.stderr.write("Not found: "+outpath+"/"+clique_filename+"\n") #Count all 
 		return Scores(RMSD=4.0, SO=0.0, Srel=0.0, RMSD_aascore05=0.0, RMSD_aascore08=0.0, seq_similarity=0.0, Srel_aascore08=0.0, Srel_aascore05=0.0, SO_aascore08=0.0, SO_aascore05=0.0, tanimoto=0.0)
 	
 	# Open clique file
@@ -81,6 +82,7 @@ def runclick(query_pocket, target_pocket, outpath, clique_filename, resume):
 	matched_atoms_count = cliquefile[0].split()[6]
 	
 	if matched_atoms_count == "0": # if no output or 0 atoms are matched
+		sys.stderr.write("Not matched: "+outpath+"/"+clique_filename+"\n")
 		return Scores(RMSD=4.0, SO=0.0, Srel=0.0, RMSD_aascore05=0.0, RMSD_aascore08=0.0, seq_similarity=0.0, Srel_aascore08=0.0, Srel_aascore05=0.0, SO_aascore08=0.0, SO_aascore05=0.0, tanimoto=0.0)
 
 	else:
@@ -140,14 +142,19 @@ def avg(vals):
 # Main function
 def pocket_compare(atomtypes, cutoff, cliquesize, dist, d_Thr, workdir, mode, resume=False):
 	
-	if len(atomtypes)==6:
-		cacb='CA'
-	if len(atomtypes)==11:
-		cacb='CACB'
-	if len(atomtypes)==16:
+	if atomtypes=='" CA ,ACC ,DON ,GRE "':
+		cacb='CA_ACC_DON_GRE'
+	if atomtypes=='"ACC ,DON ,GRE "':
+		cacb='ACC_DON_GRE'
+	if atomtypes=='" CA ,ACC ,DON "':
 		cacb='CA_ACC_DON'
-	if len(atomtypes)==21:
-		cacb='CACB_ACC_DON'
+	if atomtypes=='"ACC ,DON "':
+		cacb='ACC_DON'
+	if atomtypes=='" CA ,GRE "':
+		cacb='CA_GRE'
+	if atomtypes=='" CA "':
+		cacb='CA'
+
 		
 	# Create output dir, Copy pocket folders and symlink classification file
 	actual_path=os.getcwd()
