@@ -19,9 +19,10 @@ parser.add_argument('-a', '--auc',    required=False,default='0', help='0 to lig
 args = parser.parse_args()
 cutoffs = ['1.5','2.0','2.5','3.0','3.5'] #Cuttoff
 #atomtypes = ['" CA "', '" CA , CB "'] #Calpha o Cbeta
-atomtypes = ['" CA "', '" CA , CB "', '" CA ,ACC ,DON "', '" CA , CB ,ACC ,DON "'] #Calpha o Cbeta
-atomtype_labels = ['CA', 'CACB', 'CA_ACC_DON', 'CACB_ACC_DON'] #Calpha o Cbeta
-cliquesizes = ['5','7','10'] #Numero de cliques
+atomtypes = ['" CA "', '" CA ,GRE "', '"ACC ,DON "', '" CA ,ACC ,DON "','"ACC ,DON ,GRE "','" CA ,ACC ,DON ,GRE "'] #Calpha o Cbeta
+atomtype_labels = ['CA','CA_GRE','ACC_DON', 'CA_ACC_DON', 'ACC_DON_GRE', 'CA_ACC_DON_GRE'] #Calpha o Cbeta
+
+cliquesizes = ['5'] #Numero de cliques
 pocket_cutoff = '6.0'
 
 parameters='Parameters_'
@@ -29,12 +30,22 @@ plot_folder=args.path+'/plots'
 output_folder='./'+args.path
 opt=[]
 atomtype_label = ''
+d=dict()
+
 def create_filename(atomtype, cutoff, cliquesize, pocket_cutoff):
-	filename = parameters+atomtype_labels[atomtypes.index(atomtype)]+'_'+cutoff+'_'+cliquesize+'_'+pocket_cutoff+'_output1.out'
-	out_path = atomtype_labels[atomtypes.index(atomtype)]+'_'+cutoff+'_'+cliquesize+'_'+pocket_cutoff
+	filename = parameters+atomtype_labels[atomtypes.index(atomtype)]+'_'+cutoff+'_'+cliquesize+'_7.5_'+pocket_cutoff+'_output1.out'
+	out_path = atomtype_labels[atomtypes.index(atomtype)]+'_'+cutoff+'_'+cliquesize+'_7.5_'+pocket_cutoff
+	count = -1
+	defecto = 0
+	for data in open(output_folder+'/'+out_path+'/'+filename):
+		count = count +1
+		s = data.split(" ")
+		if s[4]=="4.0":
+			defecto = defecto + 1
+	perc= float(defecto)/float(count)
+	d[atomtype_labels[atomtypes.index(atomtype)]+'_'+cutoff]=perc
 
 	return output_folder+'/'+out_path+'/'+filename
-
 
 combinations = []
 for cutoff in cutoffs:
@@ -58,7 +69,7 @@ flag=0
 if not os.path.exists(plot_folder):
 	os.makedirs(plot_folder)
 if args.auc=='1':
-		print "Atomtypes Cuttoff Ncliques Distance Median(Score) Code Class AUC" 
+		print "Atomtypes Cuttoff Ncliques Distance Median(Score) Code Class AUC Percent"
 for combination in combinations:
 	filename = create_filename(combination['atomtype'], combination['cutoff'], combination['cliquesize'], pocket_cutoff)
 	sys.stderr.write(filename + ' ... ')
@@ -125,7 +136,7 @@ for combination in combinations:
 				fpr, tpr, _ = roc_curve(true, pred[metric], drop_intermediate=False)
 				roc_auc[metric][clss][code] = auc(fpr, tpr)
 				if args.auc=='1':
-					print combination['atomtype'].replace('"', '').replace(' ', '').replace(',', '_') + '\t' + combination['cutoff'] + '\t' + combination['cliquesize'] + '\t' + pocket_cutoff + '\t' +metric+ '\t' +code+ '\t' + clss + '\t' + str(roc_auc[metric][clss][code])
+					print combination['atomtype'].replace('"', '').replace(' ', '').replace(',', '_') + '\t' + combination['cutoff'] + '\t' + combination['cliquesize'] + '\t' + pocket_cutoff + '\t' +metric+ '\t' +code+ '\t' + clss + '\t' + str(roc_auc[metric][clss][code])+ '\t'+ str(d[combination['atomtype'].replace('"', '').replace(' ', '').replace(',', '_')+"_"+combination['cutoff']])
 				# write plotting data
 				pd.DataFrame([fpr, tpr]).transpose().to_csv(
 					folder+os.path.sep+metric+"_"+clss+"_"+code+".csv", header=False, index=False, sep="\t")
@@ -134,7 +145,7 @@ for combination in combinations:
 	#print "=== File:", input_file, "===" 
 	#print "\t" + "\t".join(classes)
 	if (flag == 0) and args.auc=='0':
-		print "Atomtypes Cuttoff Ncliques Distance Median(Score) " + "\t".join(classes) + "\t" + "Mean"
+		print "Atomtypes Cuttoff Ncliques Distance Median(Score) " + "\t".join(classes) + "\t" + "Mean" + "\t" + "Percent"
 		flag +=1
 	#number = 0
 	#var = 0
@@ -147,10 +158,8 @@ for combination in combinations:
 			medians.append(median)
 			line = line + "\t" + str(median)
 		if args.auc=='0':
-			print combination['atomtype'].replace('"', '').replace(' ', '').replace(',', '_') + '\t' + combination['cutoff'] + '\t' + combination['cliquesize'] + '\t' + pocket_cutoff + '\t' + line +"\t" + str(numpy.mean(medians))
+			print combination['atomtype'].replace('"', '').replace(' ', '').replace(',', '_') + '\t' + combination['cutoff'] + '\t' + combination['cliquesize'] + '\t' + pocket_cutoff + '\t' + line +"\t" + str(numpy.mean(medians)) + '\t'+ str(d[combination['atomtype'].replace('"', '').replace(' ', '').replace(',', '_')+"_"+combination['cutoff']])
 	
 	sys.stderr.write('OK\n')
-
-
 
 

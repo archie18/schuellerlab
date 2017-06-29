@@ -43,7 +43,7 @@ except OSError:
 casosCB = ['" CA , CB ,ACC ,DON "', '" CA ,ACC ,DON "', '" CA , CB "','" CA "'] #Calpha o Cbeta
 casosCO = ['1.5','2.0','2.5','3.0','3.5'] #Cutoff
 casosCQ = ['5'] #,'7','10'] #Numero de cliques
-casosDT = ['2.5', '5.0', '7.5', '10', '12.5'] #d_Thr
+casosDT = ['7.5'] #d_Thr
 
 n_large = len(casosCB)*len(casosCQ)*len(casosCO)*len(casosDT)
 
