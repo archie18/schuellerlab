@@ -91,13 +91,13 @@ for input_file in args.input:
 	medians = []
 	print
 	print "=== File:", input_file, "===" 
-	print "\t" + "\t".join(classes)+ "\t" + "Mean" +"\t" + "Mean of Median"
+	print "\t" + "\t".join(classes)+ "\t" + "Mean" 
 	for metric in roc_auc:
 		line = str(metric)
 		for clss in roc_auc[metric]:
 			median = numpy.median(roc_auc[metric][clss])
 			medians.append(median)
 			line = line + "\t" + str(roc_auc[metric][clss]) 
-		print line+ "\t" +  str(numpy.mean(roc_auc[metric].values()))+"\t" + str(numpy.mean(medians))
+		print line+ "\t" +  str(numpy.mean(roc_auc[metric].values()))
 	
 	
