@@ -14,6 +14,7 @@ import sys
 import pandas as pd
 import argparse
 from joblib import Parallel, delayed
+import runematchsite as runner
 
 parser = argparse.ArgumentParser()
 
@@ -128,9 +129,9 @@ def main():
 			inp.close()
 			files.append(filename)
 	
-	for i in files:
-		print i
-	#Parallel(n_jobs=8, verbose=11)(delayed()()for i in files)
+	#for i in files:
+	#	print i
+	Parallel(n_jobs=8, verbose=11)(delayed(runner.ematch)(i)for i in files)
 
 
 if __name__ == "__main__":
