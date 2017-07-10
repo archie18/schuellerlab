@@ -13,6 +13,7 @@ import os
 import sys
 import pandas as pd
 import argparse
+from joblib import Parallel, delayed
 
 parser = argparse.ArgumentParser()
 
@@ -44,6 +45,7 @@ def openfile(filename):
 
 def main():
 	parameters = ['-findsite.templates.pdb','.prf','.ss','-efindsite.pockets.dat','pocket number', '-efindsite.alignments.dat', '-efindsite.ligands.sdf']
+	files = []
 	for i in open(entries):  #armar sentencias
 
 		i = i.replace('\n','') #remove if '\n' 
@@ -123,7 +125,12 @@ def main():
 					inp.write(structB)
 					inp.write("\n\n")
 
-		inp.close()
+			inp.close()
+			files.append(filename)
+	
+	for i in files:
+		print i
+	#Parallel(n_jobs=8, verbose=11)(delayed()()for i in files)
 
 
 if __name__ == "__main__":
