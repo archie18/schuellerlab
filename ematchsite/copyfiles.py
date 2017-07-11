@@ -3,8 +3,8 @@
 
 """
 Example:
-python ematchsite.py -f classfile -p path
-Arma archivos .inp para correr ematchsite
+python copyfiles.py -f Homogeneous_entries -p homogeneous-ligand-crystal
+
 
 """
 
