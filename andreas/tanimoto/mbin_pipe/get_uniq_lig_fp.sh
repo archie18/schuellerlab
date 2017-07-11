@@ -4,7 +4,7 @@ do
 echo "working with file: " ${i}
 tail -n +2  ${i} | cut -f2,10 | sort | uniq > ${i}.ul
 cat ${i}.ul | awk 'BEGIN { FS = " " ; c=0} ; {print $1"\t"$2"\t"c;c++}' > ${i}.ul.co ### LINEA QUE AGREGA AL ARCHIVO .ul OTRA COLUMNA CON IDs CORRELATIVOS 
-python add_coid.py ${i}.ul.co ${i} > ${i}.co ### LINEA QUE EJECUTA EL .py PARA AGREGAR COLUMNA CON IDs CORRELATIVOS EN INTERACCIONES
+python /work/mruiz/mbin/add_coid.py ${i}.ul.co ${i} > ${i}.co ### LINEA QUE EJECUTA EL .py PARA AGREGAR COLUMNA CON IDs CORRELATIVOS EN INTERACCIONES
 cat ${i}.ul | cut -f2  > ${i}.smi
 echo ""
 echo "non redundant list of ligands created, as *.ul file. Unique Smiles writed in the same order in smi file" 

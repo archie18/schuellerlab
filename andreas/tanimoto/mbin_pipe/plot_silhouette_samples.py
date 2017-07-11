@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+
+# Author: Mauricio Ruiz <ruiz.moraga.90@gmail.com>
+# Version 0.1 2017-05-08 First version to plot all i ligand silhouette values clustered to n clusters
+# Execution: python3.5 plot_silhouette_sample.py silh_singl_0.x silh_av_0.x
+
 from __future__ import print_function
 
 from sklearn.metrics import silhouette_samples, silhouette_score
@@ -31,10 +37,22 @@ def readAllSamSilh(filename):
     n = len(lcs_list)
     return lcs_list,n,max_cluster#,silh_list
 
+##Funcion para lectura del archivo con promedio silhouette y retornar el valor del silhouette average
+def readAvSilh(filename):
+    with open(filename) as av:
+        for line in av:
+            bla,silhouette=line.split(":")
+            silh_avg=silhouette[1:]
+    return silh_avg
+
 lig_clust_silh = sys.argv[1]
+silh_average = sys.argv[2]
 
 lcs = []
 lcs,n,n_clusters = readAllSamSilh(lig_clust_silh)
+silhouette_avg = readAvSilh(silh_average)
+silhouette_avg = silhouette_avg.strip('\n')
+silhouette_avg = float(silhouette_avg)
 
 labels = np.empty(n)
 silhouette_sample_list = np.empty(n)
@@ -84,25 +102,9 @@ ax1.set_ylabel("Cluster label")
 ax1.axvline(x=silhouette_avg, color="red", linestyle="--")
 
 ax1.set_yticks([])  # Clear the yaxis labels / ticks
-ax1.set_xticks([-0.1, 0, 0.2, 0.4, 0.6, 0.8, 1])
+ax1.set_xticks([-1, -0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1])
 
-# 2nd Plot showing the actual clusters formed
-#colors = cm.spectral(labels.astype(float) / n_clusters)
-#ax2.scatter(silh_val[:, 0], silh_val[:, 1], marker='.', s=30, lw=0, alpha=0.7, c=colors)
-
-# Labeling the clusters
-#centers = clusterer.cluster_centers_
-# Draw white circles at cluster centers
-#ax2.scatter(centers[:, 0], centers[:, 1],marker='o', c="white", alpha=1, s=200)
-
-#for i, c in enumerate(centers):
-#    ax2.scatter(c[0], c[1], marker='$%d$' % i, alpha=1, s=50)
-
-#ax2.set_title("The visualization of the clustered data.")
-#ax2.set_xlabel("Feature space for the 1st feature")
-#ax2.set_ylabel("Feature space for the 2nd feature")
-
-#plt.suptitle(("Silhouette analysis for Uclust clustering on sample data with n_clusters = %d" % n_clusters), fontsize=14, fontweight='bold')
+plt.suptitle(("Silhouette analysis for Uclust clustering on sample data with n_clusters = %d" % n_clusters), fontsize=14, fontweight='bold')
 temp = lig_clust_silh + ".png"
 plt.savefig(temp, format='png')
 
