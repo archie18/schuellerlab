@@ -26,7 +26,7 @@ args = parser.parse_args()
 path = "/"+args.path
 entries = "./"+args.file
 
-folder = './ligands'
+folder = './inputs'
 
 if not os.path.exists(folder):
 	os.mkdir(folder)
@@ -37,13 +37,26 @@ def main():
 
 		i = i.replace('\n','') #remove if '\n' 
 		s = i.split(" ")
-		fullnameA = path+'/'+s[0].lower()+"_"+s[1]+'.sdf'
-		fullnameB = folder+'/'+s[0].lower()+"_"+s[1]+'.sdf'
+		fullnameA = path+'/'+s[0].lower()+"_"+s[1]+'/'+s[0].lower()+"_"+s[1]+'.prf'
+		fullnameB = folder
 		cmd = 'cp .'+fullnameA + ' ' + fullnameB
 		#print cmd
 		os.system(cmd)
-
-
+		fullnameA = path+'/'+s[0].lower()+"_"+s[1]+'/'+s[0].lower()+"_"+s[1]+'.ss'
+		fullnameB = folder
+		cmd = 'cp .'+fullnameA + ' ' + fullnameB
+		#print cmd
+		os.system(cmd)
+		fullnameA = path+'/'+s[0].lower()+"_"+s[1]+'/'+s[0].lower()+"_"+s[1]+'-efindsite.pockets.dat'
+		fullnameB = folder
+		cmd = 'cp .'+fullnameA + ' ' + fullnameB
+		#print cmd
+		os.system(cmd)
+		fullnameA = path+'/'+s[0].lower()+"_"+s[1]+'/'+s[0].lower()+"_"+s[1]+'-efindsite.alignments.dat'
+		fullnameB = folder
+		cmd = 'cp .'+fullnameA + ' ' + fullnameB
+		#print cmd
+		os.system(cmd)
 
 if __name__ == "__main__":
 	main() 

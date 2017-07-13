@@ -26,7 +26,7 @@ args = parser.parse_args()
 path = "/"+args.path
 entries = "./"+args.file
 
-folder = './inputs'
+folder = './inp_files'
 
 if not os.path.exists(folder):
 	os.mkdir(folder)
@@ -45,7 +45,11 @@ def openfile(filename):
 		return lines
 
 def main():
-	parameters = ['-findsite.templates.pdb','.prf','.ss','-efindsite.pockets.dat','pocket number', '-efindsite.alignments.dat', '-efindsite.ligands.sdf']
+	cmd1 = 'export EM_LIB=/CLUSTERFS/homes/rminho/libraries/ematchsite-lib-jan2012/'
+	cmd2 = 'export EM_MOD=/CLUSTERFS/homes/rminho/ematchsite-1.0/mod/'
+	os.system(cmd1)
+	os.system(cmd2)
+	parameters = ['.pdb','.prf','.ss','-efindsite.pockets.dat','pocket number', '-efindsite.alignments.dat', '.sdf']
 	files = []
 	for i in open(entries):  #armar sentencias
 
@@ -62,11 +66,11 @@ def main():
 			filename = folder + '/'+fullnameA+'-'+fullnameB+'.eMatchSite.inp'
 			inp = open(filename, 'w')
 			for extension in parameters:
-				if extension == '-findsite.templates.pdb':
+				if extension == '.pdb':
 					inp.write("# target structures")
 					inp.write("\n\n")
-					structA = 'structureA '+path+'/'+fullnameA+extension
-					structB = 'structureB '+fullnameB+extension
+					structA = 'structureA ./proteins/'+fullnameA+extension
+					structB = 'structureB ./proteins/'+fullnameB+extension
 					inp.write(structA)
 					inp.write("\n")
 					inp.write(structB)
@@ -74,8 +78,8 @@ def main():
 				if extension == '.prf':
 					inp.write("# sequence profiles")
 					inp.write("\n\n")
-					structA = 'profilesA '+fullnameA+extension
-					structB = 'profilesB '+fullnameB+extension
+					structA = 'profilesA ./inputs/'+fullnameA+extension
+					structB = 'profilesB ./inputs/'+fullnameB+extension
 					inp.write(structA)
 					inp.write("\n")
 					inp.write(structB)
@@ -83,8 +87,8 @@ def main():
 				if extension == '.ss':
 					inp.write("# secondary structure profiles")
 					inp.write("\n\n")
-					structA = 'secstrA '+fullnameA+extension
-					structB = 'secstrB '+fullnameB+extension
+					structA = 'secstrA ./inputs/'+fullnameA+extension
+					structB = 'secstrB ./inputs/'+fullnameB+extension
 					inp.write(structA)
 					inp.write("\n")
 					inp.write(structB)
@@ -92,8 +96,8 @@ def main():
 				if extension == '-efindsite.pockets.dat':
 					inp.write("# pockets predicted by eFindSite")
 					inp.write("\n\n")
-					structA = 'structureA '+fullnameA+extension
-					structB = 'structureB '+fullnameB+extension
+					structA = 'pocketsA ./inputs/'+fullnameA+extension
+					structB = 'pocketsB ./inputs/'+fullnameB+extension
 					inp.write(structA)
 					inp.write("\n")
 					inp.write(structB)
@@ -110,17 +114,17 @@ def main():
 				if extension == '-efindsite.alignments.dat':
 					inp.write("# alignments constructed by eFindSite")
 					inp.write("\n\n")
-					structA = 'alignmentsA '+fullnameA+extension
-					structB = 'alignmentsB '+fullnameB+extension
+					structA = 'alignmentsA ./inputs/'+fullnameA+extension
+					structB = 'alignmentsB ./inputs/'+fullnameB+extension
 					inp.write(structA)
 					inp.write("\n")
 					inp.write(structB)
 					inp.write("\n\n")
-				if extension == '-efindsite.ligands.sdf':
+				if extension == '.sdf':
 					inp.write("# ligands identified by eFindSite")
 					inp.write("\n\n")
-					structA = 'ligandsA '+fullnameA+extension
-					structB = 'ligandsB '+fullnameB+extension
+					structA = 'ligandsA ./ligands/'+fullnameA+extension
+					structB = 'ligandsB ./ligands/'+fullnameB+extension
 					inp.write(structA)
 					inp.write("\n")
 					inp.write(structB)

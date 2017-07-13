@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
 import sys
+import os
 
-ematchsite = '/CLUSTERFS/homes/rminho/ematchsite-1.0/bin/ematchsite'
+ematchsite = './ematchsite'
 
 def ematch(match):
-	cmd = ematchsite +' '+ match
-	#os.system(cmd)
+	cmd = ematchsite +' -i '+ match+' -o '+match+'.pdb'
 	print cmd
+	os.system(cmd)
 	sys.stdout.flush()

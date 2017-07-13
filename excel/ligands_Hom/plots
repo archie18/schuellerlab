@@ -31,7 +31,8 @@ U5P
 1PE
 
 > singcomb <- subset(sing, sing$atomtype=="CA_ACC_DON" & sing$cuttoff==2.5 & sing$clique==5 & sing$distance==6.0 & sing$metric=="RMSD", select=c(code,class,auc))
-> png('hom_GRE_6.0_1PE_CA_ACC_DON_boxplot.png')> boxplot(auc ~ class, singcomb, xlab = "Ligand", ylab="AUC",main="hom_GRE_6.0_1PE_CA_ACC_DON_boxplot(RMSD)")
+> png('hom_GRE_6.0_1PE_CA_ACC_DON_boxplot.png')
+> boxplot(auc ~ class, singcomb, xlab = "Ligand", ylab="AUC",main="hom_GRE_6.0_1PE_CA_ACC_DON_boxplot(RMSD)")
 > dev.off()
 png 
   3 
