@@ -19,7 +19,7 @@ LEFT JOIN molecule_dictionary as md  ON act.molregno = md.molregno -- datos liga
 LEFT JOIN molecule_synonyms as ms  ON act.molregno = ms.molregno -- datos ligando
 
      WHERE 1 
-       AND td.organism IN ("homo sapiens", "mus musculus", "rattus norvegicus", "bos taurus", "equus caballus")
+       AND td.organism IN ("homo sapiens")
       -- AND td.target_type IN ("single protein", "protein complex")
        AND assays.confidence_score  > 3 -- esta linea deberia ser equivalente a la anterior ya que 4 es se sabe que el target es parte de un complejo de proteinas homologas, pero no lo es, con esto salen mas resultados
        AND assays.assay_type = "B"
@@ -35,7 +35,7 @@ LEFT JOIN molecule_synonyms as ms  ON act.molregno = ms.molregno -- datos ligand
        -- AND NOT EXISTS(SELECT * FROM tmptbl INNER JOIN WHERE molregno = 4899918645646465456645645)
    GROUP BY td.chembl_id,md.chembl_id -- agrupar por par proteina ligando
 -- GROUP BY act.assay_id 
-       HAVING MIN(act.standard_value) < 10000    -- esta linea define max o min en los archivos de salida
+--       HAVING MIN(act.standard_value) < 10000    -- esta linea define max o min en los archivos de salida
 --       HAVING AVG(act.standard_value) < 10000 esta linea no funciona el AVG no funciona no entiendo porque.
 
 ;
