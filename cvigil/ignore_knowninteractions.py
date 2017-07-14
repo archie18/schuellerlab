@@ -11,13 +11,12 @@ with open(interactions_file, 'r') as ints:
         tokens = tok.split('\t')
         target = tokens[0]
         ligid = tokens[1]
-        interactions[ligid] = target
+        interactions[(target,ligand)] = True
 
 with open(cvout_file, 'r') as cvout:
     for line in cvout:
-        tok = line.replace('\n','')
-        tokens = tok.split('\t')
+        tokens = line.split('\t')
 	target = tokens[2]
         ligid = tokens[1]
-	if interactions[ligid] is not target:
-		sys.stdout.write(line.rstrip() + '\n')
+	if not interactions[(target,ligand)]:
+		sys.stdout.write(line)
