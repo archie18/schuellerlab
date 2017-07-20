@@ -1,8 +1,9 @@
+> require(reshape2)
 > df <- read.csv("clickvsisomif.csv", header=T)
 > df.m <- melt(df, id.var = "Label")
 > df.m
 > require(ggplot2)
 > png('clickvsisomif.png')
-> ggplot(data = df.m, aes(x=variable, y=value)) + geom_boxplot(aes(fill=Label))
+> ggplot(data = df.m, aes(x=variable, y=value)) + geom_boxplot(aes(fill=Label))  + coord_cartesian(ylim=c(0,1))+scale_y_continuous(breaks=seq(0,1,0.1))
 > dev.off()
 
