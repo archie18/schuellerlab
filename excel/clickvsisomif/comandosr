@@ -1,0 +1,8 @@
+> df <- read.csv("clickvsisomif.csv", header=T)
+> df.m <- melt(df, id.var = "Label")
+> df.m
+> require(ggplot2)
+> png('clickvsisomif.png')
+> ggplot(data = df.m, aes(x=variable, y=value)) + geom_boxplot(aes(fill=Label))
+> dev.off()
+

@@ -42,8 +42,55 @@ png
 png 
   3 
 
+BEST LIGANDS
 
-GSH
+> png('bests_homogeneous.png')
+> boxplot(AUC~Class, singcomb,  ylim=c(0,1),main="Best values per ligand ")
+> beeswarm(AUC ~ Class, singcomb,add = T, pch=19, method="swarm",cex=0.5,ylim=c(0,1), main="Best values per ligand ")
+> dev.off()
+null device 
+          1 
+> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
