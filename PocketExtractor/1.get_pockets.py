@@ -91,7 +91,7 @@ os.system(chmod+dst)
 os.system(dst)
 
 #Now run PocketExtractor.svl
-
+os.chdir(workdir)
 src = './PE.sh'
 dst = './'+workdir+'/PE.sh'
 cmd=dst+' '+workdir
