@@ -91,15 +91,10 @@ os.system(chmod+dst)
 os.system(dst)
 
 #Now run PocketExtractor.svl
+cmd = '../PE.sh'
 os.chdir(workdir)
-src = './PE.sh'
-dst = './'+workdir+'/PE.sh'
-cmd=dst+' '+workdir
-chmod="chmod a+x "
-if not os.path.exists(dst):
-	copyfile(src, dst)
-os.system(chmod+dst)
 os.system(cmd)
+os.chdir('..')
 
 
 

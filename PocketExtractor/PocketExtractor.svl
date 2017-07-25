@@ -10,9 +10,11 @@
 //    Andreas Schueller <aschueller@bio.puc.cl>
 //
 // Version
-//     0.3    [2017-05-10]
+//     0.4    [2017-07-25]
 //
 // History
+//     0.4      2017-07-25    Added atom types for positive, negative and
+//                            aromatic atoms
 //     0.3      2017-05-10    Added GRE atom type for greasy carbons.
 //                            Rename _ACC to ACC and _DON to DON for better
 //                            compatibility with Click
@@ -32,7 +34,7 @@
 //
 #set main 'PocketExtractor'
 #set title 'PocketExtractor'
-#set version '0.3'
+#set version '0.4'
 
 function _EditH;
 //function SelectionExtendResidueProximity;
@@ -40,6 +42,8 @@ function _Atoms;
 function ph4_aAcceptor, ph4_aTautomerAcceptor;
 function ph4_aDonor, ph4_aTautomerDonor;
 function ph4_aHydrophobe, ph4_aGrease;
+function ph4_aAnion, ph4_aResonanceAnion, ph4_aCation, ph4_aResonanceCation;
+function ph4_aPlanar, aInHRing;
 
 // Default configuration
 const DEFAULT_OPTIONS = [
@@ -50,10 +54,12 @@ const DEFAULT_OPTIONS = [
     ph4_atom_names: 0,
     exclude_paths:  [],
     greasy:         0,
-    byRes:          1
+    byRes:          1,
+    charged:        0,
+    aromatic:       0
 ];
 
-global function ph4AtomNames [ atoms, greasy ]
+global function ph4AtomNames [ atoms, greasy, charged, aromatic ]
     // ACC - H-bond acceptors + tautomer acceptors not POL
     aSetName [ atoms | ((ph4_aAcceptor atoms or ph4_aTautomerAcceptor atoms) and not (ph4_aDonor atoms or ph4_aTautomerDonor atoms)), 'ACC' ];
     // DON - H-bond donors + tautomer donors not POL
@@ -65,6 +71,15 @@ global function ph4AtomNames [ atoms, greasy ]
     // GRE - atom with very hydrophobic character.
     if istrue greasy then
         aSetName [ atoms | ph4_aGrease atoms, 'GRE'];
+    endif
+    // POS/NEG - Charged atoms
+    if istrue charged then
+        aSetName [ atoms | ph4_aCation atoms or ph4_aResonanceCation atoms, 'POS'];
+        aSetName [ atoms | ph4_aAnion atoms or ph4_aResonanceAnion atoms, 'NEG'];
+    endif
+    // ARO - aromatic ring atom
+    if istrue aromatic then
+        aSetName [ atoms | ph4_aPlanar atoms and aInHRing atoms, 'ARO'];
     endif
 
     // Get all atoms that are donors and acceptors at the same time (hydroxyls)
@@ -153,16 +168,28 @@ global function PocketExtractor options
 
             if istrue opt.ph4_atom_names then
                 // Rename atom names
-                local copies = ph4AtomNames [pocket_woLig, opt.greasy];
+                local copies = ph4AtomNames [pocket_woLig, opt.greasy, opt.charged, opt.aromatic];
 
-				// Add gre_ to pocket file name
-				local tokgre = '';
-				if istrue opt.greasy then
-					tokgre = 'gre_';
-				endif
+                // Add gre_ to pocket file name
+                local tokgre = '';
+                if istrue opt.greasy then
+                	tokgre = 'gre_';
+                endif
+
+                // Add charge_ to pocket file name
+                local tokcharge = '';
+                if istrue opt.charged then
+                	tokcharge = 'charge_';
+                endif
+
+                // Add aro_ to pocket file name
+                local tokaro = '';
+                if istrue opt.aromatic then
+                	tokaro = 'aro_';
+                endif
 
                 // Save pocket with changed atom names
-                pocFileName = tok_cat [ pocketPath, '/', ftail fbase files[fileIdx], '_pocket_ph4_', tokgre, notByRes, token swrite [ '{f.1}', opt.cutoff ], '.pdb' ];
+                pocFileName = tok_cat [ pocketPath, '/', ftail fbase files[fileIdx], '_pocket_ph4_', tokgre, tokcharge, tokaro, notByRes, token swrite [ '{f.1}', opt.cutoff ], '.pdb' ];
                 if istrue opt.write_ligand then
                     fwrite_PDB [ pocFileName, cat [pocket, copies] ];
                 else
