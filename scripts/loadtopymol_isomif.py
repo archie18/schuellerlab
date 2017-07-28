@@ -29,7 +29,7 @@ for i in open(filename):
 		if s[0]!=code:
 			target.append(s[0])
 
-ligand = code+'_match_*'
+ligand = code+'_match_'
 path = args.path
 pymol = 'pymol '
 perl = 'perl ./isoMifView.pl -m '
@@ -39,16 +39,25 @@ if not os.path.exists('./Temp'):
 	os.makedirs('./Temp')
 
 
+for i in target:
+	ligand = code+'_match_'+i
+	print i
+
 for file in os.listdir(path):
 	#print file
-	if fnmatch.fnmatch(file, ligand):
-		pymol = pymol+'./Temp/'+ file + ' '
-		#cat = 'cat ./'+path+'/'+ file + ' | '+ sed +'./Temp/'+ file 
-		cmd= perl + path +file+' -o ./Temp/ -g 1'
-		print cmd
-		#print file
-		#print cat
-		#os.system(cat)
+	for i in target:
+		ligand = code+'_match_'+i
+		print i
+		#print ligand
+		#sys.exit(1)
+		if fnmatch.fnmatch(file, ligand):
+			pymol = pymol+'./Temp/'+ file + ' '
+			#cat = 'cat ./'+path+'/'+ file + ' | '+ sed +'./Temp/'+ file 
+			cmd= perl + path +file+' -o ./Temp/ -g 1'
+			#print cmd
+			#print file
+			#print cat
+			#os.system(cat)
 print target
 #print pymol
 #os.system(pymol)
