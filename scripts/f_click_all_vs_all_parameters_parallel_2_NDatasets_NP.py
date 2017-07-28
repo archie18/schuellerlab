@@ -12,7 +12,7 @@ import signal
 import collections
 
 # Global constants
-CLICK   = '/CLUSTERFS/share/Click_multiple_2017/click'
+CLICK   = 'click.ppc64le'
 TIMEOUT = 3000 # seconds
 AAGROUPS = {'L': 1, 'V': 1, 'I': 1, 'M': 1, 'C': 1, 'A': 2, 'G': 2, 'S': 3, 'T': 3, 'P': 4, 'F': 5, 'Y': 5, 'W': 5, 'E': 6, 'D': 6, 'N': 6, 'Q': 6, 'K': 7, 'R': 7, 'H': 8}
 
@@ -140,8 +140,10 @@ def avg(vals):
 	return float(sum(float_vals)) / len(float_vals)
 
 # Main function
-def pocket_compare(atomtypes, cutoff, cliquesize, dist, d_Thr, workdir, mode, resume=False):
-	
+def pocket_compare((atomtypes, cutoff, cliquesize, dist, d_Thr, workdir, mode, resume)):
+
+	#print atomtypes, cutoff, cliquesize, dist, d_Thr, workdir, mode, resume
+		
 	if atomtypes=='" CA ,ACC ,DON ,GRE "':
 		cacb='CA_ACC_DON_GRE'
 	if atomtypes=='"ACC ,DON ,GRE "':
@@ -152,10 +154,7 @@ def pocket_compare(atomtypes, cutoff, cliquesize, dist, d_Thr, workdir, mode, re
 		cacb='ACC_DON'
 	if atomtypes=='" CA ,GRE "':
 		cacb='CA_GRE'
-	if atomtypes=='" CA "':
-		cacb='CA'
-
-		
+			
 	# Create output dir, Copy pocket folders and symlink classification file
 	actual_path=os.getcwd()
 	out_path=cacb+'_'+cutoff+'_'+cliquesize+'_'+d_Thr+'_'+dist #usado mas abajo
@@ -259,7 +258,7 @@ def pocket_compare(atomtypes, cutoff, cliquesize, dist, d_Thr, workdir, mode, re
 		# Iterate over all codes
         	for i in range(n_codes-1):
 			# Query pocket path
-            		query_pocket = codes[i]+"_"+classes[i]+"_pocket_ph4_"+dist+".pdb" 
+            		query_pocket = codes[i]+"_"+classes[i]+"_pocket_ph4_gre_notByRes_"+dist+".pdb" 
             		for j in range(i+1,n_codes):
 				# Skip if both classes are None
                 		if (classif["clss"][i] == "None") & (classif["clss"][j] == "None"):
@@ -270,11 +269,11 @@ def pocket_compare(atomtypes, cutoff, cliquesize, dist, d_Thr, workdir, mode, re
 					continue # TN vs TN, movin on...
 				
 				# Target pocket path
-                		target_pocket = codes[j]+"_"+classes[j]+"_pocket_ph4_"+dist+".pdb"
+                		target_pocket = codes[j]+"_"+classes[j]+"_pocket_ph4_gre_notByRes_"+dist+".pdb"
 
 				# Clique file name
-				clique_filename1 = "%s/%s_%s_pocket_ph4_%s-%s_%s_pocket_ph4_%s.pdb.1.clique" % (output_path1, codes[i], classes[i], dist, codes[j], classes[j], dist) 
-				clique_filename2 = "%s/%s_%s_pocket_ph4_%s-%s_%s_pocket_ph4_%s.pdb.1.clique" % (output_path2, codes[j], classes[j], dist, codes[i], classes[i], dist) 
+				clique_filename1 = "%s/%s_%s_pocket_ph4_gre_notByRes_%s-%s_%s_pocket_ph4_gre_notByRes_%s.pdb.1.clique" % (output_path1, codes[i], classes[i], dist, codes[j], classes[j], dist) 
+				clique_filename2 = "%s/%s_%s_pocket_ph4_gre_notByRes_%s-%s_%s_pocket_ph4_gre_notByRes_%s.pdb.1.clique" % (output_path2, codes[j], classes[j], dist, codes[i], classes[i], dist)  
 							
 				# Run Click
 				
@@ -321,4 +320,4 @@ def pocket_compare(atomtypes, cutoff, cliquesize, dist, d_Thr, workdir, mode, re
 			#os.remove(output_path2+'/'+archivo)
 	
     	sys.stdout.flush()
-	sys.stderr.write("Finished in " + str(datetime.now() - startTime) + "\n")
+	sys.stderr.write("Finished "+cacb+" "+cutoff +"in " + str(datetime.now() - startTime) + "\n")
