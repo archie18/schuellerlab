@@ -38,37 +38,61 @@ print 'click fold 1'
 for file in os.listdir(path+path1):
 	#print file
 	#compares a single filename(ligand) against a pattern(file)
+	if fnmatch.fnmatch(file, query):
+		query = file
+		print 'query: '+query
+		#sys.exit(1)
+for file in os.listdir(path+path1):
 	if fnmatch.fnmatch(file, ligandA):
-		pymol = pymol+'./Temp/'+ file + ' '
-		cat = 'cat ./'+path+path1+'/'+ file + ' | '+ sed +'./Temp/'+ file 
-
-		if query < file:		
-			print "menor"
+		#pymol = pymol+'./Temp/'+ file + ' '
+		#cat = 'cat ./'+path+path1+'/'+ file + ' | '+ sed +'./Temp/'+ file 
+		filename=file.split('-')
+		if query < filename[0]:
+			cat = 'cat ./'+path+path1+'/'+ file + ' | '+ sed +'./Temp/'+ file
+			pymol = pymol+'./Temp/'+ file + ' '
+			os.system(cat)
+			print query+' < '+filename[0]
+			print "query menor"
 		else:
-			print "mayor"
+			cat = 'cat ./'+path+path1+'/'+ file + ' | '+ sed +'./Temp/'+ file
+			pymol = pymol+'./Temp/'+ file + ' '
+			os.system(cat)
+			print query+' > '+filename[0]
+			print "Se agrega"
+			
 		#print fileif
 		#print cat
-		#os.system(cat)
+		
 print 'click fold 2'
 for file in os.listdir(path+path2):
 	#print file
 	#compares a single filename(ligand) against a pattern(file)
 	if fnmatch.fnmatch(file, ligandB):
-		pymol = pymol+'./Temp/'+ file + ' '
-		cat = 'cat ./'+path+path2+'/'+ file + ' | '+ sed +'./Temp/'+ file 
-
-		if query < file:		
-			print "menor"
+		#pymol = pymol+'./Temp/'+ file + ' '
+		#cat = 'cat ./'+path+path2+'/'+ file + ' | '+ sed +'./Temp/'+ file 
+		filename=file.split('-')
+		if query < filename[1]:
+			cat = 'cat ./'+path+path1+'/'+ file + ' | '+ sed +'./Temp/'+ file
+			pymol = pymol+'./Temp/'+ file + ' '
+			os.system(cat)
+			print query+' < '+filename[1]	
+			print "SE agrega"
+			
 		else:
-			print "mayor"
+			cat = 'cat ./'+path+path1+'/'+ file + ' | '+ sed +'./Temp/'+ file
+			pymol = pymol+'./Temp/'+ file + ' '
+			os.system(cat)
+			print query+' > '+filename[1]
+			print "query mayor"
+			
 		#print file
 		#print cat
 		#os.system(cat)
 # Copy query pocket
 cat = 'cat ./'+path+path1+'/'+ query + ' | '+ sed +'./Temp/'+ query
-#os.system(cat)
+os.system(cat)
 pymol += './Temp/'+ query +' '
 
 print pymol
-#os.system(pymol)
-#cat 1OJD_LDA_pocket_ph4_gre_notByRes_6.0-3B6H_BOG_pocket_ph4_gre_notByRes_6.0.1.pdb | sed 's/GRE/ C /g' | sed 's/DON/ N /g' | sed 's/ACC/ O /g' > test.pdb
+os.system(pymol)
+
