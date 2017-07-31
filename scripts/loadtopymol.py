@@ -3,7 +3,7 @@
 
 """
 Example:
-python loadtopymol.py -c 1OJD -l PMP -p ./Homogeneous/Proteins/pockets
+python loadtopymol.py -c 1OJD -l PMP -p ./CA_ACC_DON_GRE_3.0_5_7.5_6.0
 Cargar los pockets de cierto ligando en pymol.
 """
 
