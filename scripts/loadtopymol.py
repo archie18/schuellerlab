@@ -54,14 +54,16 @@ for file in os.listdir(path+path1):
 		pdbA.append(file)
 	if fnmatch.fnmatch(file, ligandA):
 		#pymol = pymol+'./Temp/'+ file + ' '
+		cp = 'cp ./'+path+path1+'/'+file+' ./Temp/'+ file
 		cat = 'cat ./'+path+path1+'/'+ file + ' | '+ sed +'./Temp/'+ file
 	#	pymol = pymol+'./Temp/'+ file + ' '
-		os.system(cat)
+		os.system(cp)
 	if fnmatch.fnmatch(file, ligandB):
 		#pymol = pymol+'./Temp/'+ file + ' '
+		cp = 'cp ./'+path+path1+'/'+file+' ./Temp/'+ file
 		cat = 'cat ./'+path+path1+'/'+ file + ' | '+ sed +'./Temp/'+ file 
 	#	print file
-		os.system(cat)
+		os.system(cp)
 print pdbA
 print '---------------'
 for file in os.listdir(path+path2):
@@ -79,17 +81,20 @@ for file in os.listdir(path+path2):
 	#compares a single filename(ligand) against a pattern(file) and copy to /Temp
 	if fnmatch.fnmatch(file, ligandB):
 		#pymol = pymol+'./Temp/'+ file + ' '
+		cp = 'cp ./'+path+path2+'/'+file+' ./Temp/'+ file
 		cat = 'cat ./'+path+path1+'/'+ file + ' | '+ sed +'./Temp/'+ file
 	#	pymol = pymol+'./Temp/'+ file + ' '
-		os.system(cat)
+		os.system(cp)
 	if fnmatch.fnmatch(file, ligandA):
 		#pymol = pymol+'./Temp/'+ file + ' '
+		cp = 'cp ./'+path+path2+'/'+file+' ./Temp/'+ file
 		cat = 'cat ./'+path+path2+'/'+ file + ' | '+ sed +'./Temp/'+ file 
 	#	print file
-		os.system(cat)
+		os.system(cp)
 # Copy query pocket
+cp = 'cp ./'+path+path1+'/'+query+' ./Temp/'+ query
 cat = 'cat ./'+path+path1+'/'+ query + ' | '+ sed +'./Temp/'+ query
-os.system(cat)
+os.system(cp)
 pymol += './Temp/'+ query +' '
 print pdbB
 print '\n'
@@ -97,24 +102,73 @@ print pymol
 #os.system(pymol)
 
 for i in pdbA:
-	f = open(path+path1+'/'+i) #open file .clique
-	lines = f.readlines()
-	pdb_len = len(lines)
+	var = i
+	print var
+	for i in open('./Temp/'+i[:-12]+'1.pdb'):
+		#i = i.replace('\n','') #remove if '\n'
+		line= i[:-6]
+		#print line
+		g = open('./'+path+path1+'/'+var)
+		lines2 = g.readlines()
+		pdb_len = len(lines2)
+		#print pdb_len
+		for x in range(7,pdb_len):
+			lines = lines2[x].split()
+			chain = lines[0]
+			resnum = lines[1]
+			atomtype = lines[3]
+			#print chain
+			#print x
+			if chain in line and resnum in line and atomtype in line:
+				print line+' 1.00'
+				x+=1
+				break
+			else:
+				#print chain +' '+ resnum + ' '+atomtype
+				print line+' 0.00'
+				x+=1
+			
+#		g = open(path+path1+'/'+i)
+	sys.exit(1)
 	print i[:-12]+'1.pdb'
-	for x in range(7,pdb_len): 
-		line = lines[x].split()
-		chain = line[0] # read matched atoms
+	f = open('./Temp/'+i[:-12]+'1.pdb') #open file .clique
+	lines = f.readlines()
+	lala = lines.split('\n')
+	#lines = 
+	print lala
+	i = i.replace('\n','') #remove if '\n'
+	s = i.split(' ')
+	g = open(path+path1+'/'+i)
+	lines2 = g.readlines()
+	pdb_len = len(lines2)
+	print str(pdb_len)+ ' '+i
+	#print lines2
+	for x in range(7,pdb_len):
+		line = lines2[x].split()
+		chain = line[0]
 		resnum = line[1]
 		atomtype = line[3]
-		g = open('./Temp/'+i[:-12]+'1.pdb') #open file .pdb
-		for linea in g:
-			#lineas = linea.split()
-			if linea[0:4] == 'ATOM' and chain in linea and resnum in linea:
-				print linea[:-6]+'1.11'
+		print chain +' '+ resnum +' ' +atomtype
+		if chain not in lines: #and resnum in lines and atomtype in lines:
+			print lines
+			print '\n'
+	#pdb_len = len(lines)
+	#print i[:-12]+'1.pdb'
+	
+	#for x in range(7,pdb_len): 
+	#	line = lines[x].split()
+	#	chain = line[0] # read matched atoms
+	#	resnum = line[1]
+	#	atomtype = line[3]
+	#	g = open('./Temp/'+i[:-12]+'1.pdb') #open file .pdb
+	#	for linea in g:
+	#		#lineas = linea.split()
+	#		if linea[0:4] == 'ATOM' and chain in linea and resnum in linea:
+	#			print linea[:-6]+'1.11'
 				#if chain in linea:
 				#	print linea[:-6]+'1.11'
-			else:
-				print linea[:-6]+'0.00'
+	#		else:
+	#			print linea[:-6]+'0.00'
 					
 			#if linea[0:4]=="ATOM":
 			#	print linea[:-6]+'1.00'
