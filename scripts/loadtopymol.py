@@ -126,8 +126,9 @@ for i in pdbA:
 			else:
 				#print chain +' '+ resnum + ' '+atomtype
 				print line+' 0.00'
-				x+=1
+				break
 			
+
 #		g = open(path+path1+'/'+i)
 	sys.exit(1)
 	print i[:-12]+'1.pdb'
