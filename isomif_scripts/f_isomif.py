@@ -30,7 +30,7 @@ def rungetcleft(code , het, het_nm, workdir):
 	"""
 	Function to run getcleft
 	"""
-	cmd = getcleft_sw+" -p "+workdir+"/hive/pdb/"+code+"h.pdb -o "+workdir+"/hive/clefts/"+code+" -s -a "+ het
+	cmd = getcleft_sw+" -p "+workdir+"/hive/pdb/"+code+".pdb -o "+workdir+"/hive/clefts/"+code+" -s -a "+ het
 	os.system(cmd)
 	sys.stdout.flush()
 

@@ -1,0 +1,4 @@
+#REMARK  PARENTFILE  ./Homogeneous/hive/pdb/1KMO.pdb
+ATOM   1229  CD2 HIS A 246       8.024  -5.821  24.314  1.00 32.33           C  
+ATOM   1234  C   ASN A 247      10.706  -5.179  29.013  1.00 23.87           C  
+ATOM   1244  CB  LEU A 248      10.582  -8.383  29.686  1.00 24.02           C  

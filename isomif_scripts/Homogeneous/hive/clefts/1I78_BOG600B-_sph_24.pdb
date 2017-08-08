@@ -1,0 +1,5 @@
+#REMARK  PARENTFILE  ./Homogeneous/hive/pdb/1I78h.pdb
+ATOM   1054  C   SPH Z   1      42.649  48.613  33.910  1.00  1.57 
+ATOM   1057  C   SPH Z   1      42.614  49.140  33.756  1.00  1.87 
+ATOM   1056  C   SPH Z   1      42.807  49.360  34.778  1.00  1.54 
+ATOM   1055  C   SPH Z   1      42.395  49.027  34.248  1.00  1.70 

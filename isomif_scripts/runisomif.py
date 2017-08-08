@@ -96,8 +96,8 @@ if(clefts<total):
 	sys.exit(1)
 
 #Step 1: RUN GetCleft
-print "GetCleft... "
-Parallel(n_jobs=8, verbose=11)(delayed(runner.rungetcleft)(getcleft.code, getcleft.het,getcleft.het_name, workdir)for getcleft in tupla)
+#print "GetCleft... "
+#Parallel(n_jobs=8, verbose=11)(delayed(runner.rungetcleft)(getcleft.code, getcleft.het,getcleft.het_name, workdir)for getcleft in tupla)
 DIR = workdir+'/hive/clefts'
 clefts= len([name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR, name))])
 total= 2*len(tupla)
@@ -106,15 +106,11 @@ if(clefts<total):
 	sys.exit(1)
 else:
 	print "No faltan clefts..."
-<<<<<<< HEAD
-	
-=======
 
->>>>>>> 0cf7759711c13f0c9cc943d76a727cc9955a498e
 #Step 2: RUN reduce
 print "Adding hidrogens... "
 Parallel(n_jobs=8, verbose=11)(delayed(runner.runreduce)(runrdc.code,workdir)for runrdc in tupla)
-
+sys.exit(1)
 #Step 3: Run mif
 print "Running MIF... "
 Parallel(n_jobs=8, verbose=11)(delayed(runner.runmif)(pdb.code,pdb.het,pdb.heter,workdir)for pdb in tupla)
