@@ -52,7 +52,7 @@ def parser_(cliques):
 				temp = []
 				#If matched atoms are in pdb we write a list called temp with Temp factor in 1.00, if not we append a Temp factor 0.00  into temp list.
 				for j in pdb_temp1:
-					if chain == j[21] and resnum ==  j[22:26].strip() and atomtype == j[12:16].strip():
+					if chain == j[21] and resnum ==  j[22:26].strip() and atomtype == j[12:16].strip() and atomnum ==j[7:11].strip():
 						temp.append(j[:-5]+' 1.00')
 					else:
 						temp.append(j)
@@ -84,7 +84,7 @@ def parser_(cliques):
 				temp = []
 				#If matched atoms are in pdb we write a list called temp with Temp factor in 1.00, if not we append a Temp factor 0.00  into temp list.
 				for j in pdb_temp2:
-					if chain == j[21] and resnum ==  j[22:26].strip() and atomtype == j[12:16].strip():
+					if chain == j[21] and resnum ==  j[22:26].strip() and atomtype == j[12:16].strip() and atomnum ==j[7:11].strip():
 						temp.append(j[:-5]+' 1.00')
 					else:
 						temp.append(j)

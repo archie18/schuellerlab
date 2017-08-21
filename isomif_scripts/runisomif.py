@@ -65,7 +65,7 @@ tupla= []
 print "Reading file... "
 #Reading file
 for algo in open(filename):
-	Codes = collections.namedtuple('Codes',['code', 'het','heter','het_name'])
+	Codes = collections.namedtuple('Codes',['code', 'het','heter','het_name','lg','rsnm','chn','cd'])
 	algo = algo.replace('\n','') #remove if '\n'
 	s = algo.split(" ")
 	pdb=s[0]
@@ -73,7 +73,10 @@ for algo in open(filename):
 	hete = s[1]+s[2]+s[3]
 	pdb_filename = pdb+".pdb"
 	het_nm = s[1]
-	tupla.append(Codes(code=pdb,het=het_file, heter=hete, het_name=het_nm))
+	lig=s[1]
+	resnum=s[2]
+	chain=s[3]
+	tupla.append(Codes(code=pdb,het=het_file, heter=hete, het_name=het_nm,lg=lig,rsnm=resnum,chn=chain,cd=pdb_filename))
 print len(tupla)
 print "Downloading PDBs..."
 Parallel(n_jobs=8, verbose=11)(delayed(runner.downloadpdb)(pdb.code, workdir)for pdb in tupla)
@@ -87,6 +90,20 @@ if not os.path.exists(dst):
 	copyfile(src, dst)
 os.system(chmod+dst)
 os.system(cmd)
+#overwrite files without ligs
+directory = './'+workdir+'/hive/pdb/'
+for i in tupla:
+	f = open(directory+i.cd,"r")
+	lines = f.readlines()
+	f.close()
+	f = open(directory+i.cd,"w")
+	for line in lines:
+		if line[0:4]=="ATOM":
+			f.write(line)
+		if line[0:6]=="HETATM" and i.lg == line[17:20].strip() and i.rsnm == line[22:26].strip() and i.chn == line[21]:
+			f.write(line)
+	f.close()
+
 #Check for the cleft's files
 DIR = workdir+'/hive/pdb'
 clefts= len([name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR, name))])
@@ -96,8 +113,8 @@ if(clefts<total):
 	sys.exit(1)
 
 #Step 1: RUN GetCleft
-#print "GetCleft... "
-#Parallel(n_jobs=8, verbose=11)(delayed(runner.rungetcleft)(getcleft.code, getcleft.het,getcleft.het_name, workdir)for getcleft in tupla)
+print "GetCleft... "
+Parallel(n_jobs=8, verbose=11)(delayed(runner.rungetcleft)(getcleft.code, getcleft.het,getcleft.het_name, workdir)for getcleft in tupla)
 DIR = workdir+'/hive/clefts'
 clefts= len([name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR, name))])
 total= 2*len(tupla)

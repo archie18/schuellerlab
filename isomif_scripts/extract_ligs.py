@@ -23,9 +23,10 @@ import collections
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-f', '--file',    required=True, help='path to file with pockets')
-
+parser.add_argument('-p', '--path', required=True, help='folder to save the clefts')
 args = parser.parse_args()
 filename = "./"+args.file
+workdir  = "./"+args.path
 print 'Hello'
 print "Reading file... "
 #Reading file
@@ -49,15 +50,22 @@ for algo in open(filename):
 #	if fnmatch.fnmatch(file, filename):
 #		if(len(file)<9):
 #			filenames.append(file)
-for i in tupla:
-	f = open(i.cd,"r")
-	lines = f.readlines()
-	f.close()
+example = './Homogeneous/hive/pdb/1A0G.pdb'
 
-	for line in lines:
-  		if line!="nickname_to_delete"+"\n":
-    			f.write(line)
-	print i.cd
+chn = 'A'
+rsnm = '285'
+lg = 'PMP'
+f = open(example,"r")
+lines = f.readlines()
+f.close()
+f = open(example,"w")
+for line in lines:
+	if line[0:4]=="ATOM":
+		f.write(line)
+	if line[0:6]=="HETATM" and lg == line[17:20].strip() and rsnm == line[22:26].strip() and chn == line[21]:
+		f.write(line)
+f.close()
+	#print i.cd
 	
 
 
