@@ -198,8 +198,8 @@ global function PocketExtractor options
             endif
 
             // Clean up
-            oDestroy recChains;
-            oDestroy ligChains;
+            //oDestroy recChains;
+            //oDestroy ligChains;
             //break;
         endif
     endloop
