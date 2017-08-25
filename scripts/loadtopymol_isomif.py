@@ -2,9 +2,15 @@
 # -*- coding: utf-8 -*-
 
 """
+Function:
+	Load clefts into a pymol session
+Parameters: 
+	-p: Path where is the .isomif
+	-f: File with entries
+	-c: code of the pdb
+	-l: ligand of the pdb code
 Example:
-python loadtopymol.py -l PMP -p ./Homogeneous/Proteins/pockets
-Cargar los pockets de cierto ligando en pymol.
+	python loadtopymol_isomif.py -c 1OJD -l PMP -p ./Homogeneous/hive/match/ -f Homogenous_entries
 """
 
 import os
@@ -26,6 +32,8 @@ for i in open(filename):
 	i = i.replace('\n','')
 	s = i.split(" ")
 	if s[1]==lig:
+		#print s[1],lig
+		#print s[0]
 		if s[0]!=code:
 			target.append(s[0])
 
@@ -33,34 +41,35 @@ ligand = code+'_match_'
 path = args.path
 pymol = 'pymol '
 perl = 'perl ./isoMifView.pl -m '
-#sed = "sed 's/GRE/ C /g' | sed 's/DON/ N /g' | sed 's/ACC/ O /g' > "
-
-if not os.path.exists('./Temp'):
-	os.makedirs('./Temp')
-
-
-for i in target:
-	ligand = code+'_match_'+i
-	print i
+temp = './'+code+'_'+lig+'/'
+if not os.path.exists(temp):
+	os.makedirs(temp)
 
 for file in os.listdir(path):
-	#print file
+
 	for i in target:
-		ligand = code+'_match_'+i
-		print i
-		#print ligand
-		#sys.exit(1)
+		ligand = code+'_match_'+i+'.isomif'
+		query = i+'_match_'+code+'.isomif'
 		if fnmatch.fnmatch(file, ligand):
-			pymol = pymol+'./Temp/'+ file + ' '
-			#cat = 'cat ./'+path+'/'+ file + ' | '+ sed +'./Temp/'+ file 
-			cmd= perl + path +file+' -o ./Temp/ -g 1'
-			#print cmd
-			#print file
-			#print cat
-			#os.system(cat)
-print target
-#print pymol
-#os.system(pymol)
+			pymol = pymol+temp+ file[:-6].replace('match_','') + 'pml ' #concatenate the command to load pymol session
+			cmd= perl + path +file+' -o '+temp+' -g 1' #here we run the script to create a pml visualization of an interest cleft
+			print cmd
+			os.system(cmd)
+			cp = 'cp '+path+'/'+file+' '+temp + file
+			os.system(cp)
+			os.system(cmd)
+
+		if fnmatch.fnmatch(file, query):
+			pymol = pymol+temp+ file[:-6].replace('match_','') + 'pml ' #concatenate the command to load pymol session
+			cmd= perl + path +file+' -o '+temp+' -g 1' #here we run the script to create a pml visualization of an interest cleft
+			print cmd
+			os.system(cmd)
+			cp = 'cp '+path+'/'+file+' '+temp + file
+			os.system(cp)
+			os.system(cmd)
+#print target
+pymol= pymol +"-d save "+temp+temp[:-1]+".pse'"
+os.system(pymol)
 
 #this works
 #perl ./isoMifView.pl -m /home/rminho/IsoMIF/Homogeneous/hive/match/1A0G_match_1OJD.isomif -o ./Temp/ -g 1

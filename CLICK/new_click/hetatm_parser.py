@@ -1,5 +1,13 @@
 #!/usr/bin/env python
 
+"""
+Function:
+	This script replace HETATM, that are part of a pocket, as ATOM
+Parameters: 
+	-p - Path where is the .pdbs
+Example:
+	python hetatm_parser.py -p pockets_folder
+"""
 import os, os.path
 import sys
 import argparse
@@ -10,7 +18,7 @@ parser.add_argument('-f', '--file',    required=True, help='file with code pdb')
 
 args = parser.parse_args()
 filename = "./"+args.file
-
+#Function to return the name of a file, in this case the name of every pdb pocket file(ph4)
 def query_(query):
 	for file in os.listdir('.'):
 		if fnmatch.fnmatch(file, query):
@@ -29,7 +37,7 @@ def main():
 			for line in file:
 				resname = line[17:20].strip()
 				if 'HETATM' in line and len(resname) == 3 and resname != 'HOH':
-					line = line.replace('HETATM','ATOM  ')
+					line = line.replace('HETATM','ATOM  ') # replace HETATM for ATOM for the ligs that are not part of the entries file
 					lines.append(line)
 				else:
 					lines.append(line)

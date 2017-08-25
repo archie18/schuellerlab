@@ -98,10 +98,16 @@ for i in tupla:
 	f.close()
 	f = open(directory+i.cd,"w")
 	for line in lines:
+		rsnm = line[17:20].strip()
 		if line[0:4]=="ATOM":
 			f.write(line)
-		if line[0:6]=="HETATM" and i.lg == line[17:20].strip() and i.rsnm == line[22:26].strip() and i.chn == line[21]:
-			f.write(line)
+		if line[0:6]=="HETATM":
+			if i.lg == line[17:20].strip() and i.rsnm == line[22:26].strip() and i.chn == line[21]:
+				f.write(line)
+#			else:
+#				if len(rsnm)==3 and rsnm != 'HOH':
+#					line = line.replace('HETATM','ATOM  ')
+#					f.write(line) 
 	f.close()
 
 #Check for the cleft's files
@@ -120,7 +126,7 @@ clefts= len([name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR
 total= 2*len(tupla)
 if(clefts<total):
 	print "faltan clefts..."
-	sys.exit(1)
+	#sys.exit(1)
 else:
 	print "No faltan clefts..."
 
