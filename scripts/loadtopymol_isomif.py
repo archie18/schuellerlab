@@ -50,6 +50,7 @@ for file in os.listdir(path):
 	for i in target:
 		ligand = code+'_match_'+i+'.isomif'
 		query = i+'_match_'+code+'.isomif'
+		
 		if fnmatch.fnmatch(file, ligand):
 			pymol = pymol+temp+ file[:-6].replace('match_','') + 'pml ' #concatenate the command to load pymol session
 			cmd= perl + path +file+' -o '+temp+' -g 1' #here we run the script to create a pml visualization of an interest cleft
@@ -67,9 +68,11 @@ for file in os.listdir(path):
 			cp = 'cp '+path+'/'+file+' '+temp + file
 			os.system(cp)
 			os.system(cmd)
+		#pymol= pymol +"-d save "+temp+code+"_"+lig+".pse"
+		#os.system(pymol)
 #print target
-pymol= pymol +"-d save "+temp+temp[:-1]+".pse'"
-os.system(pymol)
-
+pymol= pymol +"'-d save "+temp+temp[2:-1]+".pse'"
+#os.system(pymol)
+print pymol
 #this works
 #perl ./isoMifView.pl -m /home/rminho/IsoMIF/Homogeneous/hive/match/1A0G_match_1OJD.isomif -o ./Temp/ -g 1
