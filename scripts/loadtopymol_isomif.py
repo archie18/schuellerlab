@@ -44,7 +44,7 @@ perl = 'perl ./isoMifView.pl -m '
 temp = './'+code+'_'+lig+'/'
 if not os.path.exists(temp):
 	os.makedirs(temp)
-
+session = []
 for file in os.listdir(path):
 
 	for i in target:
@@ -68,11 +68,12 @@ for file in os.listdir(path):
 			cp = 'cp '+path+'/'+file+' '+temp + file
 			os.system(cp)
 			os.system(cmd)
-		#pymol= pymol +"-d save "+temp+code+"_"+lig+".pse"
+		pymol= pymol +"-d save "+temp+code+"_"+i+".pse"
+		session.append(pymol)
 		#os.system(pymol)
 #print target
-pymol= pymol +"'-d save "+temp+temp[2:-1]+".pse'"
+
 #os.system(pymol)
-print pymol
+print session
 #this works
 #perl ./isoMifView.pl -m /home/rminho/IsoMIF/Homogeneous/hive/match/1A0G_match_1OJD.isomif -o ./Temp/ -g 1
