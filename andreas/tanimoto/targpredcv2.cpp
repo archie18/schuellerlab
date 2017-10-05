@@ -11,7 +11,8 @@
  * @Version: 0.5 [2017-10-05]
  * 
  * HISTORY
- * 2017-10-05    0.5      Introduced kNN mode
+ * 2017-10-05    0.5      Introduced kNN mode.
+ *                        Added ligIdColIdx command line option
  * 2017-         0.4.2    Chained column index of the ligand sequencial number.
  *                        This should better be a command line parameter
  * 2017-06-06    0.4.1    Now printing ChEMBL ID of query ligands in output instead of
@@ -104,7 +105,7 @@ void printMap(map<string, vector<size_t> > targligs) {
  * Reads an interaction file and parses it into a target ligands dictionary and
  * a look-up map of ligand ChEMBL ids.
  */
-void readTargLigs(string filename, map<string, vector<size_t> > &targLigs, map<size_t, string> &ligChemblIds) {
+void readTargLigs(string filename, map<string, vector<size_t> > &targLigs, map<size_t, string> &ligChemblIds, int ligIdColIdx) {
     //map<string, vector<size_t> > targLigs;
     string line;
     ifstream myfile (filename);
@@ -117,7 +118,7 @@ void readTargLigs(string filename, map<string, vector<size_t> > &targLigs, map<s
             vector<string> tokens = split(line, '\t');
             string targid = tokens[0]; // Target ChEMBL ID
             string ligChemblId = tokens[1]; // Ligand ChEMBL ID
-            size_t ligid = (size_t) stoull(tokens[12]); // Ligand sequential number
+            size_t ligid = (size_t) stoull(tokens[ligIdColIdx]); // Ligand sequential number
             
             //vector<size_t> ligs;
             //if (targligs.count(targid) == 0) {
@@ -200,7 +201,45 @@ void printFoldLimits(vector<size_t> foldLimits, vector<size_t> &ligIds) {
     }
 }
 
-void fold(vector<size_t> foldLimits, int foldIdx, vector<size_t> threadLimits, int threadIdx, map<string, vector<size_t> > &targLigs, map<size_t, string> &ligChemblIds, SimilarityMatrix &simMat, vector<size_t> &ligIds) {
+// Compare function for tanimotos, descending sort
+bool comp(tuple<float, size_t> tc1, tuple<float, size_t> tc2) {
+    return get<0>(tc1) > get<0>(tc2);
+}
+
+// Returns the k ligands of the trainingSet with maximal tanimoto coefficient against the query ligand
+vector<tuple<float, size_t>> nearestNeighbors(size_t query, vector<size_t> trainingSet, SimilarityMatrix &simMat, int k) {
+    // Vector to hold tuples of tanimoto and ligId
+    vector<tuple<float, size_t>> tanimotos;
+    vector<tuple<float, size_t>> maxTanimotos;
+            
+    // Iterate over target's training set ligands and calculate all tanimotos against query
+    //cout << "tanis:" << endl;
+    for (vector<size_t>::iterator ligIt = trainingSet.begin(); ligIt != trainingSet.end(); ++ligIt) {
+        //cout << "ligIdx=" << ligIdx << " ligIds[ligIdx]=" << ligIds[ligIdx] << endl;
+        //float tanimoto = getSim(simMat, nLigs, ligIds[ligIdx], *ligIt);
+        float tanimoto = simMat.at(query, *ligIt);
+        tanimotos.push_back(make_tuple(tanimoto, *ligIt));
+        //cout << tanimoto << " " << *ligIt << endl;
+    }
+
+    // Sort tanimotos in descending order
+    sort(tanimotos.begin(), tanimotos.end(), comp);
+
+    // Determine actual k (if less then k)
+    if (tanimotos.size() < k) {
+        k = tanimotos.size();
+    }
+
+    // Return top-k tanimotos
+    //cout << "topK:" << endl;
+    vector<tuple<float, size_t>> topK(tanimotos.begin(), tanimotos.begin() + k);
+    //for (vector<tuple<float, size_t>>::iterator it = topK.begin(); it != topK.end(); ++it) {
+    //    cout << get<0>(*it) << " " << get<1>(*it) << endl;
+    //}
+    return topK;
+}
+
+void fold(vector<size_t> foldLimits, int foldIdx, vector<size_t> threadLimits, int threadIdx, map<string, vector<size_t> > &targLigs, map<size_t, string> &ligChemblIds, SimilarityMatrix &simMat, vector<size_t> &ligIds, int k) {
     /*myMutex.lock();
     cerr << "Fold " << foldIdx << ", Thread " << threadIdx << " (Time elapsed: " << chrono::duration_cast<chrono::milliseconds>(chrono::high_resolution_clock::now() - startTime).count()/1000.0f << " sec.)" << endl;
     myMutex.unlock();*/
@@ -227,8 +266,24 @@ void fold(vector<size_t> foldLimits, int foldIdx, vector<size_t> threadLimits, i
                 }
             }
             
-            // Determine maximal similarity of query ligand (ligIds[ligIdx]) and current target's training set ligands
-            //vector<float> tanimotos;
+            // Determine k maximal similarities of query ligand (ligIds[ligIdx]) against current target's training set ligands
+            vector<tuple<float, size_t>> topK = nearestNeighbors(ligIds[ligIdx], trainingSet, simMat, k);
+
+            // Calculate the average tanimoto coefficient of topK
+            float maxSim;
+            size_t maxSimLigId;
+            if (topK.size() > 0) {
+                float sum = 0.0;
+                for (vector<tuple<float, size_t>>::iterator topKIt = topK.begin(); topKIt != topK.end(); ++topKIt) {
+                    sum = sum + get<0>(*topKIt);
+                }
+                maxSim = sum / topK.size();
+                maxSimLigId = get<1>(topK[0]); // Return ligandId of most similar ligand
+            } else {
+                maxSim = -99.0f;
+                maxSimLigId = -1;
+            }
+            /*
             float maxSim = -99.0f;
             size_t maxSimLigId = 0;
             // Iterate over target's training set ligands
@@ -244,6 +299,7 @@ void fold(vector<size_t> foldLimits, int foldIdx, vector<size_t> threadLimits, i
                     maxSimLigId = *ligIt;
                 }
             }
+            */
             
             // Determine true positive (find query ligand in current target's test set)
             int tp = 0;
@@ -285,6 +341,7 @@ int main(int argc, char** argv) {
     int endFold; // Exclusive
     bool ignoreSizeMismatch;
     int k;
+    int ligIdColIdx;
 
     // Wrap everything in a try block.  Do this every time, 
     // because exceptions will be thrown for problems. 
@@ -313,6 +370,8 @@ int main(int argc, char** argv) {
         cmd.add( ignoreSizeMismatchSwitch );
         ValueArg<int> kArg("k", "knn", "Set value of kNN's k (default: 1)", false, 1, "int");
         cmd.add( kArg );
+        ValueArg<int> ligIdColIdxArg("c", "ligidcolidx", "Column index of sequential ligand ID column (default: 12)", false, 12, "int");
+        cmd.add( ligIdColIdxArg );
         // Parse the args.
         cmd.parse( argc, argv );
 
@@ -326,6 +385,8 @@ int main(int argc, char** argv) {
         mode = modeArg.getValue();
         ignoreSizeMismatch = ignoreSizeMismatchSwitch.getValue();
         k = kArg.getValue();
+        ligIdColIdx = ligIdColIdxArg.getValue();
+        cerr << ligIdColIdx;
         // Process fold range
         if (foldRangeArg.getValue() == "all") {
             startFold = 0;
@@ -354,7 +415,7 @@ int main(int argc, char** argv) {
     // Read target ligands dictionary
     map<string, vector<size_t> > targLigs;
     map<size_t, string> ligChemblIds;
-    readTargLigs(interactionsFile, targLigs, ligChemblIds);
+    readTargLigs(interactionsFile, targLigs, ligChemblIds, ligIdColIdx);
     cerr << "Interactions files read (Time elapsed: " << chrono::duration_cast<chrono::milliseconds>(chrono::high_resolution_clock::now() - startTime).count()/1000.0f << " sec.)" << endl;
     //printMap(targLigs);
     
@@ -384,6 +445,7 @@ int main(int argc, char** argv) {
     cerr << "mode:               " << mode << endl;
     cerr << "ignoreSizeMismatch: " << ignoreSizeMismatch << endl;
     cerr << "k (kNN):            " << k << endl;
+    cerr << "ligIdColIdx:        " << ligIdColIdx << endl;
     cerr << endl;
     
     if (nLigs != simMat.getNLigs()) {
