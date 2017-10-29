@@ -10,74 +10,65 @@ import os
 import shutil
 import signal
 import collections
-import urllib
 
-getcleft_sw = "./GetCleft"
-reduce_sw = "./reduce.3.10.070814.linuxi386"
-mif_sw = "/work/isomifbackup/isomif_tests/mif"
-mifView_sw="perl ./mifView.pl"
-isomif_sw ="/work/isomifbackup/isomif_tests/isomif"
-isomifview_sw ="perl ./isoMifView.pl"
-url = "http://www.rcsb.org/pdb/download/downloadFile.do?fileFormat=pdb&compression=NO&structureId="
-
-def downloadpdb(code, workdir):
-	pdb_filename = code+".pdb"
-	pdbid= url+code
-	if not os.path.isfile(workdir+'/hive/pdb/'+pdb_filename): #download pdb file
-		open(workdir+'/hive/pdb/'+pdb_filename,"w").write( urllib.urlopen(pdbid).read() )
-def rungetcleft(code , het, het_nm, workdir):
+getcleft_sw = "/CLUSTERFS/homes/rminho/Documents/sw_isomif/IsoMif-master/GetCleft"
+reduce_sw = "/CLUSTERFS/homes/rminho/Documents/sw_isomif/IsoMif-master/reduce.3.23.130521"
+mif_sw = "/CLUSTERFS/homes/rminho/Documents/sw_isomif/IsoMif-master/mif"
+mifView_sw="perl /CLUSTERFS/homes/rminho/Documents/sw_isomif/IsoMif-master/mifView.pl"
+isomif_sw ="/CLUSTERFS/homes/rminho/Documents/sw_isomif/IsoMif-master/isomif"
+def rungetcleft(code , het, workdir):
 
 	"""
 	Function to run getcleft
 	"""
-	cmd = getcleft_sw+" -p "+workdir+"/hive/pdb/"+code+"h.pdb -o "+workdir+"/hive/clefts/"+code+" -s -a "+ het
+	cmd = getcleft_sw+" -p "+code+".pdb -o ./"+workdir+"/"+code+" -s -a "+ het
 	os.system(cmd)
 	sys.stdout.flush()
 
-
-def runmifview(code,workdir):
-
-	"""
-	Function to run mifView
-	"""
-	cmd = mifView_sw+" -m "+workdir+"/hive/mifs/"+code+".mif -o "+workdir+"/hive/mifView/"
-	os.system(cmd)
-	sys.stdout.flush()
-
-def runreduce(code,workdir):
+def runreduce(code):
 
 	"""
 	Function to run Reduce
 	"""
-	reduce_out= workdir+"/hive/pdb/"+code+"h.pdb"
-	cmd = reduce_sw+" -p "+workdir+"/hive/pdb/"+code+".pdb > "+reduce_out
+	if not os.path.exists('./hive'):
+		os.mkdir('./hive')
+	reduce_out= "./hive/"+code+"h.pdb"
+	cmd = reduce_sw+" -p "+code+".pdb > "+reduce_out
 	os.system(cmd)
 	sys.stdout.flush()
 
-def runmif(code , het,heter, workdir):
+def runmif(code , het):
 
 	"""
 	Function to run mif
 	"""
+	if not os.path.exists('./mifs'):
+		os.mkdir('./mifs')
+
+	if not os.path.exists('./hive/mifView'):
+		os.mkdir('./hive/mifView')	
 	sph_file = ''
 	sph_file = code+"_"+het+"_sph_"
-	for i in range (150):
-		mif_filename= workdir+"/hive/clefts/"+sph_file+str(i)+".pdb"
+	for i in range (50):
+		mif_filename= "./clefts/"+sph_file+str(i)+".pdb"
 		if os.path.isfile(mif_filename):
-			cmd="/work/isomifbackup/isomif_tests/mif -p "+workdir+"/hive/pdb/"+code+"h.pdb -g "+mif_filename+" -o "+workdir+"/hive/mifs -l "+het+" -r 3 -t "+code+" -z 1"
+			cmd=mif_sw+" -p ./hive/"+code+"h.pdb -g "+mif_filename+" -o ./mifs -l "+het+" -r 3 -t "+code+" -z 1"
 			os.system(cmd)
-		cmd2 = mifView_sw+" -m "+workdir+"/hive/mifs/"+code+".mif -o "+workdir+"/hive/mifView/"
+		cmd2 = mifView_sw+" -m ./mifs/"+code+".mif -o ./hive/mifView/"
 		os.system(cmd2)
 
-def runisomif(pdb1, het1, pdb2, het2,workdir):
+def runisomif(pdb1, het1, pdb2, het2):
 
 	"""
 	Function to run isomif
 	"""
+	if not os.path.exists('./hive/match/'):
+		os.mkdir('./hive/match/')
 	#if pdb1 != pdb2:
-	print "pdb 1:"+pdb1+" y pdb2:"+pdb2
-	cmd = isomif_sw+" -p1 "+workdir+"/hive/mifs/"+pdb1+".mif -p2 "+workdir+"/hive/mifs/"+pdb2+".mif -o "+workdir+"/hive/match/ -c 1 -l 1 -l1 "+het1+" -l2 "+het2
+	cmd = isomif_sw+" -p1 ./mifs/"+pdb1+".mif -p2 ./mifs/"+pdb2+".mif -o ./hive/match/ -c 1 -l 1 -l1 "+het1+" -l2 "+het2
 	os.system(cmd)
 	sys.stdout.flush()
+
+
 
 
