@@ -121,7 +121,7 @@ void interFileToFilteredAndClust(string filename, vector<vector<size_t> > cluste
 	//cout << "Si se cae aca fue en el ReadWriteintf" << endl;
         while(getline(inToInt,line)){
                 vector<string> tokens = split(line,'\t');
-                size_t corrNum = (size_t) stoull(tokens[12]); //Ligands correlative number                   
+                size_t corrNum = (size_t) stoull(tokens[11]); //Ligands correlative number                   
                 for (int i = 0; i < clusters.size(); i++){
 			if (corrNum == clusters[i][0]){
                                 outFiltered << line << endl;

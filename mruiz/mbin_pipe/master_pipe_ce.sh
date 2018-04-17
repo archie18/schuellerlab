@@ -7,7 +7,7 @@ tail -n +2  ${i} | awk -F $'\t' '{ print $10"\t"$2 }' | sort -u -k2 > ${i}.tmp.u
 /share/openbabel-2.4.1/bin/babel --unique /nostereo -i smi ${i}.tmp.ul.2 -o can ${i}.ul # Keep only unique molecules ignoring stereo chemistry
 #cat ${i}.tmp.ul.can | sort -u -k1 > ${i}.ul
 cat ${i}.ul | awk 'BEGIN { FS = " " ; c=0} ; {print $1"\t"$2"\t"c;c++}' > ${i}.ul.co ### LINEA QUE AGREGA AL ARCHIVO .ul OTRA COLUMNA CON IDs CORRELATIVOS 
-python /work/mruiz/mbin/add_coid.py ${i}.ul.co ${i} > ${i}.co ### LINEA QUE EJECUTA EL .py PARA AGREGAR COLUMNA CON IDs CORRELATIVOS EN INTERACCIONES
+python /work1/mruiz/mbin/add_coid.py ${i}.ul.co ${i} > ${i}.co ### LINEA QUE EJECUTA EL .py PARA AGREGAR COLUMNA CON IDs CORRELATIVOS EN INTERACCIONES
 cat ${i}.ul | cut -f1  > ${i}.smi
 
 echo ""
@@ -25,23 +25,6 @@ done
 wait
 
 echo ""
-echo "using mold2 to create profile from sdf"
-
-for u in $(ls *.sdf) ## modificar esta linea
-do Mold2 -i ${u} -o ${u}.mold &
-done 
-wait
-
-
-
-echo ""
-echo "normalizing Mold2 (mold) data"
-for e in $(ls *.mold)
-do /home/j/pythonlocal/bin/python /home/mruiz/mbin/normalize_mold2.py ${e} ${e}.norm &
-done
-#wait
-
-echo ""
 echo "transforming FP2 hexadeximal to binary" 
 for o in $(ls *.fpt)
 do 
@@ -50,4 +33,7 @@ time cat $o |grep -v 'Possible superstructure of' |grep -v '>' |paste -d '' - - 
 done
 wait
 
-echo "creating a final file with ChemblID and the mols description"
+/work1/mruiz/mbin/tanmat -i ${o}.bin -o ${o}.bin.tanmat -s " " ### GENERAR MATRIZ
+/work1/mruiz/mbin/targpredcv2 -p -m ${o}.bin.tanmat -i ${i}.co -j 1> ${i}.co.fp2.out 2> ${i}.co.fp2.err ### PREDICCION
+python3.5 /work1/mruiz/mbin/targpredroc.py ${i}.co.fp2.out > ${i}.co.fp2.out.raw_output.txt ### GENERACION DE GRAFICOS Y RAW OUTPUT WITH TOP-X
+

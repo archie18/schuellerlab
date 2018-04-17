@@ -21,7 +21,7 @@ with open(inter) as fp2:
 			print ("%s\tCorrelativeID" % (newline))
 		else:
 #			print len(cols)
-			ligIDint = cols[1]
+			ligIDint = cols[0]
 			for elem in ligID:
 				if ligIDint == elem[0]:
 					print("%s\t%s" % (newline, elem[1]))

@@ -25,23 +25,6 @@ done
 wait
 
 echo ""
-echo "using mold2 to create profile from sdf"
-
-for u in $(ls *.sdf) ## modificar esta linea
-do Mold2 -i ${u} -o ${u}.mold &
-done 
-wait
-
-
-
-echo ""
-echo "normalizing Mold2 (mold) data"
-for e in $(ls *.mold)
-do /home/j/pythonlocal/bin/python /home/mruiz/mbin/normalize_mold2.py ${e} ${e}.norm &
-done
-#wait
-
-echo ""
 echo "transforming FP2 hexadeximal to binary" 
 for o in $(ls *.fpt)
 do 
@@ -50,4 +33,7 @@ time cat $o |grep -v 'Possible superstructure of' |grep -v '>' |paste -d '' - - 
 done
 wait
 
-echo "creating a final file with ChemblID and the mols description"
+#/work/mruiz/mbin/tanmat -i ${o}.bin -o ${o}.bin.tanmat -s " " ### GENERAR MATRIZ
+#/work/mruiz/mbin/targpredcv2 -p -m ${o}.bin.tanmat -i ${i}.co -j 1> ${i}.co.fp2.out 2> ${i}.co.fp2.err ### PREDICCION
+#python3.5 /work/mruiz/mbin/targpredroc.py ${i}.co.fp2.out > ${i}.co.fp2.out.raw_output.txt ### GENERACION DE GRAFICOS Y RAW OUTPUT WITH TOP-X
+

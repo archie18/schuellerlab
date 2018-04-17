@@ -10,7 +10,7 @@ with open(filename) as fp:
     for ligid in fp:
 	newl = ligid.rstrip('\n')
 	col = newl.split('\t')
-	ligID.append((col[1],col[2]))	
+	ligID.append((col[0],col[2]))	
         
 ### LECTURA SEGUNDO ARCHIVO .txt Y COMPARACION DE IDS CON LA LISTA CREADA ANTERIORMENTE
 with open(inter) as fp2:
