@@ -1,0 +1,38 @@
+REMARK command: ./isomif -p1 ./Kahraman/hive/mifs/1L7M.mif -p2 ./Kahraman/hive/mifs/1E8G.mif -o ./Kahraman/hive/match/ -c 1 -l 1 -l1 PO4720A- -l2 FAD600A-
+REMARK commandJob: ./isomif -p1 ./Kahraman/hive/mifs/1L7M.mif -p2 ./Kahraman/hive/mifs/1E8G.mif -p1 ./Kahraman/hive/mifs/1L7M.mif -p2 ./Kahraman/hive/mifs/1E8G.mif -o ./Kahraman/hive/match/ -c 1 -l 1 -l1 PO4720A- -l2 FAD600A-
+REMARK mif_file_1: ./Kahraman/hive/mifs/1L7M.mif
+REMARK mif_file_2: ./Kahraman/hive/mifs/1E8G.mif
+REMARK nb_of_probes: 6
+REMARK C-alpha_dDist:  3.00
+REMARK pseudocenter_dDist:  1.00
+REMARK dDist:  3.00
+REMARK jtt_threshold: 5
+REMARK max_nodes: 100000
+REMARK commont int : 1
+REMARK wsimfn: 0
+REMARK tag1: 1L7M
+REMARK tag2: 1E8G
+REMARK rnc1: PO4720A-
+REMARK rnc2: FAD600A-
+REMARK ncliques_scored: 1
+REMARK ncliques_explored: 2
+REMARK CLIQUE CG 1 NODES 14 NODESM 14 NODESMW 0.0000 NORMNODES 0.0000 NORMNODESRMSD 0.0000 TANI 0.0791 TANIM 0.0505 TANIMW 0.0000 TANINORM 0.0000 NRG 0.000 SS1 20 SS2 171 SS1M 34 SS2M 257 LIGRMSD 0.000
+4   49.500   17.000    8.000   96.500   49.000   71.500
+3   52.500   15.500    5.000  102.500   46.000   73.000
+3   51.000   17.000    6.500   99.500   47.500   73.000
+3   52.500   17.000    5.000  102.500   47.500   74.500
+2   51.000   18.500    8.000   98.000   50.500   74.500
+3   52.500   17.000    6.500   99.500   47.500   76.000
+3   52.500   15.500    8.000   98.000   47.500   76.000
+3   52.500   15.500    6.500   99.500   46.000   76.000
+2   52.500   18.500    8.000   98.000   50.500   76.000
+3   54.000   15.500    6.500   99.500   44.500   74.500
+3   54.000   15.500    8.000   96.500   46.000   74.500
+3   52.500   14.000    8.000   98.000   44.500   76.000
+2   52.500   14.000    9.500  101.000   44.500   74.500
+3   54.000   15.500    9.500   99.500   44.500   76.000
+REMARK ROTMAT     0.3134   -0.0469   -0.9485   -0.2918    0.9457   -0.1431    0.9037    0.3216    0.2827
+REMARK CENTRES   52.3929   16.1429    7.3571   99.1786   46.8571   74.7143
+REMARK DET 1
+REMARK DETORI 1
+REMARK END

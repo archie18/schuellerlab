@@ -1,0 +1,38 @@
+REMARK command: ./isomif -p1 ./Kahraman80/hive/mifs/1QPA.mif -p2 ./Kahraman80/hive/mifs/1O9T.mif -o ./Kahraman80/hive/match/ -c 1 -l 1 -l1 HEM350A- -l2 ATP1397B-
+REMARK commandJob: ./isomif -p1 ./Kahraman80/hive/mifs/1QPA.mif -p2 ./Kahraman80/hive/mifs/1O9T.mif -p1 ./Kahraman80/hive/mifs/1QPA.mif -p2 ./Kahraman80/hive/mifs/1O9T.mif -o ./Kahraman80/hive/match/ -c 1 -l 1 -l1 HEM350A- -l2 ATP1397B-
+REMARK mif_file_1: ./Kahraman80/hive/mifs/1QPA.mif
+REMARK mif_file_2: ./Kahraman80/hive/mifs/1O9T.mif
+REMARK nb_of_probes: 6
+REMARK C-alpha_dDist:  3.00
+REMARK pseudocenter_dDist:  1.00
+REMARK dDist:  3.00
+REMARK jtt_threshold: 5
+REMARK max_nodes: 100000
+REMARK commont int : 1
+REMARK wsimfn: 0
+REMARK tag1: 1QPA
+REMARK tag2: 1O9T
+REMARK rnc1: HEM350A-
+REMARK rnc2: ATP1397B-
+REMARK ncliques_scored: 1
+REMARK ncliques_explored: 1
+REMARK CLIQUE CG 1 NODES 11 NODESM 14 NODESMW 0.0000 NORMNODES 0.0000 NORMNODESRMSD 0.0000 TANI 0.0705 TANIM 0.0498 TANIMW 0.0000 TANINORM 0.0000 NRG 0.000 SS1 156 SS2 11 SS1M 276 SS2M 19 LIGRMSD 0.000
+2    6.000   50.500   75.000   -0.500   23.000   53.500
+2    6.000   50.500   76.500   -0.500   21.500   53.500
+2    6.000   52.000   75.000    1.000   23.000   53.500
+2    6.000   52.000   76.500    1.000   21.500   53.500
+2    6.000   50.500   78.000    2.500   23.000   52.000
+2    7.500   50.500   76.500    1.000   21.500   52.000
+0    6.000   49.000   76.500   -0.500   21.500   52.000
+5    7.500   49.000   76.500    1.000   23.000   50.500
+5    7.500   49.000   75.000   -0.500   23.000   50.500
+2    7.500   47.500   76.500    1.000   21.500   50.500
+3    7.500   47.500   76.500    1.000   21.500   50.500
+5    7.500   47.500   76.500    1.000   21.500   50.500
+3    7.500   49.000   73.500   -0.500   21.500   50.500
+5    7.500   49.000   73.500   -0.500   21.500   50.500
+REMARK ROTMAT     0.1046    0.0000    0.9945    0.7658    0.6388   -0.0744   -0.6345    0.7693    0.0742
+REMARK CENTRES    6.8571   49.5357   75.8571    0.4643   22.0357   51.6786
+REMARK DET 0.999908
+REMARK DETORI 0.999908
+REMARK END

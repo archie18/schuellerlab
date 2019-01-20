@@ -1,0 +1,41 @@
+REMARK command: ./isomif -p1 ./Kahraman/hive/mifs/1H6L.mif -p2 ./Kahraman/hive/mifs/1MVL.mif -o ./Kahraman/hive/match/ -c 1 -l 1 -l1 PO4501A- -l2 FMN1001A-
+REMARK commandJob: ./isomif -p1 ./Kahraman/hive/mifs/1H6L.mif -p2 ./Kahraman/hive/mifs/1MVL.mif -p1 ./Kahraman/hive/mifs/1H6L.mif -p2 ./Kahraman/hive/mifs/1MVL.mif -o ./Kahraman/hive/match/ -c 1 -l 1 -l1 PO4501A- -l2 FMN1001A-
+REMARK mif_file_1: ./Kahraman/hive/mifs/1H6L.mif
+REMARK mif_file_2: ./Kahraman/hive/mifs/1MVL.mif
+REMARK nb_of_probes: 6
+REMARK C-alpha_dDist:  3.00
+REMARK pseudocenter_dDist:  1.00
+REMARK dDist:  3.00
+REMARK jtt_threshold: 5
+REMARK max_nodes: 100000
+REMARK commont int : 1
+REMARK wsimfn: 0
+REMARK tag1: 1H6L
+REMARK tag2: 1MVL
+REMARK rnc1: PO4501A-
+REMARK rnc2: FMN1001A-
+REMARK ncliques_scored: 1
+REMARK ncliques_explored: 3
+REMARK CLIQUE CG 1 NODES 17 NODESM 17 NODESMW 0.0000 NORMNODES 0.0000 NORMNODESRMSD 0.0000 TANI 0.2464 TANIM 0.1393 TANIMW 0.0000 TANINORM 0.0000 NRG 0.000 SS1 24 SS2 62 SS1M 52 SS2M 87 LIGRMSD 0.000
+3    3.500   15.000   17.000   60.500   22.000  -17.000
+2    2.000   15.000   11.000   63.500   20.500  -21.500
+2    3.500   15.000   15.500   62.000   22.000  -17.000
+2    3.500   15.000   14.000   63.500   22.000  -18.500
+2    5.000   13.500   14.000   62.000   22.000  -18.500
+2    3.500   16.500   12.500   62.000   22.000  -20.000
+2    5.000   13.500   12.500   63.500   22.000  -20.000
+1    5.000   13.500   11.000   65.000   20.500  -21.500
+1    5.000   12.000   11.000   66.500   19.000  -21.500
+2    3.500   13.500   12.500   65.000   20.500  -20.000
+2    3.500   12.000   14.000   65.000   20.500  -18.500
+2    2.000   13.500   12.500   65.000   19.000  -20.000
+3    0.500   13.500   12.500   65.000   17.500  -18.500
+2    0.500   12.000   14.000   65.000   19.000  -18.500
+2    0.500   13.500   14.000   63.500   19.000  -17.000
+2    0.500   13.500   15.500   63.500   20.500  -17.000
+3    2.000   12.000   14.000   65.000   17.500  -15.500
+REMARK ROTMAT     0.2226   -0.9354   -0.2748    0.9201    0.1083    0.3765   -0.3224   -0.3367    0.8847
+REMARK CENTRES    2.8824   13.6765   13.3824   63.8529   20.3235  -18.8529
+REMARK DET 1
+REMARK DETORI 1
+REMARK END

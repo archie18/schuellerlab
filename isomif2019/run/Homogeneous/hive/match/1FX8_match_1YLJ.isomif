@@ -1,0 +1,32 @@
+REMARK command: ./isomif -p1 ./Homogeneous/hive/mifs/1FX8.mif -p2 ./Homogeneous/hive/mifs/1YLJ.mif -o ./Homogeneous/hive/match/ -c 1 -l 1 -l1 BOG473A- -l2 SUC1050A-
+REMARK commandJob: ./isomif -p1 ./Homogeneous/hive/mifs/1FX8.mif -p2 ./Homogeneous/hive/mifs/1YLJ.mif -p1 ./Homogeneous/hive/mifs/1FX8.mif -p2 ./Homogeneous/hive/mifs/1YLJ.mif -o ./Homogeneous/hive/match/ -c 1 -l 1 -l1 BOG473A- -l2 SUC1050A-
+REMARK mif_file_1: ./Homogeneous/hive/mifs/1FX8.mif
+REMARK mif_file_2: ./Homogeneous/hive/mifs/1YLJ.mif
+REMARK nb_of_probes: 6
+REMARK C-alpha_dDist:  3.00
+REMARK pseudocenter_dDist:  1.00
+REMARK dDist:  3.00
+REMARK jtt_threshold: 5
+REMARK max_nodes: 100000
+REMARK commont int : 1
+REMARK wsimfn: 0
+REMARK tag1: 1FX8
+REMARK tag2: 1YLJ
+REMARK rnc1: BOG473A-
+REMARK rnc2: SUC1050A-
+REMARK ncliques_scored: 1
+REMARK ncliques_explored: 2
+REMARK CLIQUE CG 1 NODES 8 NODESM 8 NODESMW 0.0000 NORMNODES 0.0000 NORMNODESRMSD 0.0000 TANI 0.3333 TANIM 0.2051 TANIMW 0.0000 TANINORM 0.0000 NRG 0.000 SS1 13 SS2 19 SS1M 19 SS2M 28 LIGRMSD 0.000
+2   32.000   76.500  141.000   33.000   73.500   -6.500
+3   33.500   76.500  141.000   36.000   73.500   -8.000
+2   33.500   78.000  142.500   36.000   72.000   -3.500
+0   32.000   76.500  144.000   33.000   72.000   -5.000
+0   32.000   78.000  144.000   34.500   72.000   -5.000
+2   30.500   78.000  144.000   34.500   73.500   -2.000
+0   32.000   76.500  145.500   36.000   72.000   -6.500
+0   32.000   78.000  145.500   34.500   72.000   -3.500
+REMARK ROTMAT     0.8418    0.5397    0.0000   -0.2740    0.4423   -0.8540   -0.4651    0.7163    0.5202
+REMARK CENTRES   32.1875   77.2500  143.4375   34.6875   72.5625   -5.0000
+REMARK DET 0.99991
+REMARK DETORI 0.99991
+REMARK END

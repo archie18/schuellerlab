@@ -1,0 +1,7 @@
+#REMARK  PARENTFILE  ./Homogeneous/hive/pdb/1FX8.pdb
+ATOM    730  CE2 TYR A 105      35.296  75.189 145.235  1.00 23.36           C  
+ATOM    731  CZ  TYR A 105      35.291  74.481 144.041  1.00 24.44           C  
+ATOM    732  OH  TYR A 105      34.989  75.129 142.869  1.00 25.33           O  
+ATOM   1576  CA  ALA A 217      29.752  74.871 144.629  1.00 21.33           C  
+ATOM   1577  C   ALA A 217      29.633  74.626 143.126  1.00 21.79           C  
+ATOM   1578  O   ALA A 217      30.646  74.581 142.421  1.00 21.42           O  

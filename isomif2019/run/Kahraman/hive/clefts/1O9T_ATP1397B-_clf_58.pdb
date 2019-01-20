@@ -1,0 +1,7 @@
+#REMARK  PARENTFILE  ./Kahraman/hive/pdb/1O9T.pdb
+ATOM   3136  CB  LYS B  54      -1.409  18.323  50.296  1.00 39.16           C  
+ATOM   3251  C   GLU B  71       4.150  19.946  53.758  1.00 41.20           C  
+ATOM   3252  O   GLU B  71       3.762  20.348  52.658  1.00 42.54           O  
+ATOM   3266  N   THR B  73       0.847  17.328  53.673  1.00 43.98           N  
+ATOM   3270  CB  THR B  73      -1.532  17.698  54.188  1.00 43.85           C  
+ATOM   3271  OG1 THR B  73      -1.259  18.863  54.976  1.00 46.29           O  
