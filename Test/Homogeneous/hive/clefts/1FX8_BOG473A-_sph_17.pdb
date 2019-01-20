@@ -1,5 +1,0 @@
-#REMARK  PARENTFILE  ./Homogeneous/hive/pdb/1FX8.pdb
-ATOM    600  C   SPH Z   1      32.694  77.210 144.036  1.00  1.61 
-ATOM    603  C   SPH Z   1      32.623  77.992 143.134  1.00  2.22 
-ATOM    602  C   SPH Z   1      32.564  77.442 143.403  1.00  1.89 
-ATOM    601  C   SPH Z   1      32.993  77.542 143.504  1.00  1.70 
