@@ -33,8 +33,13 @@ parser.add_argument('-p', '--path', required=True, help='folder to save the clef
 args = parser.parse_args()
 url = "http://www.rcsb.org/pdb/download/downloadFile.do?fileFormat=pdb&compression=NO&structureId="
 print 'Hello'
+filename = args.file
+if filename.find(".") == -1:
+	filename="./Entries/"+args.file
+else:
+	filename = args.file
+        
 workdir  = "./"+args.path
-filename = "./"+args.file
 
 try:
 	os.mkdir('./'+workdir)
