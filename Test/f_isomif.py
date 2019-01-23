@@ -13,11 +13,11 @@ import collections
 import urllib
 
 getcleft_sw = "./GetCleft"
-reduce_sw = "./reduce.3.23.130521"
-mif_sw = "./mif"
-mifView_sw="perl ./mifView.pl"
-isomif_sw ="./isomif"
-isomifview_sw ="perl ./isoMifView.pl"
+reduce_sw = "./reduce"
+mif_sw = "./IsoMif/mif"
+mifView_sw="perl ./IsoMif/mifView.pl"
+isomif_sw ="./IsoMif/isomif"
+isomifview_sw ="perl ./IsoMif/isoMifView.pl"
 url = "http://www.rcsb.org/pdb/download/downloadFile.do?fileFormat=pdb&compression=NO&structureId="
 
 def downloadpdb(code, workdir):
