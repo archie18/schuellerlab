@@ -13,7 +13,7 @@ import collections
 import urllib
 
 getcleft_sw = "./GetCleft"
-reduce_sw = "./reduce"
+reduce_sw = "./reduce.3.23.130521"
 mif_sw = "./IsoMif/mif"
 mifView_sw="perl ./IsoMif/mifView.pl"
 isomif_sw ="./IsoMif/isomif"
@@ -21,10 +21,13 @@ isomifview_sw ="perl ./IsoMif/isoMifView.pl"
 url = "http://www.rcsb.org/pdb/download/downloadFile.do?fileFormat=pdb&compression=NO&structureId="
 
 def downloadpdb(code, workdir):
-	pdb_filename = code+".pdb"
-	pdbid= url+code
-	if not os.path.isfile(workdir+'/hive/pdb/'+pdb_filename): #download pdb file
-		open(workdir+'/hive/pdb/'+pdb_filename,"w").write( urllib.urlopen(pdbid).read() )
+	cmd = 'wget -O '+workdir+'/hive/pdb/'+code+'.pdb https://files.rcsb.org/download/'+code+'.pdb'
+	os.system(cmd)
+	print cmd
+	#pdb_filename = code+".pdb"
+	#pdbid= url+code
+	#if not os.path.isfile(workdir+'/hive/pdb/'+pdb_filename): #download pdb file
+	#	open(workdir+'/hive/pdb/'+pdb_filename,"w").write( urllib.urlopen(pdbid).read() )
 def rungetcleft(code , het, het_nm, workdir):
 
 	"""
@@ -64,7 +67,7 @@ def runmif(code , het,heter, workdir):
 	for i in range (150):
 		mif_filename= workdir+"/hive/clefts/"+sph_file+str(i)+".pdb"
 		if os.path.isfile(mif_filename):
-			cmd="./mif -p "+workdir+"/hive/pdb/"+code+"h.pdb -g "+mif_filename+" -o "+workdir+"/hive/mifs -l "+het+" -r 3 -t "+code+" -z 1"
+			cmd=mif_sw+" -p "+workdir+"/hive/pdb/"+code+"h.pdb -g "+mif_filename+" -o "+workdir+"/hive/mifs -l "+het+" -r 3 -t "+code+" -z 1"
 			os.system(cmd)
 		cmd2 = mifView_sw+" -m "+workdir+"/hive/mifs/"+code+".mif -o "+workdir+"/hive/mifView/"
 		os.system(cmd2)
