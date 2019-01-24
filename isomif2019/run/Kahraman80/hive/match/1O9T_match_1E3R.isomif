@@ -1,0 +1,33 @@
+REMARK command: ./isomif -p1 ./Kahraman80/hive/mifs/1O9T.mif -p2 ./Kahraman80/hive/mifs/1E3R.mif -o ./Kahraman80/hive/match/ -c 1 -l 1 -l1 ATP1397B- -l2 AND801A-
+REMARK commandJob: ./isomif -p1 ./Kahraman80/hive/mifs/1O9T.mif -p2 ./Kahraman80/hive/mifs/1E3R.mif -p1 ./Kahraman80/hive/mifs/1O9T.mif -p2 ./Kahraman80/hive/mifs/1E3R.mif -o ./Kahraman80/hive/match/ -c 1 -l 1 -l1 ATP1397B- -l2 AND801A-
+REMARK mif_file_1: ./Kahraman80/hive/mifs/1O9T.mif
+REMARK mif_file_2: ./Kahraman80/hive/mifs/1E3R.mif
+REMARK nb_of_probes: 6
+REMARK C-alpha_dDist:  3.00
+REMARK pseudocenter_dDist:  1.00
+REMARK dDist:  3.00
+REMARK jtt_threshold: 5
+REMARK max_nodes: 100000
+REMARK commont int : 1
+REMARK wsimfn: 0
+REMARK tag1: 1O9T
+REMARK tag2: 1E3R
+REMARK rnc1: ATP1397B-
+REMARK rnc2: AND801A-
+REMARK ncliques_scored: 1
+REMARK ncliques_explored: 1
+REMARK CLIQUE CG 1 NODES 9 NODESM 9 NODESMW 0.0000 NORMNODES 0.0000 NORMNODESRMSD 0.0000 TANI 0.1047 TANIM 0.0726 TANIMW 0.0000 TANINORM 0.0000 NRG 0.000 SS1 11 SS2 84 SS1M 19 SS2M 114 LIGRMSD 0.000
+0    2.500   23.000   52.000   25.500  -31.500  -36.500
+2    1.000   23.000   53.500   22.500  -33.000  -39.500
+3    1.000   21.500   50.500   22.500  -31.500  -38.000
+2    1.000   21.500   53.500   22.500  -34.500  -38.000
+4   -0.500   21.500   53.500   22.500  -34.500  -36.500
+2   -0.500   23.000   53.500   21.000  -34.500  -38.000
+0   -0.500   21.500   52.000   24.000  -33.000  -36.500
+2    1.000   21.500   52.000   24.000  -34.500  -39.500
+3   -0.500   21.500   50.500   22.500  -31.500  -39.500
+REMARK ROTMAT     0.9844   -0.1747   -0.0216    0.0363    0.3217   -0.9461    0.1723    0.9306    0.3230
+REMARK CENTRES    0.5000   22.0000   52.3333   23.0000  -33.1667  -38.0000
+REMARK DET 1
+REMARK DETORI 1
+REMARK END

@@ -1,0 +1,25 @@
+#cmd ./IsoMif/mif -p ./Homogeneous/hive/pdb/1DXRh.pdb -g ./Homogeneous/hive/clefts/1DXR_LDA1259H-_sph_1.pdb -o ./Homogeneous/hive/mifs -l LDA1259H- -r 3 -t 1DXR -z 1
+#proteinFile ./Homogeneous/hive/pdb/1DXRh.pdb
+#cleftFile ./Homogeneous/hive/clefts/1DXR_LDA1259H-_sph_1.pdb
+#resnumc LDA1259H-
+#gridLigMinDist  3.00
+#chain none
+#ff original
+#nbOfProbes  6
+#probe[0]  hyd
+#probe[1]  arm
+#probe[2]  don
+#probe[3]  acc
+#probe[4]  pos
+#probe[5]  neg
+#zip -1
+#stepsize 0.50
+#gridStep 0.50
+#angThreshold  60.00
+#atom_probe_distance_threshold  8.0000
+#protein_grid_distance  2.5000 to  4.0000
+#grid_width -3933
+#grid_height -3933
+#gs 0 0 0 0
+#ss 0 0 0 0
+#ssm 0 0 0 0

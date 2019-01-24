@@ -1,0 +1,4 @@
+#REMARK  PARENTFILE  Processed_files/1stp.pdb
+ATOM    744  CA  GLY A 113       1.176  12.008 -13.360  1.00 19.53           C  
+ATOM    745  C   GLY A 113       0.087  11.443 -14.305  1.00 20.53           C  
+ATOM    746  O   GLY A 113       0.500  10.802 -15.299  1.00 20.88           O  

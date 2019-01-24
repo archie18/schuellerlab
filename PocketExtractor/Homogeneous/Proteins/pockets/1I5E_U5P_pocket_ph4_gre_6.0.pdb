@@ -1,0 +1,422 @@
+REMARK  99                                                                      
+REMARK  99 MOE v2016.08 (Chemical Computing Group Inc.) Sun Aug 20 20:45:53 2017
+LINK         C   ILE A  77                DON  LEU A  78     1555   1555  1.33
+LINK         C   LEU A  78                DON  ARG A  79     1555   1555  1.33
+LINK         C   ARG A  79                DON  ALA A  80     1555   1555  1.33
+LINK         C   PRO A 132                DON  MET A 133     1555   1555  1.33
+LINK         C   MET A 133                DON  LEU A 134     1555   1555  1.33
+LINK         C   LEU A 134                DON  ALA A 135     1555   1555  1.34
+LINK         C   ALA A 135                DON  THR A 136     1555   1555  1.33
+LINK         C   THR A 136                DON  GLY A 137     1555   1555  1.33
+LINK         C   GLY A 137                DON  GLY A 138     1555   1555  1.33
+LINK         C   GLY A 138                DON  SER A 139     1555   1555  1.33
+LINK         C   SER A 139                DON  ALA A 140     1555   1555  1.32
+LINK         C   GLY A 192                DON  TYR A 193     1555   1555  1.33
+LINK         C   TYR A 193                DON  ILE A 194     1555   1555  1.33
+LINK         C   GLY A 197                DON  LEU A 198     1555   1555  1.33
+LINK         C   LEU A 198                DON  GLY A 199     1555   1555  1.33
+LINK         C   GLY A 199                DON  ASP A 200     1555   1555  1.33
+LINK         C   ASP A 200                DON  ALA A 201     1555   1555  1.33
+LINK         C   ALA A 201                DON  GLY A 202     1555   1555  1.33
+ATOM      1 DON  ILE A  77       4.785  63.519  36.471  1.00 41.78           N  
+ATOM      2  CA  ILE A  77       4.629  64.833  37.096  1.00 40.29           C  
+ATOM      3  C   ILE A  77       6.045  65.426  37.180  1.00 40.49           C  
+ATOM      4 ACC  ILE A  77       6.896  64.888  37.887  1.00 42.13           O  
+ATOM      5 GRE  ILE A  77       4.060  64.700  38.515  1.00 37.77           C  
+ATOM      6 GRE  ILE A  77       2.629  64.183  38.450  1.00 37.84           C  
+ATOM      7 GRE  ILE A  77       4.135  66.020  39.226  1.00 38.37           C  
+ATOM      8 GRE  ILE A  77       1.989  63.958  39.805  1.00 37.84           C  
+ATOM      9 DON  LEU A  78       6.319  66.500  36.445  1.00 39.41           N  
+ATOM     10  CA  LEU A  78       7.647  67.103  36.491  1.00 39.35           C  
+ATOM     11  C   LEU A  78       8.057  67.370  37.944  1.00 40.87           C  
+ATOM     12 ACC  LEU A  78       7.222  67.749  38.751  1.00 41.83           O  
+ATOM     13 GRE  LEU A  78       7.659  68.406  35.710  1.00 37.72           C  
+ATOM     14 GRE  LEU A  78       7.351  68.342  34.217  1.00 38.92           C  
+ATOM     15 GRE  LEU A  78       7.523  69.727  33.603  1.00 39.30           C  
+ATOM     16 GRE  LEU A  78       8.288  67.376  33.539  1.00 38.39           C  
+ATOM     17 DON  ARG A  79       9.321  67.125  38.291  1.00 42.06           N  
+ATOM     18  CA  ARG A  79      10.300  66.599  37.341  1.00 43.95           C  
+ATOM     19  C   ARG A  79      10.634  65.128  37.587  1.00 43.63           C  
+ATOM     20 ACC  ARG A  79      10.829  64.366  36.637  1.00 43.99           O  
+ATOM     21 GRE  ARG A  79      11.592  67.415  37.392  1.00 43.90           C  
+ATOM     22 GRE  ARG A  79      12.262  67.390  38.737  1.00 45.17           C  
+ATOM     23  CD  ARG A  79      13.585  68.119  38.695  1.00 47.47           C  
+ATOM     24 DON  ARG A  79      14.272  68.036  39.981  1.00 49.24           N  
+ATOM     25  CZ  ARG A  79      15.581  68.222  40.147  1.00 51.05           C  
+ATOM     26 DON  ARG A  79      16.368  68.507  39.102  1.00 50.95           N  
+ATOM     27 DON  ARG A  79      16.101  68.113  41.365  1.00 51.41           N1+
+ATOM     28 DON  ALA A  80      10.688  64.726  38.852  1.00 42.85           N  
+ATOM     29  CA  ALA A  80      11.038  63.346  39.183  1.00 42.90           C  
+ATOM     30  C   ALA A  80      10.137  62.318  38.530  1.00 43.27           C  
+ATOM     31 ACC  ALA A  80      10.357  61.123  38.657  1.00 43.92           O  
+ATOM     32 GRE  ALA A  80      11.031  63.144  40.694  1.00 43.12           C  
+ATOM     33  N   PRO A 111      -0.420  72.748  45.491  1.00 50.61           N  
+ATOM     34  CA  PRO A 111       0.210  73.007  44.197  1.00 48.25           C  
+ATOM     35  C   PRO A 111      -0.894  73.380  43.221  1.00 47.31           C  
+ATOM     36 ACC  PRO A 111      -2.075  73.224  43.524  1.00 47.46           O  
+ATOM     37 GRE  PRO A 111       0.833  71.666  43.839  1.00 49.12           C  
+ATOM     38 GRE  PRO A 111       1.011  70.993  45.145  1.00 50.60           C  
+ATOM     39  CD  PRO A 111      -0.253  71.337  45.859  1.00 50.78           C  
+ATOM     40 DON  ASP A 131       4.696  59.314  39.565  1.00 43.66           N  
+ATOM     41  CA  ASP A 131       5.553  60.179  40.358  1.00 43.90           C  
+ATOM     42  C   ASP A 131       6.180  59.279  41.411  1.00 43.93           C  
+ATOM     43 ACC  ASP A 131       5.497  58.494  42.049  1.00 45.10           O  
+ATOM     44  CB  ASP A 131       4.737  61.294  41.013  1.00 44.58           C  
+ATOM     45  CG  ASP A 131       5.613  62.336  41.687  1.00 45.78           C  
+ATOM     46 ACC  ASP A 131       5.343  63.545  41.536  1.00 45.13           O  
+ATOM     47 ACC  ASP A 131       6.575  61.946  42.379  1.00 48.38           O1-
+ATOM     48  N   PRO A 132       7.500  59.372  41.598  1.00 44.43           N  
+ATOM     49  CA  PRO A 132       8.172  58.528  42.591  1.00 44.49           C  
+ATOM     50  C   PRO A 132       7.546  58.553  43.988  1.00 44.92           C  
+ATOM     51 ACC  PRO A 132       7.342  57.503  44.609  1.00 44.15           O  
+ATOM     52 GRE  PRO A 132       9.592  59.082  42.603  1.00 43.96           C  
+ATOM     53 GRE  PRO A 132       9.764  59.605  41.216  1.00 43.42           C  
+ATOM     54  CD  PRO A 132       8.460  60.274  40.934  1.00 43.41           C  
+ATOM     55 DON  MET A 133       7.235  59.755  44.472  1.00 44.54           N  
+ATOM     56  CA  MET A 133       6.688  59.914  45.817  1.00 43.51           C  
+ATOM     57  C   MET A 133       5.282  60.520  45.943  1.00 42.63           C  
+ATOM     58 ACC  MET A 133       4.937  61.508  45.282  1.00 43.74           O  
+ATOM     59 GRE  MET A 133       7.656  60.765  46.655  1.00 44.46           C  
+ATOM     60  CG  MET A 133       9.108  60.308  46.648  1.00 44.66           C  
+ATOM     61  SD  MET A 133       9.307  58.725  47.450  1.00 46.62           S  
+ATOM     62  CE  MET A 133       9.907  59.201  49.063  1.00 46.06           C  
+ATOM     63 DON  LEU A 134       4.469  59.918  46.799  1.00 40.07           N  
+ATOM     64  CA  LEU A 134       3.138  60.427  47.079  1.00 38.21           C  
+ATOM     65  C   LEU A 134       3.248  60.829  48.555  1.00 39.61           C  
+ATOM     66 ACC  LEU A 134       3.116  59.984  49.446  1.00 40.74           O  
+ATOM     67 GRE  LEU A 134       2.095  59.333  46.892  1.00 35.00           C  
+ATOM     68 GRE  LEU A 134       0.650  59.711  47.225  1.00 32.99           C  
+ATOM     69 GRE  LEU A 134       0.175  60.808  46.311  1.00 33.44           C  
+ATOM     70 GRE  LEU A 134      -0.242  58.496  47.069  1.00 32.97           C  
+ATOM     71 DON  ALA A 135       3.527  62.110  48.809  1.00 38.83           N  
+ATOM     72  CA  ALA A 135       3.705  62.615  50.173  1.00 39.20           C  
+ATOM     73  C   ALA A 135       2.448  63.182  50.823  1.00 40.14           C  
+ATOM     74 ACC  ALA A 135       1.746  62.496  51.570  1.00 40.44           O  
+ATOM     75 GRE  ALA A 135       4.790  63.668  50.189  1.00 38.06           C  
+ATOM     76 DON  THR A 136       2.188  64.455  50.562  1.00 40.70           N  
+ATOM     77  CA  THR A 136       1.014  65.109  51.115  1.00 40.33           C  
+ATOM     78  C   THR A 136      -0.170  64.871  50.190  1.00 41.81           C  
+ATOM     79 ACC  THR A 136      -1.313  65.152  50.549  1.00 43.03           O  
+ATOM     80  CB  THR A 136       1.212  66.600  51.197  1.00 38.24           C  
+ATOM     81 ACC  THR A 136       1.299  67.117  49.867  1.00 36.99           O  
+ATOM     82 GRE  THR A 136       2.465  66.931  51.971  1.00 35.78           C  
+ATOM     83 DON  THR A 136       1.299  67.117  49.867  1.00 36.99           O  
+ATOM     84 DON  GLY A 137       0.114  64.360  48.995  1.00 42.74           N  
+ATOM     85  CA  GLY A 137      -0.938  64.105  48.030  1.00 42.71           C  
+ATOM     86  C   GLY A 137      -1.265  65.368  47.267  1.00 42.03           C  
+ATOM     87 ACC  GLY A 137      -2.070  65.355  46.339  1.00 42.83           O  
+ATOM     88 DON  GLY A 138      -0.629  66.465  47.661  1.00 41.13           N  
+ATOM     89  CA  GLY A 138      -0.865  67.733  47.001  1.00 41.40           C  
+ATOM     90  C   GLY A 138      -0.678  67.690  45.498  1.00 41.71           C  
+ATOM     91 ACC  GLY A 138      -1.607  67.968  44.736  1.00 43.36           O  
+ATOM     92 DON  SER A 139       0.532  67.332  45.072  1.00 41.88           N  
+ATOM     93  CA  SER A 139       0.876  67.259  43.656  1.00 39.98           C  
+ATOM     94  C   SER A 139       0.007  66.255  42.896  1.00 39.84           C  
+ATOM     95 ACC  SER A 139      -0.411  66.510  41.769  1.00 40.51           O  
+ATOM     96  CB  SER A 139       2.350  66.890  43.520  1.00 37.32           C  
+ATOM     97 ACC  SER A 139       3.118  67.639  44.434  1.00 34.66           O  
+ATOM     98 DON  SER A 139       3.118  67.639  44.434  1.00 34.66           O  
+ATOM     99 DON  ALA A 140      -0.268  65.115  43.512  1.00 39.08           N  
+ATOM    100  CA  ALA A 140      -1.084  64.109  42.852  1.00 40.17           C  
+ATOM    101  C   ALA A 140      -2.478  64.654  42.545  1.00 40.72           C  
+ATOM    102 ACC  ALA A 140      -2.937  64.596  41.399  1.00 41.37           O  
+ATOM    103 GRE  ALA A 140      -1.174  62.848  43.721  1.00 40.87           C  
+ATOM    104 DON  GLY A 166      -0.864  61.228  52.332  1.00 48.83           N  
+ATOM    105  CA  GLY A 166      -1.012  61.411  50.893  1.00 49.13           C  
+ATOM    106  C   GLY A 166      -2.025  60.477  50.249  1.00 49.22           C  
+ATOM    107 ACC  GLY A 166      -2.721  60.857  49.306  1.00 48.46           O  
+ATOM    108 DON  LEU A 188       4.984  61.667  57.546  1.00 47.82           N  
+ATOM    109  CA  LEU A 188       5.741  62.770  56.965  1.00 45.44           C  
+ATOM    110  C   LEU A 188       6.441  63.515  58.097  1.00 44.10           C  
+ATOM    111 ACC  LEU A 188       6.063  63.368  59.265  1.00 42.78           O  
+ATOM    112 GRE  LEU A 188       4.812  63.736  56.228  1.00 44.41           C  
+ATOM    113 GRE  LEU A 188       3.986  63.227  55.050  1.00 44.61           C  
+ATOM    114 GRE  LEU A 188       3.355  64.415  54.337  1.00 44.19           C  
+ATOM    115 GRE  LEU A 188       4.872  62.445  54.085  1.00 45.16           C  
+ATOM    116 DON  GLY A 192       7.919  67.725  54.975  1.00 49.34           N  
+ATOM    117  CA  GLY A 192       7.131  67.067  53.950  1.00 49.02           C  
+ATOM    118  C   GLY A 192       7.732  65.849  53.293  1.00 48.83           C  
+ATOM    119 ACC  GLY A 192       7.220  65.385  52.275  1.00 48.88           O  
+ATOM    120 DON  TYR A 193       8.812  65.330  53.866  1.00 49.18           N  
+ATOM    121  CA  TYR A 193       9.464  64.136  53.334  1.00 49.78           C  
+ATOM    122  C   TYR A 193       8.842  62.861  53.915  1.00 48.43           C  
+ATOM    123 ACC  TYR A 193       8.425  62.834  55.076  1.00 47.31           O  
+ATOM    124 GRE  TYR A 193      10.961  64.151  53.662  1.00 52.49           C  
+ATOM    125 GRE  TYR A 193      11.769  65.094  52.809  1.00 56.62           C  
+ATOM    126 GRE  TYR A 193      11.533  66.468  52.840  1.00 59.83           C  
+ATOM    127 GRE  TYR A 193      12.762  64.616  51.955  1.00 57.63           C  
+ATOM    128 GRE  TYR A 193      12.268  67.346  52.039  1.00 61.25           C  
+ATOM    129 GRE  TYR A 193      13.501  65.482  51.148  1.00 59.81           C  
+ATOM    130 GRE  TYR A 193      13.246  66.844  51.196  1.00 61.26           C  
+ATOM    131 ACC  TYR A 193      13.952  67.707  50.397  1.00 62.37           O  
+ATOM    132 DON  TYR A 193      13.952  67.707  50.397  1.00 62.37           O  
+ATOM    133 DON  ILE A 194       8.776  61.806  53.109  1.00 46.88           N  
+ATOM    134  CA  ILE A 194       8.226  60.549  53.595  1.00 45.40           C  
+ATOM    135  C   ILE A 194       9.258  59.862  54.485  1.00 45.11           C  
+ATOM    136 ACC  ILE A 194      10.447  59.866  54.186  1.00 42.67           O  
+ATOM    137 GRE  ILE A 194       7.852  59.617  52.442  1.00 44.08           C  
+ATOM    138 GRE  ILE A 194       6.757  60.269  51.596  1.00 43.57           C  
+ATOM    139 GRE  ILE A 194       7.395  58.281  52.993  1.00 42.57           C  
+ATOM    140 GRE  ILE A 194       6.320  59.453  50.395  1.00 44.78           C  
+ATOM    141 DON  GLY A 197      11.174  56.723  53.812  1.00 41.91           N  
+ATOM    142  CA  GLY A 197      11.297  57.211  52.447  1.00 42.15           C  
+ATOM    143  C   GLY A 197      12.596  56.971  51.696  1.00 40.40           C  
+ATOM    144 ACC  GLY A 197      13.211  55.919  51.825  1.00 41.37           O  
+ATOM    145 DON  LEU A 198      12.997  57.955  50.893  1.00 39.39           N  
+ATOM    146  CA  LEU A 198      14.220  57.875  50.107  1.00 37.68           C  
+ATOM    147  C   LEU A 198      14.829  59.246  49.823  1.00 37.47           C  
+ATOM    148 ACC  LEU A 198      15.665  59.385  48.939  1.00 37.22           O  
+ATOM    149 GRE  LEU A 198      13.932  57.154  48.786  1.00 36.37           C  
+ATOM    150 GRE  LEU A 198      12.821  57.675  47.868  1.00 34.57           C  
+ATOM    151 GRE  LEU A 198      13.231  58.982  47.254  1.00 33.29           C  
+ATOM    152 GRE  LEU A 198      12.554  56.665  46.770  1.00 31.75           C  
+ATOM    153 DON  GLY A 199      14.415  60.261  50.570  1.00 37.26           N  
+ATOM    154  CA  GLY A 199      14.945  61.586  50.329  1.00 37.17           C  
+ATOM    155  C   GLY A 199      14.247  62.282  49.166  1.00 38.05           C  
+ATOM    156 ACC  GLY A 199      13.078  62.028  48.878  1.00 37.62           O  
+ATOM    157 DON  ASP A 200      14.983  63.148  48.482  1.00 38.71           N  
+ATOM    158  CA  ASP A 200      14.464  63.931  47.362  1.00 39.99           C  
+ATOM    159  C   ASP A 200      14.595  63.228  46.012  1.00 38.06           C  
+ATOM    160 ACC  ASP A 200      15.620  63.338  45.365  1.00 36.89           O  
+ATOM    161  CB  ASP A 200      15.216  65.264  47.324  1.00 43.87           C  
+ATOM    162  CG  ASP A 200      14.602  66.259  46.372  1.00 49.15           C  
+ATOM    163 ACC  ASP A 200      14.612  66.008  45.149  1.00 51.24           O  
+ATOM    164 ACC  ASP A 200      14.110  67.303  46.855  1.00 53.73           O1-
+ATOM    165 DON  ALA A 201      13.551  62.531  45.581  1.00 38.32           N  
+ATOM    166  CA  ALA A 201      13.567  61.803  44.308  1.00 38.40           C  
+ATOM    167  C   ALA A 201      14.240  62.561  43.158  1.00 39.88           C  
+ATOM    168 ACC  ALA A 201      15.081  62.008  42.437  1.00 41.35           O  
+ATOM    169 GRE  ALA A 201      12.148  61.408  43.912  1.00 35.48           C  
+ATOM    170 DON  GLY A 202      13.877  63.824  42.982  1.00 40.57           N  
+ATOM    171  CA  GLY A 202      14.467  64.618  41.921  1.00 41.49           C  
+ATOM    172  C   GLY A 202      15.979  64.771  41.986  1.00 42.78           C  
+ATOM    173 ACC  GLY A 202      16.651  64.615  40.973  1.00 42.92           O  
+TER     174      GLY A 202 
+ATOM    175 DON  VAL B  59      16.618  60.223  55.082  1.00 50.09           N  
+ATOM    176  CA  VAL B  59      15.688  60.784  56.049  1.00 50.36           C  
+ATOM    177  C   VAL B  59      15.755  60.105  57.402  1.00 51.96           C  
+ATOM    178 ACC  VAL B  59      15.681  60.777  58.423  1.00 53.81           O  
+ATOM    179 GRE  VAL B  59      14.239  60.721  55.527  1.00 49.85           C  
+ATOM    180 GRE  VAL B  59      13.259  61.172  56.605  1.00 49.42           C  
+ATOM    181 GRE  VAL B  59      14.101  61.614  54.305  1.00 50.29           C  
+TER     182      VAL B  59 
+HETATM  183  N     *     0       8.835  64.379  47.142  1.00  0.00           N  
+HETATM  184  C     *     0      10.100  63.801  47.225  1.00  0.00           C  
+HETATM  185  N     *     0      10.439  63.184  48.425  1.00  0.00           N  
+HETATM  186  C     *     0       9.562  63.151  49.488  1.00  0.00           C  
+HETATM  187  C     *     0       8.283  63.766  49.337  1.00  0.00           C  
+HETATM  188  C     *     0       8.017  64.353  48.124  1.00  0.00           C  
+HETATM  189  O     *     0      10.953  63.828  46.206  1.00  0.00           O  
+HETATM  190  O     *     0       9.896  62.597  50.541  1.00  0.00           O  
+HETATM  191  C     *     0       8.453  65.050  45.820  1.00  0.00           C  
+HETATM  192  C     *     0       7.436  64.220  45.032  1.00  0.00           C  
+HETATM  193  O     *     0       8.066  63.404  44.131  1.00  0.00           O  
+HETATM  194  C     *     0       6.419  65.281  44.464  1.00  0.00           C  
+HETATM  195  C     *     0       6.629  66.494  45.306  1.00  0.00           C  
+HETATM  196  O     *     0       6.860  65.526  43.083  1.00  0.00           O  
+HETATM  197  O     *     0       7.875  66.335  46.115  1.00  0.00           O  
+HETATM  198  C     *     0       5.573  66.901  46.236  1.00  0.00           C  
+HETATM  199  O     *     0       4.741  65.797  46.659  1.00  0.00           O  
+HETATM  200  P     *     0       3.560  66.096  47.643  1.00  0.00           P1+
+HETATM  201  O     *     0       2.686  67.100  46.912  1.00  0.00           O1-
+HETATM  202  O     *     0       2.834  64.790  47.875  1.00  0.00           O  
+HETATM  203  O     *     0       4.147  66.641  48.926  1.00  0.00           O  
+CONECT    1    2
+CONECT    2    1    3    5
+CONECT    3    2    4    4    9
+CONECT    4    3    3
+CONECT    5    2    6    7
+CONECT    6    5    8
+CONECT    7    5
+CONECT    8    6
+CONECT    9    3   10
+CONECT   10    9   11   13
+CONECT   11   10   12   12   17
+CONECT   12   11   11
+CONECT   13   10   14
+CONECT   14   13   15   16
+CONECT   15   14
+CONECT   16   14
+CONECT   17   11   18
+CONECT   18   17   19   21
+CONECT   19   18   20   20   28
+CONECT   20   19   19
+CONECT   21   18   22
+CONECT   22   21   23
+CONECT   23   22   24
+CONECT   24   23   25
+CONECT   25   24   26   27   27
+CONECT   26   25
+CONECT   27   25   25
+CONECT   28   19   29
+CONECT   29   28   30   32
+CONECT   30   29   31   31
+CONECT   31   30   30
+CONECT   32   29
+CONECT   33   34   39
+CONECT   34   33   35   37
+CONECT   35   34   36   36
+CONECT   36   35   35
+CONECT   37   34   38
+CONECT   38   37   39
+CONECT   39   33   38
+CONECT   40   41
+CONECT   41   40   42   44
+CONECT   42   41   43   43
+CONECT   43   42   42
+CONECT   44   41   45
+CONECT   45   44   46   46   47
+CONECT   46   45   45
+CONECT   47   45
+CONECT   48   49   54
+CONECT   49   48   50   52
+CONECT   50   49   51   51   55
+CONECT   51   50   50
+CONECT   52   49   53
+CONECT   53   52   54
+CONECT   54   48   53
+CONECT   55   50   56
+CONECT   56   55   57   59
+CONECT   57   56   58   58   63
+CONECT   58   57   57
+CONECT   59   56   60
+CONECT   60   59   61
+CONECT   61   60   62
+CONECT   62   61
+CONECT   63   57   64
+CONECT   64   63   65   67
+CONECT   65   64   66   66   71
+CONECT   66   65   65
+CONECT   67   64   68
+CONECT   68   67   69   70
+CONECT   69   68
+CONECT   70   68
+CONECT   71   65   72
+CONECT   72   71   73   75
+CONECT   73   72   74   74   76
+CONECT   74   73   73
+CONECT   75   72
+CONECT   76   73   77
+CONECT   77   76   78   80
+CONECT   78   77   79   79   84
+CONECT   79   78   78
+CONECT   80   77   81   82
+CONECT   81   80
+CONECT   82   80
+CONECT   84   78   85
+CONECT   85   84   86
+CONECT   86   85   87   87   88
+CONECT   87   86   86
+CONECT   88   86   89
+CONECT   89   88   90
+CONECT   90   89   91   91   92
+CONECT   91   90   90
+CONECT   92   90   93
+CONECT   93   92   94   96
+CONECT   94   93   95   95   99
+CONECT   95   94   94
+CONECT   96   93   97
+CONECT   97   96
+CONECT   99   94  100
+CONECT  100   99  101  103
+CONECT  101  100  102  102
+CONECT  102  101  101
+CONECT  103  100
+CONECT  104  105
+CONECT  105  104  106
+CONECT  106  105  107  107
+CONECT  107  106  106
+CONECT  108  109
+CONECT  109  108  110  112
+CONECT  110  109  111  111
+CONECT  111  110  110
+CONECT  112  109  113
+CONECT  113  112  114  115
+CONECT  114  113
+CONECT  115  113
+CONECT  116  117
+CONECT  117  116  118
+CONECT  118  117  119  119  120
+CONECT  119  118  118
+CONECT  120  118  121
+CONECT  121  120  122  124
+CONECT  122  121  123  123  133
+CONECT  123  122  122
+CONECT  124  121  125
+CONECT  125  124  126  126  127
+CONECT  126  125  125  128
+CONECT  127  125  129  129
+CONECT  128  126  130  130
+CONECT  129  127  127  130
+CONECT  130  128  128  129  131
+CONECT  131  130
+CONECT  133  122  134
+CONECT  134  133  135  137
+CONECT  135  134  136  136
+CONECT  136  135  135
+CONECT  137  134  138  139
+CONECT  138  137  140
+CONECT  139  137
+CONECT  140  138
+CONECT  141  142
+CONECT  142  141  143
+CONECT  143  142  144  144  145
+CONECT  144  143  143
+CONECT  145  143  146
+CONECT  146  145  147  149
+CONECT  147  146  148  148  153
+CONECT  148  147  147
+CONECT  149  146  150
+CONECT  150  149  151  152
+CONECT  151  150
+CONECT  152  150
+CONECT  153  147  154
+CONECT  154  153  155
+CONECT  155  154  156  156  157
+CONECT  156  155  155
+CONECT  157  155  158
+CONECT  158  157  159  161
+CONECT  159  158  160  160  165
+CONECT  160  159  159
+CONECT  161  158  162
+CONECT  162  161  163  163  164
+CONECT  163  162  162
+CONECT  164  162
+CONECT  165  159  166
+CONECT  166  165  167  169
+CONECT  167  166  168  168  170
+CONECT  168  167  167
+CONECT  169  166
+CONECT  170  167  171
+CONECT  171  170  172
+CONECT  172  171  173  173
+CONECT  173  172  172
+CONECT  175  176
+CONECT  176  175  177  179
+CONECT  177  176  178  178
+CONECT  178  177  177
+CONECT  179  176  180  181
+CONECT  180  179
+CONECT  181  179
+CONECT  183  184  188  191
+CONECT  184  183  185  189  189
+CONECT  185  184  186
+CONECT  186  185  187  190  190
+CONECT  187  186  188  188
+CONECT  188  183  187  187
+CONECT  189  184  184
+CONECT  190  186  186
+CONECT  191  183  192  197
+CONECT  192  191  193  194
+CONECT  193  192
+CONECT  194  192  195  196
+CONECT  195  194  197  198
+CONECT  196  194
+CONECT  197  191  195
+CONECT  198  195  199
+CONECT  199  198  200
+CONECT  200  199  201  202  203
+CONECT  201  200
+CONECT  202  200
+CONECT  203  200
+END

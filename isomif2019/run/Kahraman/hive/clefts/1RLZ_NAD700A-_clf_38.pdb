@@ -1,0 +1,7 @@
+#REMARK  PARENTFILE  ./Kahraman/hive/pdb/1RLZ.pdb
+ATOM    602  C   SER A 105      15.993  -7.001  43.801  1.00 18.22           C  
+ATOM    604  CB  SER A 105      17.145  -8.215  41.976  1.00 20.53           C  
+ATOM    606  N   ASN A 106      15.172  -6.140  43.209  1.00 17.99           N  
+ATOM    607  CA  ASN A 106      14.972  -4.793  43.755  1.00 18.04           C  
+ATOM    635  OG  SER A 109      18.414  -3.592  44.977  1.00 22.28           O  
+ATOM   1082  CD1 ILE A 166      20.127  -1.253  42.890  1.00 13.99           C  

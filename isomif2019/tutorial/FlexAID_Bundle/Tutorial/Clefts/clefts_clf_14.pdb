@@ -1,0 +1,7 @@
+#REMARK  PARENTFILE  Processed_files/1stp.pdb
+ATOM    561  C   ALA A  89       7.790   8.344  -7.856  1.00 14.33           C  
+ATOM    562  O   ALA A  89       6.644   7.842  -7.727  1.00 14.52           O  
+ATOM    577  CG2 THR A  91       7.930   9.217  -2.349  1.00  9.91           C  
+ATOM    717  O   LEU A 109       6.095   5.494  -5.021  1.00 12.35           O  
+ATOM    734  CB  THR A 111       2.548   8.650  -7.786  1.00 13.86           C  
+ATOM    735  OG1 THR A 111       2.248   7.974  -6.541  1.00 14.35           O  

@@ -1,0 +1,39 @@
+REMARK command: ./isomif -p1 ./Kahraman/hive/mifs/1IB0.mif -p2 ./Kahraman/hive/mifs/1LBY.mif -o ./Kahraman/hive/match/ -c 1 -l 1 -l1 NAD1994A- -l2 PO4293A-
+REMARK commandJob: ./isomif -p1 ./Kahraman/hive/mifs/1IB0.mif -p2 ./Kahraman/hive/mifs/1LBY.mif -p1 ./Kahraman/hive/mifs/1IB0.mif -p2 ./Kahraman/hive/mifs/1LBY.mif -o ./Kahraman/hive/match/ -c 1 -l 1 -l1 NAD1994A- -l2 PO4293A-
+REMARK mif_file_1: ./Kahraman/hive/mifs/1IB0.mif
+REMARK mif_file_2: ./Kahraman/hive/mifs/1LBY.mif
+REMARK nb_of_probes: 6
+REMARK C-alpha_dDist:  3.00
+REMARK pseudocenter_dDist:  1.00
+REMARK dDist:  3.00
+REMARK jtt_threshold: 5
+REMARK max_nodes: 100000
+REMARK commont int : 1
+REMARK wsimfn: 0
+REMARK tag1: 1IB0
+REMARK tag2: 1LBY
+REMARK rnc1: NAD1994A-
+REMARK rnc2: PO4293A-
+REMARK ncliques_scored: 1
+REMARK ncliques_explored: 2
+REMARK CLIQUE CG 1 NODES 12 NODESM 15 NODESMW 0.0000 NORMNODES 0.0000 NORMNODESRMSD 0.0000 TANI 0.0774 TANIM 0.0670 TANIMW 0.0000 TANINORM 0.0000 NRG 0.000 SS1 146 SS2 21 SS1M 201 SS2M 38 LIGRMSD 0.000
+3   20.500   -3.500   36.500    2.500   42.000    4.500
+2   14.500   -6.500   30.500   -2.000   39.000    1.500
+3   14.500   -3.500   32.000    1.000   39.000    1.500
+2   14.500   -5.000   30.500   -0.500   37.500    1.500
+2   16.000   -3.500   30.500   -0.500   39.000    1.500
+2   13.000   -6.500   32.000   -0.500   36.000    3.000
+3   13.000   -6.500   32.000   -0.500   36.000    3.000
+2   16.000   -3.500   35.000    1.000   39.000    3.000
+2   17.500   -2.000   33.500    1.000   40.500    3.000
+3   17.500   -2.000   33.500    1.000   40.500    3.000
+2   17.500   -3.500   35.000   -2.000   42.000    3.000
+2   16.000   -0.500   33.500   -2.000   42.000    4.500
+2   17.500   -0.500   33.500   -0.500   42.000    6.000
+3   17.500   -0.500   33.500   -0.500   42.000    6.000
+2   20.500   -2.000   33.500    1.000   42.000    6.000
+REMARK ROTMAT     0.5588   -0.6371    0.5309    0.8009    0.5808   -0.1459   -0.2154    0.5067    0.8348
+REMARK CENTRES   16.4000   -3.3000   33.0000   -0.1000   39.9000    3.4000
+REMARK DET 1
+REMARK DETORI 1
+REMARK END

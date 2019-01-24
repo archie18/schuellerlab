@@ -1,0 +1,4 @@
+#REMARK  PARENTFILE  ./Kahraman80/hive/pdb/1RLZ.pdb
+ATOM    796  C   SPH Z   1      18.404  -4.194  41.938  1.00  1.51 
+ATOM    801  C   SPH Z   1      17.945  -4.491  41.915  1.00  1.61 
+ATOM    800  C   SPH Z   1      17.737  -3.944  41.405  1.00  1.72 

@@ -1,0 +1,100 @@
+
+SAM
+> singcomb <- subset(sing, sing$atomtype=="CA" & sing$cuttoff==3.5 & sing$clique==5 & sing$distance==6.0 & sing$metric=="SrelScore08", select=c(code,class,auc))
+
+> png('hom_GRE_6.0_SAM_CA_boxplot.png')
+> boxplot(auc ~ class, singcomb, xlab = "Ligand", ylab="AUC",main="hom_GRE_6.0_SAM_CA_boxplot(SrelScore08)")
+> dev.off()
+> png('hom_GRE_6.0_SAM_CA_beeswarm.png')
+> beeswarm(auc ~ class, singcomb, col=sample(colors(),10), pch=19, method="swarm",cex=0.5,main="hom_GRE_6.0_SAM_CA_beeswarm(SrelScore08)")
+> dev.off()
+
+
+
+LLP
+
+> singcomb <- subset(sing, sing$atomtype=="CA_ACC_DON" & sing$cuttoff==3.5 & sing$clique==5 & sing$distance==6.0 & sing$metric=="Srel", select=c(code,class,auc))
+> png('hom_GRE_6.0_SAM_CA_ACC_DON_beeswarm.png')
+> beeswarm(auc ~ class, singcomb, col=sample(colors(),10), pch=19, method="swarm",cex=0.5,main="hom_GRE_6.0_LLP_CA_ACC_DON_beeswarm(Srel)")
+
+U5P
+
+> singcomb <- subset(sing, sing$atomtype=="CA" & sing$cuttoff==2.5 & sing$clique==5 & sing$distance==6.0 & sing$metric=="SO", select=c(code,class,auc))
+> png('hom_GRE_6.0_U5P_CA_beeswarm.png')
+> beeswarm(auc ~ class, singcomb, col=sample(colors(),10), pch=19, method="swarm",cex=0.5,main="hom_GRE_6.0_U5P_CA_beeswarm(SO)")
+> dev.off()
+
+> png('hom_GRE_6.0_U5P_CA_boxplot.png')
+> boxplot(auc ~ class, singcomb, xlab = "Ligand", ylab="AUC",main="hom_GRE_6.0_U5P_CA_boxplot(SO)")
+> dev.off()
+
+1PE
+
+> singcomb <- subset(sing, sing$atomtype=="CA_ACC_DON" & sing$cuttoff==2.5 & sing$clique==5 & sing$distance==6.0 & sing$metric=="RMSD", select=c(code,class,auc))
+> png('hom_GRE_6.0_1PE_CA_ACC_DON_boxplot.png')
+> boxplot(auc ~ class, singcomb, xlab = "Ligand", ylab="AUC",main="hom_GRE_6.0_1PE_CA_ACC_DON_boxplot(RMSD)")
+> dev.off()
+png 
+  3 
+> png('hom_GRE_6.0_1PE_CA_ACC_DON_beeswarm.png')
+> beeswarm(auc ~ class, singcomb, col=sample(colors(),10), pch=19, method="swarm",cex=0.5,main="hom_GRE_6.0_1PE_CA_ACC_DON_beeswarm(RMSD)")
+> dev.off()
+png 
+  3 
+
+BEST LIGANDS
+
+> png('bests_homogeneous.png')
+> boxplot(AUC~Class, singcomb,  ylim=c(0,1),main="Best values per ligand ")
+> beeswarm(AUC ~ Class, singcomb,add = T, pch=19, method="swarm",cex=0.5,ylim=c(0,1), main="Best values per ligand ")
+> dev.off()
+null device 
+          1 
+> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

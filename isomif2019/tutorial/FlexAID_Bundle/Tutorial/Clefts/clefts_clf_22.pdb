@@ -1,0 +1,5 @@
+#REMARK  PARENTFILE  Processed_files/1stp.pdb
+ATOM    490  NZ  LYS A  80      14.615  17.805 -15.973  1.00 27.56           N  
+ATOM    493  C   ASN A  81      17.477  13.787 -17.178  1.00 26.05           C  
+ATOM    500  CA  ASN A  82      19.071  14.534 -18.878  1.00 27.55           C  
+ATOM    505  OD1 ASN A  82      20.259  17.088 -18.602  1.00 32.58           O  

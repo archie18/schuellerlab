@@ -1,0 +1,38 @@
+REMARK command: ./isomif -p1 ./Kahraman80/hive/mifs/1EW0.mif -p2 ./Kahraman80/hive/mifs/1BDG.mif -o ./Kahraman80/hive/match/ -c 1 -l 1 -l1 HEM501A- -l2 GLC501A-
+REMARK commandJob: ./isomif -p1 ./Kahraman80/hive/mifs/1EW0.mif -p2 ./Kahraman80/hive/mifs/1BDG.mif -p1 ./Kahraman80/hive/mifs/1EW0.mif -p2 ./Kahraman80/hive/mifs/1BDG.mif -o ./Kahraman80/hive/match/ -c 1 -l 1 -l1 HEM501A- -l2 GLC501A-
+REMARK mif_file_1: ./Kahraman80/hive/mifs/1EW0.mif
+REMARK mif_file_2: ./Kahraman80/hive/mifs/1BDG.mif
+REMARK nb_of_probes: 6
+REMARK C-alpha_dDist:  3.00
+REMARK pseudocenter_dDist:  1.00
+REMARK dDist:  3.00
+REMARK jtt_threshold: 5
+REMARK max_nodes: 100000
+REMARK commont int : 1
+REMARK wsimfn: 0
+REMARK tag1: 1EW0
+REMARK tag2: 1BDG
+REMARK rnc1: HEM501A-
+REMARK rnc2: GLC501A-
+REMARK ncliques_scored: 1
+REMARK ncliques_explored: 4
+REMARK CLIQUE CG 1 NODES 13 NODESM 14 NODESMW 0.0000 NORMNODES 0.0000 NORMNODESRMSD 0.0000 TANI 0.0778 TANIM 0.0519 TANIMW 0.0000 TANINORM 0.0000 NRG 0.000 SS1 154 SS2 26 SS1M 230 SS2M 54 LIGRMSD 0.000
+2   16.500   -1.000    7.500   28.500   19.500   63.000
+3   10.500   -4.000    1.500   25.500   22.500   67.500
+5   13.500   -4.000    7.500   27.000   22.500   63.000
+0   12.000   -2.500    3.000   27.000   24.000   66.000
+3   12.000   -4.000    3.000   25.500   22.500   64.500
+3   10.500   -5.500    6.000   27.000   21.000   67.500
+3   13.500   -4.000    6.000   27.000   19.500   63.000
+3   12.000   -5.500    4.500   24.000   21.000   64.500
+3   12.000   -4.000    6.000   28.500   22.500   63.000
+2   10.500    0.500    6.000   30.000   24.000   63.000
+2    9.000    0.500    6.000   30.000   25.500   61.500
+3    9.000    0.500    6.000   30.000   25.500   61.500
+3   10.500    0.500    7.500   30.000   25.500   63.000
+3   10.500    0.500    9.000   31.500   25.500   63.000
+REMARK ROTMAT    -0.3607    0.2038    0.9101   -0.6829    0.6069   -0.4066   -0.6352   -0.7682   -0.0798
+REMARK CENTRES   11.5714   -2.2857    5.6786   27.9643   22.9286   63.8571
+REMARK DET 1
+REMARK DETORI 1
+REMARK END

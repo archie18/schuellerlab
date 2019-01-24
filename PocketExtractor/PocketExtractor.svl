@@ -1,0 +1,209 @@
+//////////////////////////////////////////////////////////////////////////
+//
+// PocketExtractor
+// Extracts binding pockets from the PDBbind set
+//
+// Usage
+//    PocketExtractor []
+//
+// Author
+//    Andreas Schueller <aschueller@bio.puc.cl>
+//
+// Version
+//     0.4    [2017-07-25]
+//
+// History
+//     0.4      2017-07-25    Added atom types for positive, negative and
+//                            aromatic atoms
+//     0.3      2017-05-10    Added GRE atom type for greasy carbons.
+//                            Rename _ACC to ACC and _DON to DON for better
+//                            compatibility with Click
+//                            Added option to extend pocket atoms to residues or not
+//     0.2.2_hack 2016-11-28  Adapted to work with Kahraman dataset
+//     0.2.2    2013-09-08    Added exclude_path option.
+//                            Undid some changes of 0.2.1 since they
+//                            prevented proper function
+//     0.2.1    2013-08-06    Path option now accepts files in addition to
+//                            dirs
+//     0.2      2012-12-05    Now exporting pocket with ligand by default.
+//                            Added options argument.
+//                            Added ph4AtomNames functionality.
+//     0.1      2012-12-04    Initial version
+//
+// Copyright 2012 by Andreas Schueller
+//
+#set main 'PocketExtractor'
+#set title 'PocketExtractor'
+#set version '0.4'
+
+function _EditH;
+//function SelectionExtendResidueProximity;
+function _Atoms;
+function ph4_aAcceptor, ph4_aTautomerAcceptor;
+function ph4_aDonor, ph4_aTautomerDonor;
+function ph4_aHydrophobe, ph4_aGrease;
+function ph4_aAnion, ph4_aResonanceAnion, ph4_aCation, ph4_aResonanceCation;
+function ph4_aPlanar, aInHRing;
+
+// Default configuration
+const DEFAULT_OPTIONS = [
+    cutoff:         6.0,
+    proteinPath:    '.',
+    ligandPath:     '.',
+    write_ligand:   1,
+    ph4_atom_names: 0,
+    exclude_paths:  [],
+    greasy:         0,
+    byRes:          1,
+    charged:        0,
+    aromatic:       0
+];
+
+global function ph4AtomNames [ atoms, greasy, charged, aromatic ]
+    // ACC - H-bond acceptors + tautomer acceptors not POL
+    aSetName [ atoms | ((ph4_aAcceptor atoms or ph4_aTautomerAcceptor atoms) and not (ph4_aDonor atoms or ph4_aTautomerDonor atoms)), 'ACC' ];
+    // DON - H-bond donors + tautomer donors not POL
+    aSetName [ atoms | ((ph4_aDonor atoms or ph4_aTautomerDonor atoms) and not (ph4_aAcceptor atoms or ph4_aTautomerAcceptor atoms)), 'DON' ];
+    // POL - Both H-bond acceptors and donors (including tautomer version)
+    //aSetName [ atoms | ((ph4_aDonor atoms or ph4_aTautomerDonor atoms) and (ph4_aAcceptor atoms or ph4_aTautomerAcceptor atoms)), 'POL' ];
+    // HYD - Hydrophobic atoms
+    //aSetName [ atoms | ph4_aHydrophobe atoms, 'HYD' ];
+    // GRE - atom with very hydrophobic character.
+    if istrue greasy then
+        aSetName [ atoms | ph4_aGrease atoms, 'GRE'];
+    endif
+    // POS/NEG - Charged atoms
+    if istrue charged then
+        aSetName [ atoms | ph4_aCation atoms or ph4_aResonanceCation atoms, 'POS'];
+        aSetName [ atoms | ph4_aAnion atoms or ph4_aResonanceAnion atoms, 'NEG'];
+    endif
+    // ARO - aromatic ring atom
+    if istrue aromatic then
+        aSetName [ atoms | ph4_aPlanar atoms and aInHRing atoms, 'ARO'];
+    endif
+
+    // Get all atoms that are donors and acceptors at the same time (hydroxyls)
+    local accDon = atoms | ((ph4_aDonor atoms or ph4_aTautomerDonor atoms) and (ph4_aAcceptor atoms or ph4_aTautomerAcceptor atoms) /* Poner nueva condicion a setear?*/);
+    // Create new atoms and copy the properties of the acceptor-donor atoms
+    local copies = oCreate aResidue accDon;
+    aSetElement [ copies, aElement accDon ];
+    aSetPos [ copies, aPos accDon ];
+    aSetCharge [ copies, aCharge accDon ];
+    aSetIon [ copies, aIon accDon ];
+    aSetGeometry [ copies, aGeometry accDon ];
+    aSetTempFactor [ copies, aTempFactor accDon ];
+    aSetOccupancy [ copies, aOccupancy accDon ];
+    // Finally change the atom name of the original atoms to acceptor and of the copies to donor
+    aSetName [ copies, 'DON' ];
+    aSetName [ accDon, 'ACC' ];
+
+    // Return the copied atoms so we can add them to our pocket atoms
+    return copies;
+endfunction
+
+global function PocketExtractor options
+
+    write [ '{} (v{}) (MOE {}) [{}]\n', (modenv[]).title, (modenv[]).version, MOE_VERSION, asctime[] ];
+
+    // Process options
+    local opt = cat [ options, DEFAULT_OPTIONS ];
+    opt = opt | m_uniq tags opt;
+
+    write [ '{} ', (modenv[]).title ];
+    print opt;
+
+    // Close current molecular system
+    Close [force:1];
+
+    // Create pocket dir
+    local pocketPath = tok_cat [ opt.proteinPath, '/', 'pockets' ];
+    _fmkdir pocketPath;
+
+    // Loop over all subdirs
+    local files = flist [ opt.proteinPath ];
+    local fileIdx;
+    for fileIdx = 1, length files loop
+        if ftype files[fileIdx] == 'file' and not add(files[fileIdx] == opt.exclude_paths) then
+            write [ '{}\n', files[fileIdx] ];
+
+            // Read receptor
+            //local recFileName = tok_cat [ opt.proteinPath, '/', opt.codes[codeIdx], '.pdb' ];
+            local recChains = ReadPDB files[fileIdx];
+            // Read ligand
+            local ligFileName = tok_cat [ opt.ligandPath, '/', fbase ftail files[fileIdx], '.sdf' ];
+            local ligChains = ReadMDLMOL [ ligFileName, [center:0] ];
+            // Remove hydrogens
+            _EditH 'delH';
+
+            // Select ligand atoms
+            aSetSelected [ cAtoms ligChains, 1 ];
+            if istrue opt.byRes then
+                // Extend selection to near residues
+                aSetSelected [_Atoms tok_cat ['asel >> ', totok opt.cutoff, ' >> res'], 1];
+            else
+               // Extend selection to near atoms
+                aSetSelected [_Atoms tok_cat ['asel >> ', totok opt.cutoff], 1];
+            endif
+            // Get pocket atoms with ligand
+            local atoms = Atoms[];
+            local pocket = atoms | aSelected atoms;
+            // Deselect ligand atoms. Now the selection contains only the pocket atoms + solvent
+            aSetSelected [ cAtoms ligChains, 0 ];
+            // Get pocket atoms without ligand
+            local pocket_woLig = atoms | aSelected atoms;
+
+            // Add notByRes_ to pocket file name
+            local notByRes = '';
+            if isfalse opt.byRes then
+                notByRes = 'notByRes_';
+            endif
+
+            // Write pocket in PDB format
+            local pocFileName = tok_cat [ pocketPath, '/', ftail fbase files[fileIdx], '_pocket_', notByRes, token swrite [ '{f.1}', opt.cutoff ], '.pdb' ];
+            if istrue opt.write_ligand then
+                fwrite_PDB [ pocFileName, pocket ];
+            else
+                fwrite_PDB [ pocFileName, pocket_woLig ];
+            endif
+
+            if istrue opt.ph4_atom_names then
+                // Rename atom names
+                local copies = ph4AtomNames [pocket_woLig, opt.greasy, opt.charged, opt.aromatic];
+
+                // Add gre_ to pocket file name
+                local tokgre = '';
+                if istrue opt.greasy then
+                	tokgre = 'gre_';
+                endif
+
+                // Add charge_ to pocket file name
+                local tokcharge = '';
+                if istrue opt.charged then
+                	tokcharge = 'charge_';
+                endif
+
+                // Add aro_ to pocket file name
+                local tokaro = '';
+                if istrue opt.aromatic then
+                	tokaro = 'aro_';
+                endif
+
+                // Save pocket with changed atom names
+                pocFileName = tok_cat [ pocketPath, '/', ftail fbase files[fileIdx], '_pocket_ph4_', tokgre, tokcharge, tokaro, notByRes, token swrite [ '{f.1}', opt.cutoff ], '.pdb' ];
+                if istrue opt.write_ligand then
+                    fwrite_PDB [ pocFileName, cat [pocket, copies] ];
+                else
+                    fwrite_PDB [ pocFileName, cat [pocket_woLig, copies] ];
+                endif
+            endif
+
+            // Clean up
+            //oDestroy recChains;
+            //oDestroy ligChains;
+            //break;
+        endif
+    endloop
+
+    // ...done :-)
+    write [ '\n...done :-) [{}]\n\n', asctime[] ]; 
+endfunction

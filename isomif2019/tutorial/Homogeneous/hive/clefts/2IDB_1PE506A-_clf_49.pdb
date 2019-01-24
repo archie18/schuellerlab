@@ -1,0 +1,6 @@
+#REMARK  PARENTFILE  ./Homogeneous/hive/pdb/2IDB.pdb
+ATOM   2117  CB  HIS A 291      58.038  59.083  78.171  1.00 27.20           C  
+ATOM   2118  CG  HIS A 291      58.305  58.098  77.082  1.00 29.76           C  
+ATOM   2120  CD2 HIS A 291      57.691  57.890  75.892  1.00 31.53           C  
+ATOM   2430  C   PRO A 329      59.669  65.804  77.688  1.00 36.84           C  
+ATOM   2690  OG  SER A 362      56.915  63.590  74.579  1.00 32.01           O  

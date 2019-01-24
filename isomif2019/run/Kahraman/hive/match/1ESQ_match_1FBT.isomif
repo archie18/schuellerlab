@@ -1,0 +1,38 @@
+REMARK command: ./isomif -p1 ./Kahraman/hive/mifs/1ESQ.mif -p2 ./Kahraman/hive/mifs/1FBT.mif -o ./Kahraman/hive/match/ -c 1 -l 1 -l1 ATP300A- -l2 PO4191B-
+REMARK commandJob: ./isomif -p1 ./Kahraman/hive/mifs/1ESQ.mif -p2 ./Kahraman/hive/mifs/1FBT.mif -p1 ./Kahraman/hive/mifs/1ESQ.mif -p2 ./Kahraman/hive/mifs/1FBT.mif -o ./Kahraman/hive/match/ -c 1 -l 1 -l1 ATP300A- -l2 PO4191B-
+REMARK mif_file_1: ./Kahraman/hive/mifs/1ESQ.mif
+REMARK mif_file_2: ./Kahraman/hive/mifs/1FBT.mif
+REMARK nb_of_probes: 6
+REMARK C-alpha_dDist:  3.00
+REMARK pseudocenter_dDist:  1.00
+REMARK dDist:  3.00
+REMARK jtt_threshold: 5
+REMARK max_nodes: 100000
+REMARK commont int : 1
+REMARK wsimfn: 0
+REMARK tag1: 1ESQ
+REMARK tag2: 1FBT
+REMARK rnc1: ATP300A-
+REMARK rnc2: PO4191B-
+REMARK ncliques_scored: 1
+REMARK ncliques_explored: 3
+REMARK CLIQUE CG 1 NODES 10 NODESM 14 NODESMW 0.0000 NORMNODES 0.0000 NORMNODESRMSD 0.0000 TANI 0.0943 TANIM 0.0952 TANIMW 0.0000 TANINORM 0.0000 NRG 0.000 SS1 98 SS2 18 SS1M 124 SS2M 37 LIGRMSD 0.000
+5   42.000   10.500   14.000    7.000   20.500   23.500
+2   43.500   10.500    8.000    8.500   17.500   22.000
+2   39.000    9.000   11.000   10.000   14.500   23.500
+4   39.000    9.000   11.000   10.000   14.500   23.500
+4   39.000    7.500    9.500    8.500   14.500   23.500
+2   42.000   12.000    9.500    8.500   19.000   22.000
+3   42.000   12.000    9.500    8.500   19.000   22.000
+3   42.000    6.000    8.000    7.000   16.000   25.000
+3   40.500    6.000    8.000    8.500   16.000   25.000
+2   42.000   10.500   11.000    7.000   17.500   22.000
+3   42.000   10.500   11.000    7.000   17.500   22.000
+2   42.000   10.500    9.500    8.500   20.500   23.500
+3   42.000   10.500    9.500    8.500   20.500   23.500
+4   40.500    9.000    9.500   10.000   16.000   23.500
+REMARK ROTMAT    -0.5647    0.4046   -0.7193    0.7363    0.6406   -0.2178    0.3727   -0.6526   -0.6597
+REMARK CENTRES   41.2500    9.5357    9.9286    8.3929   17.3929   23.1786
+REMARK DET 1
+REMARK DETORI 1
+REMARK END

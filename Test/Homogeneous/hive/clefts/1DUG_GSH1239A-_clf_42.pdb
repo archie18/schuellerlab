@@ -1,0 +1,6 @@
+#REMARK  PARENTFILE  ./Homogeneous/hive/pdb/1DUG.pdb
+ATOM    461  OD1 ASN A  53      13.072  51.100  30.904  1.00 10.28           O  
+ATOM    463  N   LEU A  54      10.604  51.265  29.714  1.00 12.77           N  
+ATOM    467  CB  LEU A  54       9.365  53.397  29.708  1.00 12.32           C  
+ATOM    468  CG  LEU A  54       8.118  53.056  30.537  1.00 12.27           C  
+ATOM    469  CD1 LEU A  54       7.731  54.239  31.424  1.00 14.68           C  
