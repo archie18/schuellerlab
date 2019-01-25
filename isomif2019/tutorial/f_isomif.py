@@ -13,7 +13,7 @@ import collections
 import urllib
 
 getcleft_sw = "./GetCleft"
-reduce_sw = "./reduce.3.23.130521"
+reduce_sw = "./reduce"
 mif_sw = "./IsoMif/mif"
 mifView_sw="perl ./IsoMif/mifView.pl"
 isomif_sw ="./IsoMif/isomif"

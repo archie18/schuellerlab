@@ -1,0 +1,38 @@
+REMARK command: ./IsoMif/isomif -p1 ./Homogeneous/hive/mifs/2BYN.mif -p2 ./Homogeneous/hive/mifs/1YLJ.mif -o ./Homogeneous/hive/match/ -c 1 -l 1 -l1 1PE401C- -l2 SUC1050A-
+REMARK commandJob: ./IsoMif/isomif -p1 ./Homogeneous/hive/mifs/2BYN.mif -p2 ./Homogeneous/hive/mifs/1YLJ.mif -p1 ./Homogeneous/hive/mifs/2BYN.mif -p2 ./Homogeneous/hive/mifs/1YLJ.mif -o ./Homogeneous/hive/match/ -c 1 -l 1 -l1 1PE401C- -l2 SUC1050A-
+REMARK mif_file_1: ./Homogeneous/hive/mifs/2BYN.mif
+REMARK mif_file_2: ./Homogeneous/hive/mifs/1YLJ.mif
+REMARK nb_of_probes: 6
+REMARK C-alpha_dDist:  3.00
+REMARK pseudocenter_dDist:  1.00
+REMARK dDist:  3.00
+REMARK jtt_threshold: 5
+REMARK max_nodes: 100000
+REMARK commont int : 1
+REMARK wsimfn: 0
+REMARK tag1: 2BYN
+REMARK tag2: 1YLJ
+REMARK rnc1: 1PE401C-
+REMARK rnc2: SUC1050A-
+REMARK ncliques_scored: 1
+REMARK ncliques_explored: 1
+REMARK CLIQUE CG 1 NODES 14 NODESM 14 NODESMW 0.0000 NORMNODES 0.0000 NORMNODESRMSD 0.0000 TANI 0.1728 TANIM 0.1167 TANIMW 0.0000 TANINORM 0.0000 NRG 0.000 SS1 76 SS2 19 SS1M 106 SS2M 28 LIGRMSD 0.000
+2    6.000   25.500   22.500   33.000   73.500   -6.500
+0    4.500   27.000   21.000   33.000   72.000   -5.000
+0    3.000   27.000   21.000   34.500   72.000   -5.000
+0    3.000   25.500   21.000   34.500   72.000   -3.500
+0    4.500   25.500   21.000   34.500   73.500   -3.500
+0    4.500   24.000   21.000   34.500   73.500   -2.000
+2    6.000   25.500   24.000   36.000   72.000   -3.500
+0    4.500   28.500   21.000   31.500   69.000   -5.000
+3    1.500   25.500   19.500   36.000   73.500   -8.000
+0    1.500   24.000   21.000   36.000   72.000   -6.500
+3    3.000   30.000   19.500   30.000   72.000   -3.500
+0    6.000   30.000   19.500   28.500   72.000   -3.500
+0    7.500   30.000   21.000   28.500   73.500   -3.500
+0    0.000   24.000   21.000   34.500   70.500   -8.000
+REMARK ROTMAT    -0.2846   -0.8569    0.4298    0.6036   -0.5085   -0.6141    0.7448    0.0847    0.6619
+REMARK CENTRES    3.9643   26.5714   21.0000   33.2143   72.2143   -4.7857
+REMARK DET 1
+REMARK DETORI 1
+REMARK END
