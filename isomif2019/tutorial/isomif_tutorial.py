@@ -56,7 +56,7 @@ os.system('curl -o f_isomif.py https://raw.githubusercontent.com/archie18/schuel
 os.system('python run_isomif.py -f Homogenous_entries -p Homogeneous')
 
 #take the scores from raw data
-os.system('python isomif_results.py -f Entries/Homogenous_entries -p Homogeneous > output.txt')
+
 os.system('rm *.gz')
 os.system('rm *.zip')
 
