@@ -1,5 +1,21 @@
 #!/usr/bin/env python
 
+##########################################################################
+##
+## IsoMIF Pipeline, download and compile all files necesaries to run isomif pipeline, it run by default Homogeneous dataset.
+## 
+## Usage
+##    python isomif_tutorial.py
+##
+## Version
+##     0.1    [2019-01-25]
+##
+## History
+##
+##     0.1      2019-01-25    Initial version
+##
+##########################################################################
+
 import os
 import sys
 
