@@ -160,7 +160,7 @@ sys.stderr.write("Finished in " + str(datetime.now() - startTime) + "\n")
 #
 
 
-cmd = 'python isomif_results.py -f '+args.file+'  -p '+args.path+' > output_'+args.file
+cmd = 'python isomif_results.py -f '+filename+'  -p '+args.path+' > output_'+args.file
 os.system(cmd)
 print 'Tanimoto file is called output_'+args.file
 # Here add the pipeline's second part
