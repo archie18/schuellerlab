@@ -1,0 +1,42 @@
+REMARK command: ./isomif -p1 ./Kahraman/hive/mifs/1EUC.mif -p2 ./Kahraman/hive/mifs/1QHU.mif -o ./Kahraman/hive/match/ -c 1 -l 1 -l1 PO4307A- -l2 HEM500A-
+REMARK commandJob: ./isomif -p1 ./Kahraman/hive/mifs/1EUC.mif -p2 ./Kahraman/hive/mifs/1QHU.mif -p1 ./Kahraman/hive/mifs/1EUC.mif -p2 ./Kahraman/hive/mifs/1QHU.mif -o ./Kahraman/hive/match/ -c 1 -l 1 -l1 PO4307A- -l2 HEM500A-
+REMARK mif_file_1: ./Kahraman/hive/mifs/1EUC.mif
+REMARK mif_file_2: ./Kahraman/hive/mifs/1QHU.mif
+REMARK nb_of_probes: 6
+REMARK C-alpha_dDist:  3.00
+REMARK pseudocenter_dDist:  1.00
+REMARK dDist:  3.00
+REMARK jtt_threshold: 5
+REMARK max_nodes: 100000
+REMARK commont int : 1
+REMARK wsimfn: 0
+REMARK tag1: 1EUC
+REMARK tag2: 1QHU
+REMARK rnc1: PO4307A-
+REMARK rnc2: HEM500A-
+REMARK ncliques_scored: 1
+REMARK ncliques_explored: 1
+REMARK CLIQUE CG 1 NODES 13 NODESM 18 NODESMW 0.0000 NORMNODES 0.0000 NORMNODESRMSD 0.0000 TANI 0.0935 TANIM 0.0638 TANIMW 0.0000 TANINORM 0.0000 NRG 0.000 SS1 16 SS2 136 SS1M 37 SS2M 263 LIGRMSD 0.000
+2   17.500   -7.500   21.500    4.500    7.500    9.000
+3   17.500   -7.500   21.500    4.500    7.500    9.000
+5   17.500   -7.500   21.500    4.500    7.500    9.000
+3   19.000   -7.500   21.500    4.500    9.000    9.000
+1   20.500   -9.000   18.500    6.000    9.000    9.000
+1   19.000   -6.000   20.000    6.000    7.500    9.000
+1   20.500   -7.500   20.000    6.000    7.500    7.500
+5   20.500   -6.000   20.000    6.000    9.000    7.500
+2   20.500   -4.500   18.500    4.500   10.500    9.000
+3   20.500   -4.500   18.500    4.500   10.500    9.000
+5   20.500   -4.500   18.500    4.500   10.500    9.000
+2   20.500   -9.000   20.000    3.000    6.000    9.000
+3   20.500   -9.000   20.000    3.000    6.000    9.000
+0   20.500   -7.500   21.500    4.500    6.000    6.000
+0   22.000   -9.000   23.000    3.000    4.500    7.500
+0   22.000   -7.500   23.000    4.500    4.500    7.500
+0   22.000   -7.500   21.500    6.000    4.500    6.000
+0   23.500   -7.500   21.500    4.500    4.500    6.000
+REMARK ROTMAT    -0.1741    0.7928    0.5841   -0.1282    0.5699   -0.8117   -0.9763   -0.2162    0.0000
+REMARK CENTRES   20.2500   -7.1667   20.5833    4.6667    7.3333    8.1667
+REMARK DET 0.999994
+REMARK DETORI 0.999994
+REMARK END

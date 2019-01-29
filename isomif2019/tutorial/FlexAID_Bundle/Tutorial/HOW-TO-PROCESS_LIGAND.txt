@@ -1,0 +1,43 @@
+############################################
+#        Tutorial file created by          #
+#        Francis Gaudreault, on            #
+#        07/22/14.                         #
+############################################
+
+This tutorial explains how to process the initial input files.
+Both the target and the ligand require to be processed.
+
+We use the variable $Process_Ligand as to define the Process_Ligand executable throughout.
+$Process_Ligand = Process_Ligand (Linux or MacOSX), or
+$Process_Ligand = Process_Ligand.exe (Windows)
+
+$Platform refers to the platform of the bundle you downloaded, either
+  Linux32, Linux64, Win32, Win64 or MacOSX64
+
+
+Open a terminal, and execute the following commands:
+
+  # Move into the Tutorial directory
+  cd FlexAID_Bundle/Tutorial
+  
+  ----------
+
+  # Process the uncomplexed form of Streptavidin '1stp_noBTN.pdb'
+  # The target requires to be in PDB format for the processing
+  # The processed target file will appear as 'Processed_files/1stp_noBTN.inp.pdb'
+  ../$Platform/Process_Ligand/$Process_Ligand -f Processed_files/1stp_noBTN.pdb -target
+  
+  ----------
+
+  # Process the ligand Biotin 'BTN.pdb'
+  # The ligand file has to be in either format: PDB, MDL or MOL2
+  ../$Platform/Process_Ligand/$Process_Ligand -f Processed_files/BTN.pdb -ref --atom_index 90000 --res_name LIG --res_chain A --res_number 9999
+  
+  # As a convention, we give the new and unique RESNUMC identifier LIG9999A to the ligand to be docked
+  # and we start the atom numbering to 90000 as atom numbers and residue identifiers between
+  # the processed molecules (target and ligand) must not clash
+  # The description of the output files follows:
+  #   - Processed_files/BTN.inp: file to store the ligand connectivity and atom typing
+  #   - Processed_files/BTN.ic: file to specify the internal coordinates of the ligand
+  #   - Processed_files/BTN_ref.pdb: file used as reference for RMSD calculations
+  

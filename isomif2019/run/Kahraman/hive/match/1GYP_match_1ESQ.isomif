@@ -1,0 +1,40 @@
+REMARK command: ./isomif -p1 ./Kahraman/hive/mifs/1GYP.mif -p2 ./Kahraman/hive/mifs/1ESQ.mif -o ./Kahraman/hive/match/ -c 1 -l 1 -l1 PO4359A- -l2 ATP300A-
+REMARK commandJob: ./isomif -p1 ./Kahraman/hive/mifs/1GYP.mif -p2 ./Kahraman/hive/mifs/1ESQ.mif -p1 ./Kahraman/hive/mifs/1GYP.mif -p2 ./Kahraman/hive/mifs/1ESQ.mif -o ./Kahraman/hive/match/ -c 1 -l 1 -l1 PO4359A- -l2 ATP300A-
+REMARK mif_file_1: ./Kahraman/hive/mifs/1GYP.mif
+REMARK mif_file_2: ./Kahraman/hive/mifs/1ESQ.mif
+REMARK nb_of_probes: 6
+REMARK C-alpha_dDist:  3.00
+REMARK pseudocenter_dDist:  1.00
+REMARK dDist:  3.00
+REMARK jtt_threshold: 5
+REMARK max_nodes: 100000
+REMARK commont int : 1
+REMARK wsimfn: 0
+REMARK tag1: 1GYP
+REMARK tag2: 1ESQ
+REMARK rnc1: PO4359A-
+REMARK rnc2: ATP300A-
+REMARK ncliques_scored: 1
+REMARK ncliques_explored: 1
+REMARK CLIQUE CG 1 NODES 16 NODESM 16 NODESMW 0.0000 NORMNODES 0.0000 NORMNODESRMSD 0.0000 TANI 0.1538 TANIM 0.1103 TANIMW 0.0000 TANINORM 0.0000 NRG 0.000 SS1 22 SS2 98 SS1M 37 SS2M 124 LIGRMSD 0.000
+2   70.500   64.000   84.000   48.000   10.500   14.000
+3   69.000   65.500   88.500   49.500   12.000   14.000
+2   70.500   67.000   87.000   49.500   10.500   14.000
+3   70.500   65.500   87.000   49.500   12.000   15.500
+2   69.000   67.000   87.000   48.000   12.000   14.000
+0   70.500   64.000   88.500   48.000   13.500   17.000
+0   70.500   67.000   84.000   48.000    9.000   12.500
+0   70.500   68.500   84.000   46.500    9.000   12.500
+1   69.000   65.500   87.000   46.500   12.000   17.000
+0   69.000   68.500   84.000   46.500    9.000   14.000
+0   69.000   68.500   85.500   46.500   10.500   15.500
+2   69.000   68.500   87.000   46.500   13.500   14.000
+0   69.000   70.000   84.000   45.000    9.000   14.000
+1   67.500   67.000   85.500   45.000   12.000   17.000
+0   67.500   68.500   84.000   45.000   10.500   15.500
+0   67.500   68.500   85.500   45.000   13.500   14.000
+REMARK ROTMAT     0.7403   -0.6150    0.2715   -0.2671    0.1015    0.9583   -0.6169   -0.7820   -0.0891
+REMARK CENTRES   69.2812   67.0938   85.7812   47.0625   11.1562   14.6562
+REMARK DET 1
+REMARK DETORI 1
+REMARK END

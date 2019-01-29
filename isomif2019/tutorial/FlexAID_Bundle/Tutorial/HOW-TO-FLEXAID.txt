@@ -1,0 +1,87 @@
+############################################
+#        Tutorial file created by          #
+#        Francis Gaudreault, on            #
+#        07/22/14.                         #
+############################################
+
+This tutorial explains how to run a docking simulation with FlexAID
+
+We use the variable $FlexAID as to define the FlexAID executable throughout.
+$FlexAID = FlexAID (Linux or MacOSX), or
+$FlexAID = FlexAID.exe (Windows)
+
+$Platform refers to the platform of the bundle you downloaded, either
+  Linux32, Linux64, Win32, Win64 or MacOSX64
+
+
+Open a terminal, and execute the following commands:
+
+  # Move into the Tutorial directory
+  cd FlexAID_Bundle/Tutorial
+  
+  ----------
+
+  # Copy the template 'ga_inp.dat' that encodes the default genetic algorithms parameters
+  cp FlexAID_Input/ga_inp.dat FlexAID_Input/ga_inp_1stp-BTN.dat
+  
+  # If you wish to modify some of the GA parameters, open the copied file with your desired text editor
+  # We strongly suggest not to modify other parameters other than the number of chromosomes (NUMCHROM)
+  # and the number of generations (NUMGENER) as the default parameters were tested and are optimal
+  
+  ----------
+  
+  # Copy the template 'CONFIG.inp' that encodes the default configuration of FlexAID
+  cp FlexAID_Input/CONFIG.inp FlexAID_Input/CONFIG_1stp-BTN.inp
+  
+  # We strongly suggest not to modify the parameters of the template as they were tested and are optimal
+
+  # Open the copied file with your desired text editor and add the following lines at the beginning of the file:
+  
+    # Specify the processed target file to use
+    PDBNAM Processed_files/1stp_noBTN.inp.pdb
+
+    # Specify the processed ligand file to use
+    # BTN.inp has the unique RESNUMC identifier LIG9999A
+    INPLIG Processed_files/BTN.inp
+    
+    # Specify to use one or multiple cleft(s) as binding-site
+    RNGOPT LOCCLF Binding_sites/global_binding_site.pdb
+    
+    # If you would rather use a sphere than a cleft generated with GetCleft
+    # You can draw a sphere centered at coordinates 11.6 1.6 -11.4 with radius 8.0
+    RNGOPT LOCCEN 11.6 1.6 -11.4 8.0
+    
+    # Specify the degrees of freedom (DOF) of the processed ligand with residue number 9999 and chain A
+    # Translational DOF of the ligand (-1)
+    OPTIMZ 9999 A -1
+    # Rotational DOF of the ligand (0)
+    OPTIMZ 9999 A 0
+    # Add one extra line for each flexible bond of the ligand
+    # The allowable flexible bonds are listed as FLEDIH lines in Processed_files/BTN.inp
+    # In our example, Biotin has 5 flexible bonds
+    OPTIMZ 9999 A 1
+    OPTIMZ 9999 A 2
+    OPTIMZ 9999 A 3
+    OPTIMZ 9999 A 4
+    OPTIMZ 9999 A 5
+    
+    # Add one or multiple flexible side-chains for the protein target
+    FLEXSC 110 A LEU
+    FLEXSC 25 A LEU
+    
+    # Use a reference pose of a ligand from which to calculate RMSD
+    RMSDST Processed_files/BTN_ref.pdb
+    
+  ----------
+  
+  # Run FlexAID using the configuration and GA parameters file
+  # The FlexAID_Output/Results_Simulation_1 argument serves as output prefix
+  ../$Platform/FlexAID/$FlexAID FlexAID_Input/CONFIG_1stp-BTN.inp FlexAID_Input/ga_inp_1stp-BTN.dat FlexAID_Output/Results_Simulation_1
+  
+  # A description of the output files follows:
+    - FlexAID_Output/Results_Simulation_1.cad describes statistics of the clusters
+      and pairwise RMSD between clusters
+    - FlexAID_Output/Results_Simulation_1_INI.pdb represents the complex using the internal coordinates generated from when the ligand was processed.
+    - FlexAID_Output/Results_Simulation_1_#.pdb represents the complexes predicted in increasing order of predicted CF energy 0 (most favourable) to N (least favourable)
+      The different terms of the complementarity function are explicitly described in the header of each PDB output file.
+      When RMSDST is used, a RMSD value from the reference is displayed in the header.

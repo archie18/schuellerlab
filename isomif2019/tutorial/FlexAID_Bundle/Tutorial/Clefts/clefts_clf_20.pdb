@@ -1,0 +1,5 @@
+#REMARK  PARENTFILE  Processed_files/1stp.pdb
+ATOM    422  CB  ALA A  72      12.304   4.874  10.745  1.00 18.54           C  
+ATOM    423  N   LEU A  73      13.733   5.170   7.752  1.00 18.24           N  
+ATOM    426  O   LEU A  73      12.448   5.208   5.391  1.00 17.30           O  
+ATOM    601  O   GLY A  94      12.506   2.574   7.048  1.00 17.97           O  

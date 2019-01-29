@@ -1,0 +1,38 @@
+REMARK command: ./isomif -p1 ./Kahraman/hive/mifs/1O9T.mif -p2 ./Kahraman/hive/mifs/1EJ2.mif -o ./Kahraman/hive/match/ -c 1 -l 1 -l1 ATP1397B- -l2 NAD1339A-
+REMARK commandJob: ./isomif -p1 ./Kahraman/hive/mifs/1O9T.mif -p2 ./Kahraman/hive/mifs/1EJ2.mif -p1 ./Kahraman/hive/mifs/1O9T.mif -p2 ./Kahraman/hive/mifs/1EJ2.mif -o ./Kahraman/hive/match/ -c 1 -l 1 -l1 ATP1397B- -l2 NAD1339A-
+REMARK mif_file_1: ./Kahraman/hive/mifs/1O9T.mif
+REMARK mif_file_2: ./Kahraman/hive/mifs/1EJ2.mif
+REMARK nb_of_probes: 6
+REMARK C-alpha_dDist:  3.00
+REMARK pseudocenter_dDist:  1.00
+REMARK dDist:  3.00
+REMARK jtt_threshold: 5
+REMARK max_nodes: 100000
+REMARK commont int : 1
+REMARK wsimfn: 0
+REMARK tag1: 1O9T
+REMARK tag2: 1EJ2
+REMARK rnc1: ATP1397B-
+REMARK rnc2: NAD1339A-
+REMARK ncliques_scored: 1
+REMARK ncliques_explored: 2
+REMARK CLIQUE CG 1 NODES 11 NODESM 14 NODESMW 0.0000 NORMNODES 0.0000 NORMNODESRMSD 0.0000 TANI 0.0759 TANIM 0.0593 TANIMW 0.0000 TANINORM 0.0000 NRG 0.000 SS1 11 SS2 145 SS1M 19 SS2M 231 LIGRMSD 0.000
+2   -0.500   23.000   53.500   24.000   19.000   45.500
+3   -0.500   21.500   50.500   24.000   19.000   44.000
+5   -0.500   21.500   50.500   24.000   19.000   44.000
+5   -0.500   23.000   50.500   22.500   19.000   44.000
+5    1.000   23.000   50.500   24.000   19.000   47.000
+2    1.000   21.500   50.500   25.500   19.000   45.500
+3    1.000   21.500   50.500   25.500   19.000   45.500
+5    1.000   21.500   50.500   25.500   19.000   45.500
+0   -0.500   21.500   52.000   22.500   20.500   47.000
+2   -0.500   21.500   53.500   24.000   17.500   47.000
+2    1.000   21.500   52.000   24.000   17.500   48.500
+2    1.000   21.500   53.500   24.000   19.000   48.500
+2    1.000   23.000   53.500   21.000   17.500   48.500
+0    2.500   23.000   52.000   21.000   19.000   45.500
+REMARK ROTMAT    -0.0589   -0.9377   -0.3426    0.8107    0.1553   -0.5645    0.5825   -0.3109    0.7510
+REMARK CENTRES    0.4643   22.0357   51.6786   23.6786   18.7857   46.1429
+REMARK DET 1
+REMARK DETORI 1
+REMARK END

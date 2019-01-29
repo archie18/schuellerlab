@@ -1,0 +1,38 @@
+REMARK command: ./isomif -p1 ./Kahraman80/hive/mifs/1FDS.mif -p2 ./Kahraman80/hive/mifs/1RLZ.mif -o ./Kahraman80/hive/match/ -c 1 -l 1 -l1 EST350A- -l2 NAD700A-
+REMARK commandJob: ./isomif -p1 ./Kahraman80/hive/mifs/1FDS.mif -p2 ./Kahraman80/hive/mifs/1RLZ.mif -p1 ./Kahraman80/hive/mifs/1FDS.mif -p2 ./Kahraman80/hive/mifs/1RLZ.mif -o ./Kahraman80/hive/match/ -c 1 -l 1 -l1 EST350A- -l2 NAD700A-
+REMARK mif_file_1: ./Kahraman80/hive/mifs/1FDS.mif
+REMARK mif_file_2: ./Kahraman80/hive/mifs/1RLZ.mif
+REMARK nb_of_probes: 6
+REMARK C-alpha_dDist:  3.00
+REMARK pseudocenter_dDist:  1.00
+REMARK dDist:  3.00
+REMARK jtt_threshold: 5
+REMARK max_nodes: 100000
+REMARK commont int : 1
+REMARK wsimfn: 0
+REMARK tag1: 1FDS
+REMARK tag2: 1RLZ
+REMARK rnc1: EST350A-
+REMARK rnc2: NAD700A-
+REMARK ncliques_scored: 1
+REMARK ncliques_explored: 2
+REMARK CLIQUE CG 1 NODES 13 NODESM 14 NODESMW 0.0000 NORMNODES 0.0000 NORMNODESRMSD 0.0000 TANI 0.1494 TANIM 0.0940 TANIMW 0.0000 TANINORM 0.0000 NRG 0.000 SS1 87 SS2 13 SS1M 144 SS2M 19 LIGRMSD 0.000
+0   46.000    6.000   42.000   16.500   -2.500   39.500
+2   43.000    1.500   37.500   18.000   -5.500   42.500
+3   43.000    1.500   37.500   18.000   -5.500   42.500
+2   44.500    3.000   37.500   18.000   -5.500   41.000
+2   44.500    4.500   37.500   19.500   -5.500   41.000
+2   46.000    3.000   39.000   19.500   -4.000   41.000
+3   46.000    1.500   40.500   18.000   -4.000   42.500
+0   43.000    3.000   39.000   16.500   -5.500   41.000
+0   46.000    4.500   39.000   18.000   -4.000   41.000
+0   44.500    6.000   39.000   16.500   -4.000   41.000
+0   43.000    4.500   39.000   18.000   -5.500   39.500
+0   46.000    4.500   40.500   18.000   -2.500   41.000
+0   46.000    3.000   40.500   16.500   -2.500   41.000
+0   47.500    6.000   39.000   18.000   -2.500   39.500
+REMARK ROTMAT     0.5639   -0.0935   -0.8205    0.8257    0.0818    0.5581    0.0150   -0.9923    0.1233
+REMARK CENTRES   44.9286    3.7500   39.1071   17.7857   -4.2143   41.0000
+REMARK DET 1
+REMARK DETORI 1
+REMARK END

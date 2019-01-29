@@ -1,0 +1,53 @@
+REMARK command: ./isomif -p1 ./Homogeneous/hive/mifs/1THQ.mif -p2 ./Homogeneous/hive/mifs/1PT2.mif -o ./Homogeneous/hive/match/ -c 1 -l 1 -l1 LDA200A- -l2 SUC501A-
+REMARK commandJob: ./isomif -p1 ./Homogeneous/hive/mifs/1THQ.mif -p2 ./Homogeneous/hive/mifs/1PT2.mif -p1 ./Homogeneous/hive/mifs/1THQ.mif -p2 ./Homogeneous/hive/mifs/1PT2.mif -o ./Homogeneous/hive/match/ -c 1 -l 1 -l1 LDA200A- -l2 SUC501A-
+REMARK mif_file_1: ./Homogeneous/hive/mifs/1THQ.mif
+REMARK mif_file_2: ./Homogeneous/hive/mifs/1PT2.mif
+REMARK nb_of_probes: 6
+REMARK C-alpha_dDist:  3.00
+REMARK pseudocenter_dDist:  1.00
+REMARK dDist:  3.00
+REMARK jtt_threshold: 5
+REMARK max_nodes: 100000
+REMARK commont int : 1
+REMARK wsimfn: 0
+REMARK tag1: 1THQ
+REMARK tag2: 1PT2
+REMARK rnc1: LDA200A-
+REMARK rnc2: SUC501A-
+REMARK ncliques_scored: 1
+REMARK ncliques_explored: 1
+REMARK CLIQUE CG 1 NODES 28 NODESM 29 NODESMW 0.0000 NORMNODES 0.0000 NORMNODESRMSD 0.0000 TANI 0.2188 TANIM 0.1408 TANIMW 0.0000 TANINORM 0.0000 NRG 0.000 SS1 88 SS2 68 SS1M 120 SS2M 115 LIGRMSD 0.000
+1   14.500   41.000    5.000   41.500   37.500   12.000
+1   13.000   41.000    5.000   43.000   39.000   13.500
+1   14.500   41.000    3.500   41.500   39.000   15.000
+1   13.000   41.000    3.500   41.500   37.500   15.000
+1   14.500   41.000    2.000   40.000   37.500   16.500
+1   14.500   41.000    0.500   41.500   36.000   16.500
+0   13.000   41.000    0.500   41.500   34.500   16.500
+0   11.500   41.000    0.500   43.000   34.500   15.000
+0   13.000   41.000   -1.000   43.000   34.500   16.500
+1   11.500   39.500    3.500   43.000   36.000   15.000
+4   14.500   39.500   -1.000   40.000   36.000   18.000
+4   14.500   38.000    0.500   40.000   34.500   16.500
+4   13.000   38.000   -1.000   38.500   34.500   16.500
+4   14.500   36.500    0.500   37.000   37.500   18.000
+4   13.000   36.500   -2.500   37.000   39.000   18.000
+4   16.000   36.500    0.500   37.000   37.500   16.500
+4   13.000   36.500   -1.000   37.000   36.000   16.500
+2   14.500   33.500   -1.000   34.000   37.500   18.000
+2   14.500   35.000    0.500   35.500   37.500   16.500
+2   14.500   35.000   -1.000   35.500   36.000   16.500
+4   14.500   35.000   -1.000   35.500   36.000   16.500
+1   13.000   35.000    2.000   37.000   34.500   13.500
+1   16.000   35.000    2.000   35.500   37.500   13.500
+1   16.000   36.500    2.000   37.000   36.000   13.500
+1   11.500   35.000    3.500   37.000   37.500   12.000
+1   13.000   33.500    3.500   35.500   37.500   12.000
+1   17.500   35.000    2.000   34.000   37.500   13.500
+2   16.000   33.500    0.500   34.000   36.000   16.500
+1   14.500   33.500    3.500   37.000   36.000   12.000
+REMARK ROTMAT    -0.2445    0.9474    0.2065    0.9208    0.1601    0.3558    0.3040    0.2771   -0.9115
+REMARK CENTRES   14.0345   37.4310    1.2241   38.3966   36.5690   15.3621
+REMARK DET 1
+REMARK DETORI 1
+REMARK END

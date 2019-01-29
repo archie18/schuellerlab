@@ -49,6 +49,13 @@ def main():
 					if line[17:20].strip() == het_atm:
 						if int(line[22:26])==int(resnum):
 							atm_ligand.append(line)
+						#si no corresponde al ligando definido en el entries, este pasa a ser ATOM en vez de HETATM
+						else:
+							atm_protein.append(line.replace('HETATM','ATOM  '))
+					else:
+	                                        atm_protein.append(line.replace('HETATM','ATOM  '))	
+				else:
+					atm_protein.append(line.replace('HETATM','ATOM  '))
 			if line[0:6]=="ENDMDL":
 				break
 

@@ -1,0 +1,38 @@
+REMARK command: ./IsoMif/isomif -p1 ./Homogeneous/hive/mifs/1MGP.mif -p2 ./Homogeneous/hive/mifs/1TJ4.mif -o ./Homogeneous/hive/match/ -c 1 -l 1 -l1 PLM314A- -l2 SUC245A-
+REMARK commandJob: ./IsoMif/isomif -p1 ./Homogeneous/hive/mifs/1MGP.mif -p2 ./Homogeneous/hive/mifs/1TJ4.mif -p1 ./Homogeneous/hive/mifs/1MGP.mif -p2 ./Homogeneous/hive/mifs/1TJ4.mif -o ./Homogeneous/hive/match/ -c 1 -l 1 -l1 PLM314A- -l2 SUC245A-
+REMARK mif_file_1: ./Homogeneous/hive/mifs/1MGP.mif
+REMARK mif_file_2: ./Homogeneous/hive/mifs/1TJ4.mif
+REMARK nb_of_probes: 6
+REMARK C-alpha_dDist:  3.00
+REMARK pseudocenter_dDist:  1.00
+REMARK dDist:  3.00
+REMARK jtt_threshold: 5
+REMARK max_nodes: 100000
+REMARK commont int : 1
+REMARK wsimfn: 0
+REMARK tag1: 1MGP
+REMARK tag2: 1TJ4
+REMARK rnc1: PLM314A-
+REMARK rnc2: SUC245A-
+REMARK ncliques_scored: 1
+REMARK ncliques_explored: 6
+REMARK CLIQUE CG 1 NODES 12 NODESM 14 NODESMW 0.0000 NORMNODES 0.0000 NORMNODESRMSD 0.0000 TANI 0.0876 TANIM 0.0606 TANIMW 0.0000 TANINORM 0.0000 NRG 0.000 SS1 81 SS2 68 SS1M 120 SS2M 125 LIGRMSD 0.000
+0   67.000   62.500    3.500   42.500    2.000   97.000
+2   59.500   58.000    2.000   48.500    0.500   95.500
+3   59.500   58.000    2.000   48.500    0.500   95.500
+1   67.000   64.000    6.500   41.000    2.000   98.500
+5   67.000   64.000    6.500   41.000    2.000   98.500
+0   64.000   64.000    3.500   44.000    2.000   95.500
+0   65.500   62.500    5.000   44.000    3.500   95.500
+1   62.500   64.000    6.500   44.000   -2.500   94.000
+3   58.000   56.500    3.500   48.500   -4.000   98.500
+2   59.500   58.000    3.500   48.500   -1.000   97.000
+2   59.500   59.500    3.500   45.500   -2.500   97.000
+1   59.500   61.000    6.500   44.000   -4.000   95.500
+1   61.000   62.500    3.500   42.500   -4.000   95.500
+1   61.000   62.500    5.000   42.500   -2.500   94.000
+REMARK ROTMAT    -0.3709   -0.7259   -0.5793    0.8310    0.0190   -0.5559    0.4145   -0.6876    0.5962
+REMARK CENTRES   62.1786   61.2143    4.3571   44.6429   -0.5714   96.2500
+REMARK DET 1
+REMARK DETORI 1
+REMARK END

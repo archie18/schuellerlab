@@ -1,0 +1,34 @@
+REMARK command: ./isomif -p1 ./Kahraman/hive/mifs/1RLZ.mif -p2 ./Kahraman/hive/mifs/1HO5.mif -o ./Kahraman/hive/match/ -c 1 -l 1 -l1 NAD700A- -l2 PO42603B-
+REMARK commandJob: ./isomif -p1 ./Kahraman/hive/mifs/1RLZ.mif -p2 ./Kahraman/hive/mifs/1HO5.mif -p1 ./Kahraman/hive/mifs/1RLZ.mif -p2 ./Kahraman/hive/mifs/1HO5.mif -o ./Kahraman/hive/match/ -c 1 -l 1 -l1 NAD700A- -l2 PO42603B-
+REMARK mif_file_1: ./Kahraman/hive/mifs/1RLZ.mif
+REMARK mif_file_2: ./Kahraman/hive/mifs/1HO5.mif
+REMARK nb_of_probes: 6
+REMARK C-alpha_dDist:  3.00
+REMARK pseudocenter_dDist:  1.00
+REMARK dDist:  3.00
+REMARK jtt_threshold: 5
+REMARK max_nodes: 100000
+REMARK commont int : 1
+REMARK wsimfn: 0
+REMARK tag1: 1RLZ
+REMARK tag2: 1HO5
+REMARK rnc1: NAD700A-
+REMARK rnc2: PO42603B-
+REMARK ncliques_scored: 1
+REMARK ncliques_explored: 1
+REMARK CLIQUE CG 1 NODES 9 NODESM 10 NODESMW 0.0000 NORMNODES 0.0000 NORMNODESRMSD 0.0000 TANI 0.2812 TANIM 0.1370 TANIMW 0.0000 TANINORM 0.0000 NRG 0.000 SS1 13 SS2 28 SS1M 19 SS2M 64 LIGRMSD 0.000
+0   16.500   -2.500   39.500    6.000   12.500   31.000
+0   18.000   -2.500   39.500    4.500   12.500   31.000
+0   16.500   -2.500   41.000    6.000   12.500   32.500
+2   19.500   -4.000   41.000    7.500   12.500   29.500
+0   18.000   -2.500   41.000    7.500   14.000   32.500
+2   18.000   -4.000   42.500    7.500   12.500   31.000
+3   18.000   -4.000   42.500    7.500   12.500   31.000
+2   19.500   -5.500   41.000    7.500   12.500   28.000
+2   18.000   -5.500   41.000    7.500   11.000   31.000
+2   18.000   -5.500   42.500    7.500   11.000   28.000
+REMARK ROTMAT     0.1568   -0.1342    0.9785    0.6825    0.7308    0.0000   -0.7138    0.6693    0.2062
+REMARK CENTRES   18.0000   -3.8500   41.1500    6.9000   12.3500   30.5500
+REMARK DET 0.999917
+REMARK DETORI 0.999917
+REMARK END

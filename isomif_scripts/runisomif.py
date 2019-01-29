@@ -65,7 +65,7 @@ tupla= []
 print "Reading file... "
 #Reading file
 for algo in open(filename):
-	Codes = collections.namedtuple('Codes',['code', 'het','heter','het_name'])
+	Codes = collections.namedtuple('Codes',['code', 'het','heter','het_name','lg','rsnm','chn','cd'])
 	algo = algo.replace('\n','') #remove if '\n'
 	s = algo.split(" ")
 	pdb=s[0]
@@ -73,7 +73,10 @@ for algo in open(filename):
 	hete = s[1]+s[2]+s[3]
 	pdb_filename = pdb+".pdb"
 	het_nm = s[1]
-	tupla.append(Codes(code=pdb,het=het_file, heter=hete, het_name=het_nm))
+	lig=s[1]
+	resnum=s[2]
+	chain=s[3]
+	tupla.append(Codes(code=pdb,het=het_file, heter=hete, het_name=het_nm,lg=lig,rsnm=resnum,chn=chain,cd=pdb_filename))
 print len(tupla)
 print "Downloading PDBs..."
 Parallel(n_jobs=8, verbose=11)(delayed(runner.downloadpdb)(pdb.code, workdir)for pdb in tupla)
@@ -87,6 +90,26 @@ if not os.path.exists(dst):
 	copyfile(src, dst)
 os.system(chmod+dst)
 os.system(cmd)
+#overwrite files without ligs
+directory = './'+workdir+'/hive/pdb/'
+for i in tupla:
+	f = open(directory+i.cd,"r")
+	lines = f.readlines()
+	f.close()
+	f = open(directory+i.cd,"w")
+	for line in lines:
+		rsnm = line[17:20].strip()
+		if line[0:4]=="ATOM":
+			f.write(line)
+		if line[0:6]=="HETATM":
+			if i.lg == line[17:20].strip() and i.rsnm == line[22:26].strip() and i.chn == line[21]:
+				f.write(line)
+#			else:
+#				if len(rsnm)==3 and rsnm != 'HOH':
+#					line = line.replace('HETATM','ATOM  ')
+#					f.write(line) 
+	f.close()
+
 #Check for the cleft's files
 DIR = workdir+'/hive/pdb'
 clefts= len([name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR, name))])
@@ -103,18 +126,14 @@ clefts= len([name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR
 total= 2*len(tupla)
 if(clefts<total):
 	print "faltan clefts..."
-	sys.exit(1)
+	#sys.exit(1)
 else:
 	print "No faltan clefts..."
-<<<<<<< HEAD
-	
-=======
 
->>>>>>> 0cf7759711c13f0c9cc943d76a727cc9955a498e
 #Step 2: RUN reduce
 print "Adding hidrogens... "
 Parallel(n_jobs=8, verbose=11)(delayed(runner.runreduce)(runrdc.code,workdir)for runrdc in tupla)
-
+sys.exit(1)
 #Step 3: Run mif
 print "Running MIF... "
 Parallel(n_jobs=8, verbose=11)(delayed(runner.runmif)(pdb.code,pdb.het,pdb.heter,workdir)for pdb in tupla)
