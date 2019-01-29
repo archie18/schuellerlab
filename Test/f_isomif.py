@@ -67,7 +67,7 @@ def runmif(code , het,heter, workdir):
 	for i in range (150):
 		mif_filename= workdir+"/hive/clefts/"+sph_file+str(i)+".pdb"
 		if os.path.isfile(mif_filename):
-			cmd=mif_sw+" -p "+workdir+"/hive/pdb/"+code+"h.pdb -g "+mif_filename+" -o "+workdir+"/hive/mifs -l "+het+" -r 3 -t "+code+" -s 1 -a 100"
+			cmd=mif_sw+" -p "+workdir+"/hive/pdb/"+code+"h.pdb -g "+mif_filename+" -o "+workdir+"/hive/mifs -l "+het+" -r 3 -t "+code+" -s 1.5 "
 			os.system(cmd)
 		cmd2 = mifView_sw+" -m "+workdir+"/hive/mifs/"+code+".mif -o "+workdir+"/hive/mifView/"
 		os.system(cmd2)
@@ -79,7 +79,7 @@ def runisomif(pdb1, het1, pdb2, het2,workdir):
 	"""
 	#if pdb1 != pdb2:
 	print "pdb 1:"+pdb1+" y pdb2:"+pdb2
-	cmd = isomif_sw+" -p1 "+workdir+"/hive/mifs/"+pdb1+".mif -p2 "+workdir+"/hive/mifs/"+pdb2+".mif -o "+workdir+"/hive/match/ -c 1 -l 1 -l1 "+het1+" -l2 "+het2
+	cmd = isomif_sw+" -p1 "+workdir+"/hive/mifs/"+pdb1+".mif -p2 "+workdir+"/hive/mifs/"+pdb2+".mif -o "+workdir+"/hive/match/ -c 1 -l 1 -l1 "+het1+" -l2 "+het2+"-s 1 -a 100"
 	os.system(cmd)
 	sys.stdout.flush()
 
