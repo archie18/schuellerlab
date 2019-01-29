@@ -23,20 +23,23 @@ import sys
 entries = 'wget biophys.umontreal.ca/nrg/NRG/IsoMIF_files/IsoMIF_Entries.zip'
 os.system(entries)
 
-#unzip files
-unzip = 'unzip *.zip'
-os.system(unzip)
-
 #clone github repo
 isomif = 'git clone https://github.com/mtthchrtr/IsoMif.git'
 os.system(isomif)
-
+#comment next line or use .zip 
+#isomif = 'wget http://biophys.umontreal.ca/nrg/NRG/IsoMIF_files/IsoMif_150311.zip'
+#os.system(isomif)
+fldr='IsoMif'
+#fldr = 'IsoMif_150311'
+#unzip files
+unzip = 'unzip *.zip'
+os.system(unzip)
 #now we compile MIF as Readme.md from github.
 mif = 'g++ ./IsoMif/mif.cpp -o ./IsoMif/mif -O3'
 os.system(mif)
 
 #now we compile MIF as Readme.md from github. Here you must change the folder of lgsl.
-isomif = 'g++ ./IsoMif/isomif.cpp -o ./IsoMif/isomif -O3 -lm -lgsl -lgslcblas -L/usr/lib/ -I/usr/include/gsl/'
+isomif = 'g++ ./'+fldr+'/isomif.cpp -o ./'+fldr+'/isomif -O3 -lm -lgsl -lgslcblas -L/usr/lib/ -I/usr/include/gsl/'
 os.system(isomif)
 
 #Download Getcleft from 

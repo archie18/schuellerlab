@@ -12,12 +12,16 @@ import signal
 import collections
 import urllib
 
+
+fldr='IsoMif'
+#fldr = 'IsoMif_150311'
+
 getcleft_sw = "./GetCleft"
 reduce_sw = "./reduce"
-mif_sw = "./IsoMif/mif"
-mifView_sw="perl ./IsoMif/mifView.pl"
-isomif_sw ="./IsoMif/isomif"
-isomifview_sw ="perl ./IsoMif/isoMifView.pl"
+mif_sw = "./"+fldr+"/mif"
+mifView_sw="perl ./"+fldr+"/mifView.pl"
+isomif_sw ="./"+fldr+"/isomif"
+isomifview_sw ="perl ./"+fldr+"/isoMifView.pl"
 url = "http://www.rcsb.org/pdb/download/downloadFile.do?fileFormat=pdb&compression=NO&structureId="
 
 def downloadpdb(code, workdir):

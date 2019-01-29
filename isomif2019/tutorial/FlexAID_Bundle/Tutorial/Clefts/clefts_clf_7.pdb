@@ -1,8 +1,0 @@
-#REMARK  PARENTFILE  Processed_files/1stp.pdb
-ATOM    753  CG2 THR A 114      -1.995   8.670 -13.861  1.00 22.29           C  
-ATOM    803  CA  LYS A 121      -4.771   3.721 -11.464  1.00 19.57           C  
-ATOM    804  C   LYS A 121      -3.424   4.382 -11.583  1.00 18.90           C  
-ATOM    805  O   LYS A 121      -2.568   3.851 -12.338  1.00 19.36           O  
-ATOM    806  CB  LYS A 121      -5.022   2.941 -12.744  1.00 21.39           C  
-ATOM    807  CG  LYS A 121      -5.162   3.804 -14.010  1.00 23.30           C  
-ATOM    808  CD  LYS A 121      -5.366   2.824 -15.168  1.00 26.21           C  
