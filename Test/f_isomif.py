@@ -83,7 +83,7 @@ def runisomif(pdb1, het1, pdb2, het2,workdir):
 	"""
 	#if pdb1 != pdb2:
 	print "pdb 1:"+pdb1+" y pdb2:"+pdb2
-	cmd = isomif_sw+" -p1 "+workdir+"/hive/mifs/"+pdb1+".mif -p2 "+workdir+"/hive/mifs/"+pdb2+".mif -o "+workdir+"/hive/match/ -s 1 -a 100 -c 1 -l 1 -l1 "+het1+" -l2 "+het2
+	cmd = isomif_sw+" -p1 "+workdir+"/hive/mifs/"+pdb1+".mif -p2 "+workdir+"/hive/mifs/"+pdb2+".mif -o "+workdir+"/hive/match/ -c 1 -l 1 -l1 "+het1+" -l2 "+het2
 	os.system(cmd)
 	sys.stdout.flush()
 
