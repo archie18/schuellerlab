@@ -24,13 +24,13 @@ entries = 'wget biophys.umontreal.ca/nrg/NRG/IsoMIF_files/IsoMIF_Entries.zip'
 os.system(entries)
 
 #clone github repo
-isomif = 'git clone https://github.com/mtthchrtr/IsoMif.git'
+#isomif = 'git clone https://github.com/mtthchrtr/IsoMif.git'
 os.system(isomif)
 #comment next line or use .zip 
-#isomif = 'wget http://biophys.umontreal.ca/nrg/NRG/IsoMIF_files/IsoMif_150311.zip'
+isomif = 'wget http://biophys.umontreal.ca/nrg/NRG/IsoMIF_files/IsoMif_150311.zip'
 #os.system(isomif)
-fldr='IsoMif'
-#fldr = 'IsoMif_150311'
+#fldr='IsoMif'
+fldr = 'IsoMif_150311'
 #unzip files
 unzip = 'unzip *.zip'
 os.system(unzip)
