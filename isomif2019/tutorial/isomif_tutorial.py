@@ -29,6 +29,9 @@ os.system(entries)
 #comment next line or use .zip 
 isomif = 'wget http://biophys.umontreal.ca/nrg/NRG/IsoMIF_files/IsoMif_150311.zip'
 os.system(isomif)
+unzip = 'unzip *.zip'
+os.system(unzip)
+os.system('rm *.zip')
 #fldr='IsoMif'
 fldr = 'IsoMif_150311'
 #unzip files
