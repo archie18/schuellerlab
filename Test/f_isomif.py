@@ -20,7 +20,7 @@ getcleft_sw = "./GetCleft"
 reduce_sw = "./reduce"
 mif_sw = "./"+fldr+"/mif_linux_x86_64"
 mifView_sw="perl ./"+fldr+"/mifView.pl"
-isomif_sw ="./"+fldr+"/isomif"
+isomif_sw ="./"+fldr+"/isomif_linux_x86_64"
 isomifview_sw ="perl ./"+fldr+"/isoMifView.pl"
 url = "http://www.rcsb.org/pdb/download/downloadFile.do?fileFormat=pdb&compression=NO&structureId="
 
