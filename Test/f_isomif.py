@@ -18,7 +18,7 @@ fldr = 'IsoMif_150311'
 
 getcleft_sw = "./GetCleft"
 reduce_sw = "./reduce"
-mif_sw = "./"+fldr+"/mif"
+mif_sw = "./"+fldr+"/mif_linux_x86_64"
 mifView_sw="perl ./"+fldr+"/mifView.pl"
 isomif_sw ="./"+fldr+"/isomif"
 isomifview_sw ="perl ./"+fldr+"/isoMifView.pl"
