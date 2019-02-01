@@ -1,0 +1,5 @@
+isomif	Parametros
+1	mif -z 1 isomif 
+2	mif -s 1.5 isomif -s 1 -a 100
+3	mif -z 1  isomif -s 1-a 100
+4	mif -s 1.5 isomif 
