@@ -69,22 +69,22 @@ def runmif(code , het,heter, workdir):
 	"""
 	sph_file = ''
 	sph_file = code+"_"+het+"_sph_"
-	mif_filename = glob.glob('3a*isomif')
-	print mif_filename
-	mif_filename = glob.glob(workdir+"/hive/clefts/"+sph_file)
-	print mif_filename
-	cmd=mif_sw+" -p "+workdir+"/hive/pdb/"+code+"h.pdb -g "+mif_filename+" -o "+workdir+"/hive/mifs -l "+het+" -r 3 -t "+code+" -s 1.5"
-	os.system(cmd)
-	cmd2 = mifView_sw+" -m "+workdir+"/hive/mifs/"+code+".mif -o "+workdir+"/hive/mifView/"
-	os.system(cmd2)
-#	for i in range (150):
-#		mif_filename = glob.glob(sph_file)
-		#mif_filename= workdir+"/hive/clefts/"+sph_file+str(i)+".pdb"
-#		if os.path.isfile(mif_filename):
-#			cmd=mif_sw+" -p "+workdir+"/hive/pdb/"+code+"h.pdb -g "+mif_filename+" -o "+workdir+"/hive/mifs -l "+het+" -r 3 -t "+code+" -s 1.5"
-#			os.system(cmd)
-#		cmd2 = mifView_sw+" -m "+workdir+"/hive/mifs/"+code+".mif -o "+workdir+"/hive/mifView/"
-#		os.system(cmd2)
+	#mif_filename = glob.glob('3a*isomif')
+	#print mif_filename
+	#mif_filename = glob.glob(workdir+"/hive/clefts/"+sph_file)
+	#print mif_filename
+	#cmd=mif_sw+" -p "+workdir+"/hive/pdb/"+code+"h.pdb -g "+mif_filename+" -o "+workdir+"/hive/mifs -l "+het+" -r 3 -t "+code+" -s 1.5"
+	#os.system(cmd)
+	#cmd2 = mifView_sw+" -m "+workdir+"/hive/mifs/"+code+".mif -o "+workdir+"/hive/mifView/"
+	#os.system(cmd2)
+	for i in range (150):
+		#mif_filename = glob.glob(sph_file)
+		mif_filename= workdir+"/hive/clefts/"+sph_file+str(i)+".pdb"
+		if os.path.isfile(mif_filename):
+			cmd=mif_sw+" -p "+workdir+"/hive/pdb/"+code+"h.pdb -g "+mif_filename+" -o "+workdir+"/hive/mifs -l "+het+" -r 3 -t "+code+" -s 1.5"
+			os.system(cmd)
+		cmd2 = mifView_sw+" -m "+workdir+"/hive/mifs/"+code+".mif -o "+workdir+"/hive/mifView/"
+		os.system(cmd2)
 
 def runisomif(pdb1, het1, pdb2, het2,workdir):
 
