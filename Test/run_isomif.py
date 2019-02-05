@@ -167,7 +167,7 @@ print 'Tanimoto file is called output_'+args.file
 # python 3a._ROC_by_Code.py -i output_test.txt >out_test
 
 
-cmd = 'python 3a._ROC_by_Code.py -i output_'+args.file+' > output_auc_'+args.file
+cmd = 'python 3a._ROC_by_Code_isomif.py -i output_'+args.file+' > output_auc_'+args.file
 os.system(cmd)
 
 print 'AUC file is called output_auc_'+args.file

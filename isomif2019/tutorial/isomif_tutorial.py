@@ -24,16 +24,16 @@ entries = 'wget biophys.umontreal.ca/nrg/NRG/IsoMIF_files/IsoMIF_Entries.zip'
 os.system(entries)
 
 #clone github repo
-#isomif = 'git clone https://github.com/mtthchrtr/IsoMif.git'
-#os.system(isomif)
-#comment next line or use .zip 
-isomif = 'wget http://biophys.umontreal.ca/nrg/NRG/IsoMIF_files/IsoMif_150311.zip'
+isomif = 'git clone https://github.com/mtthchrtr/IsoMif.git'
 os.system(isomif)
+#comment next line or use .zip 
+#isomif = 'wget http://biophys.umontreal.ca/nrg/NRG/IsoMIF_files/IsoMif_150311.zip'
+#os.system(isomif)
 unzip = 'unzip *.zip'
 os.system(unzip)
 os.system('rm *.zip')
-#fldr='IsoMif'
-fldr = 'IsoMif_150311'
+fldr='IsoMif'
+#fldr = 'IsoMif_150311'
 #unzip files
 unzip = 'unzip *.zip'
 os.system(unzip)
@@ -69,7 +69,7 @@ os.system('curl -o removeAltLoc.py https://raw.githubusercontent.com/archie18/sc
 
 os.system('curl -o isomif_results.py https://raw.githubusercontent.com/archie18/schuellerlab/pockets/Test/isomif_results.py')
 
-os.system('curl -o 3a._ROC_by_Code.py https://raw.githubusercontent.com/archie18/schuellerlab/pockets/Test/3a._ROC_by_Code.py')
+os.system('curl -o 3a._ROC_by_Code_isomif.py https://raw.githubusercontent.com/archie18/schuellerlab/pockets/Test/3a._ROC_by_Code.py')
 
 os.system('curl -o f_isomif.py https://raw.githubusercontent.com/archie18/schuellerlab/pockets/Test/f_isomif.py')
 

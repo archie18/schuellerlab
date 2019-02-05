@@ -14,8 +14,8 @@ import urllib
 import glob
 
 
-#fldr='IsoMif'
-fldr = 'IsoMif_150311'
+fldr='IsoMif'
+#fldr = 'IsoMif_150311'
 
 getcleft_sw = "./GetCleft"
 reduce_sw = "./reduce"
