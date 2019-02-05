@@ -39,7 +39,7 @@ print "code1 code2 class1 class2 tani"
 for i in range(n_codes-1):
 	pdb1 = tupla[i]
 	#print pdb1
-	for j in range(i+1,n_codes):
+	for j in range(n_codes-1):
 		pdb2 = tupla[j]
 		if pdb1.code == pdb2.code:
 			continue
