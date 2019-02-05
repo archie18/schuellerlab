@@ -19,9 +19,11 @@ fldr='IsoMif'
 
 getcleft_sw = "./GetCleft"
 reduce_sw = "./reduce"
-mif_sw = "./"+fldr+"/mif_linux_x86_64"
+#mif_sw = "./"+fldr+"/mif_linux_x86_64"
+mif_sw = "./"+fldr+"/mif"
 mifView_sw="perl ./"+fldr+"/mifView.pl"
-isomif_sw ="./"+fldr+"/isomif_linux_x86_64"
+#isomif_sw ="./"+fldr+"/isomif_linux_x86_64"
+isomif_sw ="./"+fldr+"/isomif"
 isomifview_sw ="perl ./"+fldr+"/isoMifView.pl"
 url = "http://www.rcsb.org/pdb/download/downloadFile.do?fileFormat=pdb&compression=NO&structureId="
 
