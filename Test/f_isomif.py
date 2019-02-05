@@ -69,6 +69,8 @@ def runmif(code , het,heter, workdir):
 	"""
 	sph_file = ''
 	sph_file = code+"_"+het+"_sph_"
+	mif_filename = glob.glob('3a*isomif')
+	print mif_filename
 	mif_filename = glob.glob(workdir+"/hive/clefts/"+sph_file)
 	print mif_filename
 	cmd=mif_sw+" -p "+workdir+"/hive/pdb/"+code+"h.pdb -g "+mif_filename+" -o "+workdir+"/hive/mifs -l "+het+" -r 3 -t "+code+" -s 1.5"
