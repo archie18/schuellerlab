@@ -36,10 +36,10 @@ for data in open(dataset):
 n_codes = len(tupla)
 h= 1
 print "code1 code2 class1 class2 tani"
-for i in range(n_codes-1):
+for i in range(n_codes):
 	pdb1 = tupla[i]
 	#print pdb1
-	for j in range(n_codes-1):
+	for j in range(n_codes):
 		pdb2 = tupla[j]
 		if pdb1.code == pdb2.code:
 			continue
