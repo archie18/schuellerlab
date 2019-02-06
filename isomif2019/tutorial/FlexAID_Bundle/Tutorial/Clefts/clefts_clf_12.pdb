@@ -1,8 +1,0 @@
-#REMARK  PARENTFILE  Processed_files/1stp.pdb
-ATOM    323  CG2 THR A  57      14.816  14.694  -1.900  1.00 20.37           C  
-ATOM    451  C   THR A  76      13.278  10.132  -4.426  1.00 14.64           C  
-ATOM    452  O   THR A  76      14.368  10.650  -4.318  1.00 13.99           O  
-ATOM    453  CB  THR A  76      11.424  11.227  -3.172  1.00 15.11           C  
-ATOM    455  CG2 THR A  76      10.489  11.480  -4.337  1.00 14.05           C  
-ATOM    457  CA  VAL A  77      13.345   9.878  -6.879  1.00 15.41           C  
-ATOM    463  N   ALA A  78      12.448  11.484  -8.459  1.00 16.38           N  
