@@ -83,7 +83,7 @@ def runmif(code , het,heter, workdir):
 		#mif_filename = glob.glob(sph_file)
 		mif_filename= workdir+"/hive/clefts/"+sph_file+str(i)+".pdb"
 		if os.path.isfile(mif_filename):
-			cmd=mif_sw+" -p "+workdir+"/hive/pdb/"+code+"h.pdb -g "+mif_filename+" -o "+workdir+"/hive/mifs -l "+het+" -r 3 -t "+code+" -s 1.5"
+			cmd=mif_sw+" -p "+workdir+"/hive/pdb/"+code+"h.pdb -g "+mif_filename+" -o "+workdir+"/hive/mifs -l "+het+" -r 3 -t "+code+" -z 1"
 			os.system(cmd)
 		cmd2 = mifView_sw+" -m "+workdir+"/hive/mifs/"+code+".mif -o "+workdir+"/hive/mifView/"
 		os.system(cmd2)
