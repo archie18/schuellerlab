@@ -67,7 +67,7 @@ if not os.path.exists(workdir+'/hive/matchView/'):
 	os.mkdir(workdir+'/hive/matchView/')
 
 startTime = datetime.now()
-if False:
+if True:
 	tupla= []
 	print "Reading file... "
 	#Reading file and create a collection to save codes, ligands, resnume and chain from the entries file
