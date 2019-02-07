@@ -74,7 +74,7 @@ os.system('curl -o removeAltLoc.py https://raw.githubusercontent.com/archie18/sc
 
 os.system('curl -o isomif_results.py https://raw.githubusercontent.com/archie18/schuellerlab/pockets/Test/isomif_results.py')
 
-os.system('curl -o 3a._ROC_by_Code.py https://raw.githubusercontent.com/archie18/schuellerlab/pockets/Test/3a._ROC_by_Code.py')
+os.system('curl -o 3a._ROC_by_Code_isomif.py https://raw.githubusercontent.com/archie18/schuellerlab/pockets/Test/3a._ROC_by_Code_isomif.py')
 
 os.system('curl -o f_isomif.py https://raw.githubusercontent.com/archie18/schuellerlab/pockets/Test/f_isomif.py')
 
