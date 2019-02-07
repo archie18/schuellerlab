@@ -14,16 +14,16 @@ import urllib
 import glob
 
 
-fldr='IsoMif'
-#fldr = 'IsoMif_150311'
+#fldr='IsoMif'
+fldr = 'IsoMif_150311'
 
 getcleft_sw = "./GetCleft"
 reduce_sw = "./reduce"
-#mif_sw = "./"+fldr+"/mif_linux_x86_64"
-mif_sw = "./"+fldr+"/mif"
+mif_sw = "./"+fldr+"/mif_linux_x86_64"
+#mif_sw = "./"+fldr+"/mif"
 mifView_sw="perl ./"+fldr+"/mifView.pl"
-#isomif_sw ="./"+fldr+"/isomif_linux_x86_64"
-isomif_sw ="./"+fldr+"/isomif"
+isomif_sw ="./"+fldr+"/isomif_linux_x86_64"
+#isomif_sw ="./"+fldr+"/isomif"
 isomifview_sw ="perl ./"+fldr+"/isoMifView.pl"
 url = "http://www.rcsb.org/pdb/download/downloadFile.do?fileFormat=pdb&compression=NO&structureId="
 
@@ -83,7 +83,7 @@ def runmif(code , het,heter, workdir):
 		#mif_filename = glob.glob(sph_file)
 		mif_filename= workdir+"/hive/clefts/"+sph_file+str(i)+".pdb"
 		if os.path.isfile(mif_filename):
-			cmd=mif_sw+" -p "+workdir+"/hive/pdb/"+code+"h.pdb -g "+mif_filename+" -o "+workdir+"/hive/mifs -l "+het+" -r 3 -t "+code+" -s 1.5"
+			cmd=mif_sw+" -p "+workdir+"/hive/pdb/"+code+"h.pdb -g "+mif_filename+" -o "+workdir+"/hive/mifs -l "+het+" -r 3 -t "+code+" -z 1"
 			os.system(cmd)
 		cmd2 = mifView_sw+" -m "+workdir+"/hive/mifs/"+code+".mif -o "+workdir+"/hive/mifView/"
 		os.system(cmd2)
