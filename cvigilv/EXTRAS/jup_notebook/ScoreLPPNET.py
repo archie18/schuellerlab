@@ -18,7 +18,7 @@ from collections import defaultdict
 def ROC(y_pred, y_scores):
     fpr, tpr, thresholds = sklearn.metrics.roc_curve(y_pred, y_scores, pos_label=1)
     auc_roc = sklearn.metrics.auc(fpr,tpr)
-    return aur_roc
+    return auc_roc
 
 def PR(y_pred, y_scores):
     average_precision = average_precision_score(y_pred, y_scores)
