@@ -17,40 +17,15 @@ import pandas as pd
 import networkx as nx
 from configparser import ConfigParser
 
-def MatrixToLayer(matrix_file, lookup_table, layer_name='Null'):
-    """Convert matrix into a layer of the network.
+def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False):
+    """Convert edge list text file or dataframe into layer of network.
 
-    Read a tab-delimited matrix into memory, use lookup table to assign indices
-    correctly for each node, convert it into a "long form" table for further
-    processing and create a Layer of the  multilayered graph used for DTI
-    prediction.
+    [TODO:description]
 
     Args:
-        matrix (str):       Path to the matrix file.
-        lookup_table (str): Path to the lookup table for the matrix indices.
-        layer_name (str):   Name given to the layer created.
-    """
-    indices = pd.read_csv(lookup_table, sep='\t', header=None, squeeze=True)
-    matrix = pd.read_csv(matrix_file, sep='\t', header=None)
-    matrix.index = indices[0]
-    matrix.columns = indices[0]
-
-    # TODO: Convertir matriz en longform para poder leerla con la funcion
-    #       existente de NetworkX (NO REINVENTAR RUEDA!)
-    # TODO: Quizas convenga convertir la matriz en longform y pasarla a la
-    #       función ya existente para crear una capa a partir de un edgelist
-    #       así evitando volver a escribir codigo.
-
-def EdgelistToLayer(edgelist_file=False, layer_name=False, df=False):
-    """Convert edge list into a layer of the network.
-
-    Read a tab-delimited edge list file into memory and build a layer for the
-    multilayered graph used for DTI prediction
-
-    Args:
-        edgelist (str):        Path to the edge list file.
-        layer_name (str):      Name given to layer created.
-        df (pandas Dataframe): Edge list dataframe.
+        edgelist_file (str, optional):   Edge list file path.
+        df (pandas DataFrame, optional): Edge list dataframe.
+        layer_name (str, optional):      Name of layer.
     """
     # Create 'edgelist' dataframe from file or used dataframe given in arguments.
     if edgelist_file:
@@ -62,7 +37,7 @@ def EdgelistToLayer(edgelist_file=False, layer_name=False, df=False):
     # Clean up dataframe.
     edgelist             = edgelist.drop_duplicates(keep='first')
     edgelist['weight']   = edgelist['weight'].fillna(value=1)
-    edgelist['relation'] = str(name[0]*2).upper()
+    edgelist['relation'] = str(layer_name[0]*2).upper()
 
     # Create graph from 'edgelist'.
     L = nx.from_pandas_edgelist(edgelist, \
@@ -73,9 +48,38 @@ def EdgelistToLayer(edgelist_file=False, layer_name=False, df=False):
     # Add name to graph and nodes.
     if '-' not in layer_name:
         L.name = layer_name
-        nx.set_node_attributes(L, name, 'layer')
+        nx.set_node_attributes(L, layer_name, 'layer')
 
     return L
+
+def MatrixToEdgelist(matrix_file, lookup_table, layer_name='Null'):
+    """Convert matrix into a layer of the network.
+
+    Read a tab-delimited matrix into memory, use lookup table to assign indices
+    correctly for each node, convert it into a "long form" table for further
+    processing and create a Layer of the  multilayered graph used for DTI
+    prediction.
+
+    Args:
+        matrix (str):       Distance matrix file path
+        lookup_table (str): Lookup table of matrix indices file path.
+        layer_name (str):   Name of layer.
+    """
+    source = []
+    target = []
+    weight = []
+
+    lookup_df=pd.read_csv(lookup_table, names=['id'])
+    with open(matrix_file, 'r') as f:
+        for i, line in enumerate(f):
+            for j, sim in enumerate(line.split()):
+                if sim != '':
+                    source.append(lookup_df.at[int(i), 'ChEMBL_ID'])
+                    target.append(lookup_df.at[int(j), 'ChEMBL_ID'])
+                    weight.append(float(sim))
+
+    edgelist = pd.DataFrame({'source': source, 'target': target, 'weight': weight})
+    return EdgelistToLayer(df=edgelist, layer_name=layer_name)
 
 if __name__ == '__main__':
     print(__title__)
@@ -126,5 +130,4 @@ if __name__ == '__main__':
     print(f'Nodes without edges: {singletons}')
     print('\nMultilayered graph created')
     print(nx.info(ML))
-    #nx.write_graphml(ML, config.get('I/O','Output graph file'))
-    nx.write_gpickle(ML, config.get('I/O','Output graph file')+'.gpickle')
+    nx.write_gpickle(ML, config.get('I/O','Output graph file'))
