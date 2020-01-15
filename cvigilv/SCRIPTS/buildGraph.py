@@ -37,29 +37,43 @@ def MatrixToLayer(matrix_file, lookup_table, layer_name='Null'):
 
     # TODO: Convertir matriz en longform para poder leerla con la funcion
     #       existente de NetworkX (NO REINVENTAR RUEDA!)
+    # TODO: Quizas convenga convertir la matriz en longform y pasarla a la
+    #       función ya existente para crear una capa a partir de un edgelist
+    #       así evitando volver a escribir codigo.
 
-def EdgelistToLayer(edgelist_file, layer_name=None):
+def EdgelistToLayer(edgelist_file=False, layer_name=False, df=False):
     """Convert edge list into a layer of the network.
 
     Read a tab-delimited edge list file into memory and build a layer for the
     multilayered graph used for DTI prediction
 
     Args:
-        edgelist (str):   Path to the edge list file.
-        layer_name (str): Name given to layer created.
+        edgelist (str):        Path to the edge list file.
+        layer_name (str):      Name given to layer created.
+        df (pandas Dataframe): Edge list dataframe.
     """
+    # Create 'edgelist' dataframe from file or used dataframe given in arguments.
+    if edgelist_file:
+        edgelist = pd.read_csv(edgelist_file, names=['source', 'target', 'weight'],
+                sep='\t', header=None)
+    elif df:
+        edgelist = df
 
-    # Create 'edgelist' dataframe
-    edgelist = pd.read_csv(edgelist_file, names=['source', 'target', 'weight'],
-            sep='\t', header=None)
+    # Clean up dataframe.
+    edgelist             = edgelist.drop_duplicates(keep='first')
+    edgelist['weight']   = edgelist['weight'].fillna(value=1)
+    edgelist['relation'] = str(name[0]*2).upper()
 
-    edgelist['weight'] = edgelist['weight'].fillna(value=1)
+    # Create graph from 'edgelist'.
+    L = nx.from_pandas_edgelist(edgelist, \
+            source='source', target='target', \
+            edge_attr=['weight','relation'])
+    L.remove_edges_from(list(nx.selfloop_edges(L)))
 
-    # Create graph from 'edgelist'
-    L = nx.from_pandas_edgelist(edgelist, 'source', 'target', ['weight'])
-    if layer_name != None:
+    # Add name to graph and nodes.
+    if '-' not in layer_name:
         L.name = layer_name
-        nx.set_node_attributes(L, 'layer', name)
+        nx.set_node_attributes(L, name, 'layer')
 
     return L
 
@@ -80,9 +94,10 @@ if __name__ == '__main__':
         matrix_file   = config.get('I/O',f'Layer {n_layer} distance matrix')
         lookup_file   = config.get('I/O',f'Layer {n_layer} node lookup table')
 
-        # Create layer and assign node typing for use in predictive model
+        # Create layer and assign node typing based in layer name
         print(f'Building layer #{n_layer}: {name}')
         L = EdgelistToLayer(edgelist_file, name)
+        print(nx.info(L))
         Layers.append(L); Layers_names.append(name)
 
     # Merge layers into one multilayered non-connected graph
@@ -90,6 +105,7 @@ if __name__ == '__main__':
     ML      = nx.algorithms.operators.all.compose_all(Layers); Layers = 0
     ML.name = '-'.join(Layers_names)
     print(f'Combined layers: {ML.name}')
+    print(nx.info(ML))
 
     # Connect layers with annotated interactions
     print('\nConnecting layers with annotated interactions')
@@ -101,9 +117,14 @@ if __name__ == '__main__':
 
         print(f'Adding interactions between layers #{n_interactions}: {name}')
 
-        I  = EdgelistToLayer(edgelist_file)
+        I  = EdgelistToLayer(edgelist_file, name)
+        relation_type = name.upper().split('-')[0][0]+name.upper().split('-')[1][0]
+        nx.set_edge_attributes(I,relation_type,'relation')
+        print(nx.info(I))
         ML = nx.compose(ML, I)
-
+    singletons = ', '.join([n for n, degree in ML.degree() if degree==0])
+    print(f'Nodes without edges: {singletons}')
     print('\nMultilayered graph created')
     print(nx.info(ML))
-    nx.write_graphml(ML, config.get('I/O','Output graph file'))
+    #nx.write_graphml(ML, config.get('I/O','Output graph file'))
+    nx.write_gpickle(ML, config.get('I/O','Output graph file')+'.gpickle')
