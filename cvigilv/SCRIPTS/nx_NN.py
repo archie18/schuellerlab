@@ -35,40 +35,15 @@ def NearestNeighbour(inputs):
     R = nx.Graph(Graph.subgraph([n for n in Graph.neighbors(target_node) \
             if Graph.nodes[n]['layer'] == source_layer]+[source_node,target_node]))
 
-    # Remove all edges that don't connect to either source or target node.
-    for u,v in R.edges():
-        if u not in [source_node,target_node] and v not in [source_node,target_node]:
-            R.remove_edge(u,v)
-
     # Cycle through edges weight to get the minimum value
-    edgesw = R.edges(nbunch = source_node, data=True)
-    for u, v, d in edgesw:
-        if score == -99:
-             step_node, score = v, d['weight']
-        elif float(d['weight']) < float(score):
-             step_node, score = v, d['weight']
-
-    return Graph.nodes[source_node]['fold'], source_node, target_node, str(score), '-'.join([source_node, step_node, target_node]), str(bool((source_node,target_node) in Fold_DTIs))
-
-def NearestNeighbour2(inputs):
-    Graph       = ML
-    source_node = inputs[0]
-    target_node = inputs[1]
-    step_node   = 'Null'
-    score       = -99
-
-    # Generate subgraph corresponding to the source node, target node and
-    # the target neighbours that are of the same type as the source node.
-    R = nx.Graph(Graph.subgraph([n for n in Graph.neighbors(target_node) \
-            if Graph.nodes[n]['layer'] == source_layer]+[source_node,target_node]))
-
     try:
         score, path = nx.single_source_dijkstra(R, source_node, target_node, weight='weight')
         step_node = path[1]
     except NodeNotFound:
         pass
 
-    return Graph.nodes[source_node]['fold'], source_node, target_node, str(score), '-'.join([source_node, step_node, target_node]), str(bool((source_node,target_node) in Fold_DTIs))
+    return R.nodes[source_node]['fold'], source_node, target_node, str(score), '-'.join([source_node, step_node, target_node]), str(bool((source_node,target_node) in Fold_DTIs))
+
 if __name__ == '__main__':
     print(__title__)
     verbose = True
@@ -95,7 +70,7 @@ if __name__ == '__main__':
     target_nodes = [n for n,d in ML.nodes(data=True) if d['layer']==target_layer]
     rel2pred     = config.get('Options', 'Relation to predict')
     n_processes  = config.getint('I/O', 'Number of parallel processes')
-    if verbose: 
+    if verbose:
         relations  = set(nx.get_edge_attributes(ML,'relation').values())
         folds_node = set(nx.get_node_attributes(ML,'fold').values())
         print(f'Edges \'relation\': {relations}')
@@ -109,7 +84,7 @@ if __name__ == '__main__':
         fold_source_nodes = [n for n,d in ML.nodes(data=True) for i in range(10) \
                 if d['layer']==source_layer and d['fold']==fold]
         test_edges        = [(n1,n2) for n1 in fold_source_nodes \
-                for n2 in target_nodes] 
+                for n2 in target_nodes]
 
         # Remove edges from the test set that connect layers
         # (This are the edges we want to predict!)
@@ -124,13 +99,6 @@ if __name__ == '__main__':
             ML.remove_edges_from(DTIs)
         print(f'Fold {fold} "{rel2pred}" edges: {DTIs_eliminated}')
 
-        # Time predictive methods
-        nn = timeit.timeit('NearestNeighbour(test_edges[0])', setup="from __main__ import NearestNeighbour", number=10)
-        dj = timeit.timeit('NearestNeighbour2(test_edges[0])', setup="from __main__ import NearestNeighbour2", number=10)
-
-        print('Reimplementation: {nn} seconds')
-        print('nx Dijsktra:      {dj} seconds')
-        exit()
         # Generate predictions using nearest-neighbour implementation
         Proccess = Pool(n_processes)
         Predictions_raw = Proccess.map(NearestNeighbour, test_edges)
