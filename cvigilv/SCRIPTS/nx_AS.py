@@ -116,10 +116,7 @@ Graph.remove_edges_from(Edges2Ignore)
 
 # Add correct fold ID to each ligand node
 Folds = {}
-with open(Folds_file, 'r') as FF:
-    for line in FF:
-        print(line)
-        tokens = line.rstrip().split(',')
+with open(Folds_file, 'r') as FF: for line in FF: print(line) tokens = line.rstrip().split(',')
         Folds[tokens[1]] = tokens[0]
 
 for n1, d in Graph.nodes(data = True):
