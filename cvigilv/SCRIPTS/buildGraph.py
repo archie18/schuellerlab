@@ -31,7 +31,7 @@ def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False):
     if edgelist_file:
         edgelist = pd.read_csv(edgelist_file, names=['source', 'target', 'weight'],
                 sep='\t', header=None)
-    elif df:
+    else:
         edgelist = df
 
     # Clean up dataframe.
@@ -72,18 +72,19 @@ def MatrixToEdgelist(matrix_file, lookup_table, layer_name='Null'):
     lookup_df=pd.read_csv(lookup_table, names=['id'])
     with open(matrix_file, 'r') as f:
         for i, line in enumerate(f):
-            for j, sim in enumerate(line.split()):
-                if sim != '':
-                    source.append(lookup_df.at[int(i), 'ChEMBL_ID'])
-                    target.append(lookup_df.at[int(j), 'ChEMBL_ID'])
-                    weight.append(float(sim))
+            for j, w in enumerate(line.split()):
+                if w != '':
+                    source.append(lookup_df.at[int(i), 'id'])
+                    target.append(lookup_df.at[int(j), 'id'])
+                    weight.append(float(w))
 
     edgelist = pd.DataFrame({'source': source, 'target': target, 'weight': weight})
+    edgelist.to_csv(matrix_file+'.edgelist.tsv', sep='\t', header=None, index=False)
     return EdgelistToLayer(df=edgelist, layer_name=layer_name)
 
 if __name__ == '__main__':
     print(__title__)
-
+    verbose = True
     # Read configuration file
     config = ConfigParser()
     config.read(sys.argv[1])
@@ -100,7 +101,10 @@ if __name__ == '__main__':
 
         # Create layer and assign node typing based in layer name
         print(f'Building layer #{n_layer}: {name}')
-        L = EdgelistToLayer(edgelist_file, name)
+        if edgelist_file != '':
+            L = EdgelistToLayer(edgelist_file, layer_name=name)
+        elif matrix_file != '' and lookup_file != '':
+            L = MatrixToEdgelist(matrix_file, lookup_file, layer_name=name)
         print(nx.info(L))
         Layers.append(L); Layers_names.append(name)
 
@@ -121,11 +125,12 @@ if __name__ == '__main__':
 
         print(f'Adding interactions between layers #{n_interactions}: {name}')
 
-        I  = EdgelistToLayer(edgelist_file, name)
+        I  = EdgelistToLayer(edgelist_file, layer_name=name)
         relation_type = name.upper().split('-')[0][0]+name.upper().split('-')[1][0]
-        nx.set_edge_attributes(I,relation_type,'relation')
+        nx.set_edge_attributes(I,relation_type,'Type')
         print(nx.info(I))
         ML = nx.compose(ML, I)
+
     singletons = ', '.join([n for n, degree in ML.degree() if degree==0])
     print(f'Nodes without edges: {singletons}')
     print('\nMultilayered graph created')
