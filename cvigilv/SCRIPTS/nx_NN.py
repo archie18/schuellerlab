@@ -10,10 +10,9 @@
 # =============================================================
 
 __version__ = 0.1
-__title__   = f'nx_NN.py - Nearest-Neighbour graph-based predictions. {__version__}'
+__title__   = f'nx_NN.py - Nearest-Neighbour graph-based predictions. (v{__version__})'
 
 import sys
-import timeit
 import datetime
 import numpy as np
 import pandas as pd
@@ -23,7 +22,17 @@ from multiprocessing import Pool
 from collections import defaultdict
 from configparser import ConfigParser
 
-def NearestNeighbour(inputs):
+def getCommunities(Graph):
+    pass
+
+def predictRelation(inputs):
+    def path_cost(u,v,d):
+
+        node1_community = R.nodes[u]['community id']
+        node2_community = R.nodes[v]['community id']
+        weight          = d['weight']
+        return weight*(len(set([node1_community, node2_community])))
+   
     Graph       = ML
     source_node = inputs[0]
     target_node = inputs[1]
@@ -37,9 +46,9 @@ def NearestNeighbour(inputs):
 
     # Cycle through edges weight to get the minimum value
     try:
-        score, path = nx.single_source_dijkstra(R, source_node, target_node, weight='weight')
+        score, path = nx.single_source_dijkstra(R, source_node, target_node, weight=path_cost)
         step_node = path[1]
-    except NodeNotFound:
+    except nx.exception.NetworkXNoPath:
         pass
 
     return R.nodes[source_node]['fold'], source_node, target_node, str(score), '-'.join([source_node, step_node, target_node]), str(bool((source_node,target_node) in Fold_DTIs))
@@ -62,9 +71,14 @@ if __name__ == '__main__':
     target_layer = config.get('Options','Target layer')
 
     # Assign fold to source layer nodes
-    print(f'Assigning fold to the nodes in layer "{source_layer}"')
-    for i, n in enumerate([n for n,d in ML.nodes(data=True) if d['layer'] == source_layer]):
-        ML.nodes[n]['fold'] = i % 10
+    #print(f'Assigning fold to the nodes in layer "{source_layer}"')
+    #for i, n in enumerate([n for n,d in ML.nodes(data=True) if d['layer'] == source_layer]):
+    #    ML.nodes[n]['fold'] = i % 10
+    # This snippet is used to validate if the script is predicting correctly 
+    with open('/home/cvigilv/Repos/schuellerlab/cvigilv/EXTRAS/correctFolds.csv') as folds_file:
+        for line in folds_file:
+            fold, node= line.rstrip().split(',')
+            ML.nodes[node]['fold']=int(fold)
 
     # Get some data before generating folds
     target_nodes = [n for n,d in ML.nodes(data=True) if d['layer']==target_layer]
@@ -83,25 +97,25 @@ if __name__ == '__main__':
         print(f'Generating predictions for fold {fold}')
         fold_source_nodes = [n for n,d in ML.nodes(data=True) for i in range(10) \
                 if d['layer']==source_layer and d['fold']==fold]
-        test_edges        = [(n1,n2) for n1 in fold_source_nodes \
+        edges2predict     = [(n1,n2) for n1 in fold_source_nodes \
                 for n2 in target_nodes]
 
         # Remove edges from the test set that connect layers
         # (This are the edges we want to predict!)
         # TODO: Cambiar nombres de variables ('DTIs'-like) a algo más genérico.
-        DTIs_eliminated = 0
-        Fold_DTIs = []
+        relations_eliminated = 0
+        fold_relations = []
         for n1 in fold_source_nodes:
-            DTIs            = [(n1, n2) for n2 in list(ML.neighbors(n1))
-                            if ML.edges[n1,n2]['relation'] == rel2pred]
-            Fold_DTIs       = Fold_DTIs + DTIs
-            DTIs_eliminated += len(DTIs)
-            ML.remove_edges_from(DTIs)
-        print(f'Fold {fold} "{rel2pred}" edges: {DTIs_eliminated}')
+            relations = [(n1, n2) for n2 in list(ML.neighbors(n1)) \
+                    if ML.edges[n1,n2]['relation'] == rel2pred]
+            fold_relations = fold_relations + relations
+            relations_eliminated += len(relations)
+            ML.remove_edges_from(relation)
+        print(f'Fold {fold} "{rel2pred}" edges: {relations_eliminated}')
 
         # Generate predictions using nearest-neighbour implementation
         Proccess = Pool(n_processes)
-        Predictions_raw = Proccess.map(NearestNeighbour, test_edges)
+        Predictions_raw = Proccess.map(predictRelation, edges2predict)
         Proccess.close()
 
         # Write predictions to output file
@@ -111,4 +125,4 @@ if __name__ == '__main__':
         print(f'Fold {fold} done! Time elapsed: {datetime.datetime.now() - time}')
 
         # Add interlayer edges back to the multilayered graph.
-        ML.add_edges_from(Fold_DTIs, weight=1, relation=rel2pred)
+        ML.add_edges_from(fold_relations, weight=1, relation=rel2pred)
