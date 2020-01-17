@@ -19,11 +19,9 @@ def PR(y_pred, y_scores):
 
 # Open file and load to dataframe
 output_file = sys.argv[1]
-output_df = pd.read_csv(output_file,sep='\t',header=None, index_col=False)
-output_df.columns = ['Fold','Ligand','Target','Score','Path','Communities','TP','N1','N2']
-#output_df.columns = ['Fold','Ligand','Target','Score','Path','TP']
-output_df=output_df[(output_df['Score']!=-99)&(output_df['Fold']==1)]
-output_df['Score'] = output_df['Score']
-# 
-print('ROC:',ROC(output_df[output_df['Score'] > -99]['TP'], output_df[output_df['Score'] > -99]['Score']))
-print('PR:',PR(output_df[output_df['Score'] > -99]['TP'], output_df[output_df['Score'] > -99]['Score']))
+output_df   = pd.read_csv(output_file, sep='\t',index_col=False)
+output_df   = output_df[output_df['Score']!=-99]
+output_df['Score'] = -1*output_df['Score']
+
+print('ROC:',ROC(output_df['TP'], output_df['Score']))
+print('PR:',PR(output_df['TP'], output_df['Score']))
