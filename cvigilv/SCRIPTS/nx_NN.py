@@ -13,6 +13,7 @@ __version__ = 0.1
 __title__   = f'nx_NN.py - Nearest-Neighbour graph-based predictions. (v{__version__})'
 
 import sys
+import math
 import datetime
 import numpy as np
 import pandas as pd
@@ -23,7 +24,33 @@ from collections import defaultdict
 from configparser import ConfigParser
 
 def getCommunities(Graph):
-    pass
+    # Get best partition and modularity
+    Partition  = cmt.best_partition(Graph, weight = 'weight', resolution = resolution)
+    Modularity = cmt.modularity(Partition, Graph)
+
+    CommunitiesList = set([id for n,id in Partition.items()])
+
+    # Create a histogram of the best partition
+    CommunitiesHistogram = defaultdict(list)
+    for N, ID in Partition.items():
+        CommunitiesHistogram[ID].append(N)
+
+    # Merge all communities with one lone member
+    Singletons = []
+    for ID in CommunitiesList:
+        if len(CommunitiesHistogram[ID]) == 1:
+            Singletons.append(*CommunitiesHistogram[ID])
+
+    # Change ID for lone members
+    for N, ID in Partition.items():
+        if N in Singletons:
+            Partition[N] = 'singleton'
+
+    # Assign community ID to each node in target graph
+    for Node, CommunityID in Partition.items():
+        Graph.nodes[Node]['community id'] = str(CommunityID)
+
+    return Modularity
 
 def predictRelation(inputs):
     def path_cost(u,v,d):
@@ -31,7 +58,7 @@ def predictRelation(inputs):
         node1_community = R.nodes[u]['community id']
         node2_community = R.nodes[v]['community id']
         weight          = d['weight']
-        return weight*(len(set([node1_community, node2_community])))
+        return weight * alpha + math.exp(1-(len(set([node1_community, node2_community])))) * (1-alpha)
    
     Graph       = ML
     source_node = inputs[0]
@@ -51,7 +78,7 @@ def predictRelation(inputs):
     except nx.exception.NetworkXNoPath:
         pass
 
-    return R.nodes[source_node]['fold'], source_node, target_node, str(score), '-'.join([source_node, step_node, target_node]), str(bool((source_node,target_node) in Fold_DTIs))
+    return R.nodes[source_node]['fold'], source_node, target_node, str(score), '-'.join([source_node, step_node, target_node]), str(bool((source_node,target_node) in fold_relations))
 
 if __name__ == '__main__':
     print(__title__)
@@ -92,6 +119,8 @@ if __name__ == '__main__':
 
     # Generate predictions
     out_file = open(config.get('I/O','Output predictions file'),"w+")
+    alpha = config.getfloat('Options','Alpha value')
+    resolution = config.getfloat('Options','Resolution')
     for fold in range(10):
         time = datetime.datetime.now()
         print(f'Generating predictions for fold {fold}')
@@ -110,8 +139,12 @@ if __name__ == '__main__':
                     if ML.edges[n1,n2]['relation'] == rel2pred]
             fold_relations = fold_relations + relations
             relations_eliminated += len(relations)
-            ML.remove_edges_from(relation)
+            ML.remove_edges_from(relations)
         print(f'Fold {fold} "{rel2pred}" edges: {relations_eliminated}')
+        
+        # Get community organization for fold graph
+        modularity = getCommunities(ML)
+        print(f'Fold {fold} modularity: {modularity}')
 
         # Generate predictions using nearest-neighbour implementation
         Proccess = Pool(n_processes)
