@@ -19,9 +19,12 @@ def PR(y_pred, y_scores):
 
 # Open file and load to dataframe
 output_file = sys.argv[1]
+#output_df   = pd.read_csv(output_file, sep='\t',index_col=False,header=None,names=['Fold','Source','Target','Score','Path','TP'])
 output_df   = pd.read_csv(output_file, sep='\t',index_col=False)
 output_df   = output_df[output_df['Score']!=-99]
 output_df['Score'] = -1*output_df['Score']
 
-print('ROC:',ROC(output_df['TP'], output_df['Score']))
-print('PR:',PR(output_df['TP'], output_df['Score']))
+ROC = ROC(output_df['TP'], output_df['Score'])
+PR  = PR(output_df['TP'], output_df['Score'])
+
+print('\t'.join([output_file,str(ROC),str(PR)]))
