@@ -19,6 +19,7 @@ import numpy as np
 import pandas as pd
 import networkx as nx
 import community as cmt
+from tqdm import tqdm
 from multiprocessing import Pool
 from collections import defaultdict
 from configparser import ConfigParser
@@ -38,9 +39,9 @@ def predictRelation(inputs):
         step_node = path[1]
     
         # Calculate score of shortest path
-        path_edges   = zip(path[:-1],path[1:])
+        path_edges   = list(zip(path[:-1],path[1:]))
         path_length  = len(path_edges)
-        path_weights = [1-ML.edges[u][v]['weight'] for u,v in path_edges] 
+        path_weights = [1-ML.edges[u,v]['weight'] or 1 for u,v in path_edges]
         score        = np.prod(path_weights) ** (2.26 * path_length)
 
     except nx.exception.NetworkXNoPath:
@@ -53,7 +54,7 @@ if __name__ == '__main__':
     verbose = True
 
     # Read configuration file
-    config = ConfigParser()
+    config = ConfigParser(allow_no_value=True)
     config.read(sys.argv[1])
 
     # Read multilayered graph into memory and print basic stats of it.
@@ -110,7 +111,7 @@ if __name__ == '__main__':
         print(f'Fold {fold} "{rel2pred}" edges: {relations_eliminated}')
         
         # Generate predictions in chunks
-        for chunk in tqdm(np.array_split(edges2predict, 1000), total=1000):
+        for chunk in tqdm(np.array_split(edges2predict, 250), total=250):
             Proccess = Pool(n_processes)
             Predictions_raw = Proccess.map(predictRelation, chunk)
             Proccess.close()

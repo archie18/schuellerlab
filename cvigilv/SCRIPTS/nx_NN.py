@@ -52,7 +52,7 @@ if __name__ == '__main__':
     verbose = True
 
     # Read configuration file
-    config = ConfigParser()
+    config = ConfigParser(allow_no_value=True)
     config.read(sys.argv[1])
 
     # Read multilayered graph into memory and print basic stats of it.
