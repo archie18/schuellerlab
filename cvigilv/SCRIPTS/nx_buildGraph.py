@@ -56,7 +56,7 @@ def getDefaults(write=False):
         return config
 
 
-def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False, cutoff=False):
+def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False, cutoff='False'):
     """Convert edge list text file or dataframe into layer of network.
 
     Read tab-separated edge list file to into memory and create a Layer of
@@ -81,15 +81,16 @@ def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False, cutoff=Fals
     edgelist             = edgelist.drop_duplicates(keep='first')
     edgelist['weight']   = edgelist['weight'].fillna(value=1)
     edgelist['relation'] = str(layer_name[0]*2).upper()
+    edgelist['z_weight']   = (edgelist['weight']-edgelist['weight'].mean())/edgelist['weight'].std(ddof=0)
 
     # Create graph from 'edgelist'.
     L = nx.from_pandas_edgelist(edgelist, \
             source='source', target='target', \
-            edge_attr=['weight','relation'])
+            edge_attr=['weight','z_weight','relation'])
     L.remove_edges_from(list(nx.selfloop_edges(L)))
 
     # Reduce edges from layer
-    if cutoff != False:
+    if cutoff != 'False':
         # Get sparsest graph
         if cutoff == 'sparsest':
             mst_edges        = nx.minimum_spanning_edges(L, weight='weight', data=True)
@@ -192,7 +193,7 @@ if __name__ == '__main__':
 
     # Remove isolate nodes from multilayered graph
     isolates = nx.isolates(ML)
-    print(f'Removing nodes without edges: {isolates}')
+    print(f'Removing nodes without edges: {list(isolates)}')
     ML.remove_nodes_from(isolates)
 
     # Print a summary of the multilayered graph
