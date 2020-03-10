@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 #
 # =============================================================
-# nx_NN.py
+# ig_SP.py
 # by Carlos Vigil, Andreas Schüller
 #
-# Validación del método basado en redes por medio de la reimple
-# mentación del método nearest-neighbour de Andreas Schüller
-#
+# Método predictivo de interacciones proteína-ligando basado en
+# formalismo de redes, utilizando el camino más corto.
 # =============================================================
 
 __version__ = 0.1
@@ -16,12 +15,15 @@ import sys
 import math
 import datetime
 import numpy as np
-import pandas as pd
+from igraph import *
 from tqdm import tqdm
-from igtaph import *
 from multiprocessing import Pool
-from collections import defaultdict
 from configparser import ConfigParser
+
+def dijkstra(source, target, weights):
+    pass
+
+
 
 def predictRelation(inputs):
     source_node = inputs[0]
@@ -31,26 +33,29 @@ def predictRelation(inputs):
 
     # Get shortest path from source to target node
     try:
-        score, path = nx.bidirectional_dijkstra(ML, \
-                source = source_node, \
-                target = target_node, \
-                weight = 'weight')
-        step_node = path[1]
+        path = ML.get_shortest_paths(v       = source_node, \
+                                     to      = target_node, \
+                                     weights = ML.es['weight'], \
+                                     output  = 'vpath')[0]
 
         # Calculate score of shortest path
-        path_edges   = list(zip(path[:-1],path[1:]))
-        path_length  = len(path_edges)
-        path_weights = [1-ML.edges[u,v]['weight'] or 1 for u,v in path_edges]
-        score        = np.prod(path_weights) ** (2.26 * path_length)
+        path_ids         = [ML.vs[n]['id'] for n in path]
+        path_edges       = [ML.get_eid(u,v) for u,v in list(zip(path[:-1],path[1:]))]
+        path_length      = len(path_edges)
+        path_communities = [str(i) for i in set([ML.vs[n]['community'] for n in path])]
+        path_weights     = [1-ML.es[e]['weight'] for e in path_edges \
+                                             if ML.es[e]['relation'] != rel2pred]
 
-    except nx.exception.NetworkXNoPath:
-        path = [source_target,'Null',target_node]
+        # TODO: Split scoring function and declare both scores to evaluate if it works properly
+        score        = (np.prod(path_weights) ** (2.26 * path_length) * alpha) + (math.exp(1-len(path_communities)) * (1-alpha))
 
-    return ML.nodes[source_node]['fold'], source_node, target_node, str(score), '-'.join(path), str(bool((source_node,target_node) in fold_relations))
+    except:
+        path = [source_node,'Null',target_node]
+
+    return ML.vs[source_node]['fold'], ML.vs[source_node]['id'], ML.vs[target_node]['id'],str(score), '-'.join(path_ids),'-'.join(path_communities), str(bool((source_node,target_node) in fold_relations))
 
 if __name__ == '__main__':
     print(__title__)
-    verbose = True
 
     # Read configuration file
     config = ConfigParser(allow_no_value=True)
@@ -59,62 +64,63 @@ if __name__ == '__main__':
     # Read multilayered graph into memory and print basic stats of it.
     print('Reading multilayered graph into memory')
     ML = Graph.Read_GraphML(config.get('I/O','Multilayered graph file'))
-    if verbose: print(summary(ML))
 
     # Get source and target layers to generate predictions
     source_layer = config.get('Options','Source layer')
     target_layer = config.get('Options','Target layer')
 
     # Assign fold to source layer nodes
-    #print(f'Assigning fold to the nodes in layer "{source_layer}"')
-    #for i, n in enumerate([n for n,d in ML.nodes(data=True) if d['layer'] == source_layer]):
-    #    ML.nodes[n]['fold'] = i % 10
+    print(f'Assigning fold to the nodes in layer "{source_layer}"')
+    #for i, n in enumerate([n for n in ML.vs if n['layer']==source_layer]):
+    #    n['fold'] = i % 10
     # This snippet is used to validate if the script is predicting correctly
     with open('/home/cvigilv/Repos/schuellerlab/cvigilv/EXTRAS/correctFolds.csv') as folds_file:
         for line in folds_file:
             fold, node= line.rstrip().split(',')
-            ML.nodes[node]['fold']=int(fold)
+            ML.vs[ML.vs.find(id=node).index]["fold"] = int(fold)
 
     # Get some data before generating folds
-    target_nodes = [n for n,d in ML.nodes(data=True) if d['layer']==target_layer]
+    target_nodes = [n.index for n in ML.vs if n['layer']==target_layer]
     rel2pred     = config.get('Options', 'Relation to predict')
     n_processes  = config.getint('I/O', 'Number of parallel processes')
-    if verbose:
-        relations  = set(nx.get_edge_attributes(ML,'relation').values())
-        folds_node = set(nx.get_node_attributes(ML,'fold').values())
-        print(f'Edges \'relation\': {relations}')
-        print(f'Folds: {folds_node}')
-
+    
     # Generate predictions
-    out_file = open(config.get('I/O','Output predictions file'),"w+")
-    alpha = config.getfloat('Options','Alpha value')
-    resolution = config.getfloat('Options','Resolution')
-    for fold in range(10):
+    out_file   = open(config.get('I/O','Output predictions file'),"w+")
+    alpha      = config.getfloat('Options','Alpha value')
+    for fold in tqdm(range(10), total=10):
         time = datetime.datetime.now()
         print(f'Generating predictions for fold {fold}')
-        fold_source_nodes = [n for n,d in ML.nodes(data=True) for i in range(10) \
-                if d['layer']==source_layer and d['fold']==fold]
+        fold_source_nodes = [n.index for n in ML.vs \
+                                     if  n['layer']==source_layer and \
+                                         n['fold']==fold]
         edges2predict     = [(n1,n2) for n1 in fold_source_nodes \
-                for n2 in target_nodes]
+                                     for n2 in target_nodes]
 
         # Remove edges from the test set that connect layers
         # (This are the edges we want to predict!)
         relations_eliminated = 0
-        fold_relations = []
+        fold_relations       = []
         for n1 in fold_source_nodes:
-            relations = [(n1, n2) for n2 in list(ML.neighbors(n1)) \
-                    if ML.edges[n1,n2]['relation'] == rel2pred]
+            relations = [(n1, n2) for n2 in ML.neighborhood(n1) \
+                                  if ML.vs[n2]['layer'] == target_layer]
             fold_relations = fold_relations + relations
             relations_eliminated += len(relations)
-            ML.remove_edges_from(relations)
+            ML.delete_edges(relations)
         print(f'Fold {fold} "{rel2pred}" edges: {relations_eliminated}')
 
+        # Calculate clusters/communities for graph
+        communities = ML.community_infomap(edge_weights='weight')
+        for n_comm, community in enumerate(communities):
+            for node in community:
+                ML.vs[node]['community'] = n_comm
+        print(f"Modularity for fold clustering: {communities.modularity}")
+
         # Generate predictions in chunks
-        for chunk in tqdm(np.array_split(edges2predict, 250), total=250):
+        for chunk in np.array_split(edges2predict, 1):
             Proccess = Pool(n_processes)
             Predictions_raw = Proccess.map(predictRelation, chunk)
             Proccess.close()
-
+            
             # Write predictions to output file
             for Prediction in Predictions_raw:
                 print('\t'.join([str(element) for element in Prediction]), file = out_file, flush=True)
@@ -122,4 +128,7 @@ if __name__ == '__main__':
         print(f'Fold {fold} done! Time elapsed: {datetime.datetime.now() - time}')
 
         # Add interlayer edges back to the multilayered graph.
-        ML.add_edges_from(fold_relations, weight=1, relation=rel2pred)
+        ML.add_edges(fold_relations)
+        for u,v in fold_relations:
+            ML.es[ML.get_eid(u,v)]['weight']   = 1.0
+            ML.es[ML.get_eid(u,v)]['relation'] = rel2pred
