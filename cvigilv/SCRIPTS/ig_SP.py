@@ -83,7 +83,7 @@ if __name__ == '__main__':
     target_nodes = [n.index for n in ML.vs if n['layer']==target_layer]
     rel2pred     = config.get('Options', 'Relation to predict')
     n_processes  = config.getint('I/O', 'Number of parallel processes')
-    
+
     # Generate predictions
     out_file   = open(config.get('I/O','Output predictions file'),"w+")
     alpha      = config.getfloat('Options','Alpha value')
@@ -120,7 +120,7 @@ if __name__ == '__main__':
             Proccess = Pool(n_processes)
             Predictions_raw = Proccess.map(predictRelation, chunk)
             Proccess.close()
-            
+
             # Write predictions to output file
             for Prediction in Predictions_raw:
                 print('\t'.join([str(element) for element in Prediction]), file = out_file, flush=True)
