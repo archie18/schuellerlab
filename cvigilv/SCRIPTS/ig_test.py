@@ -20,39 +20,61 @@ from tqdm import tqdm
 from multiprocessing import Pool
 from configparser import ConfigParser
 
-def dijkstra(source, target, weights):
-    pass
+def power_dijkstra(graph_adj, source, target):
+    # Some needed variables
+    vertices = [vertex for vertex in range(len(graph_adj))]
 
+    # Initialization
+    dist         = {vertex: -1 for vertex in vertices}
+    dist[source] = 1
+    prev         = {vertex: None for vertex in vertices}
+    Q = vertices
 
+    # Shortest path algorithm main loop
+    current = None
+    while Q:
+        u = max(Q, key=dist.__getitem__)
+        if u == target:
+            break
+        else:
+            Q.remove(u)
+
+        neighbours = [(i,l) for i,l in enumerate(graph_adj[u]) if l != 0.0
+                and i in Q]
+
+        for v, l in neighbours:
+            alt = dist[u] * l
+            if alt > dist[v]:
+                dist[v] = alt
+                prev[v] = u
+
+    # Get path from source to target
+    path     = [target]
+    prevNode = target
+
+    while source not in path:
+        prevNode = prev[prevNode]
+        path.append(prevNode)
+
+    # Return shortest path cost and path traversed
+    return dist[target], path[::-1]
 
 def predictRelation(inputs):
     source_node = inputs[0]
     target_node = inputs[1]
-    step_node   = 'Null'
     score       = -99
 
     # Get shortest path from source to target node
     try:
-        path = ML.get_shortest_paths(v       = source_node, \
-                                     to      = target_node, \
-                                     weights = ML.es['weight'], \
-                                     output  = 'vpath')[0]
+        score, path = power_dijkstra(source = source_node, \
+                                     target = target_node, \
+                                     graph_adj = ML.get_adjacency(attribute='weight'))
 
-        # Calculate score of shortest path
-        path_ids         = [ML.vs[n]['id'] for n in path]
-        path_edges       = [ML.get_eid(u,v) for u,v in list(zip(path[:-1],path[1:]))]
-        path_length      = len(path_edges)
-        path_communities = [str(i) for i in set([ML.vs[n]['community'] for n in path])]
-        path_weights     = [1-ML.es[e]['weight'] for e in path_edges \
-                                             if ML.es[e]['relation'] != rel2pred]
-
-        # TODO: Split scoring function and declare both scores to evaluate if it works properly
-        score        = (np.prod(path_weights) ** (2.26 * path_length) * alpha) + (math.exp(1-len(path_communities)) * (1-alpha))
 
     except:
         path = [source_node,'Null',target_node]
 
-    return ML.vs[source_node]['fold'], ML.vs[source_node]['id'], ML.vs[target_node]['id'],str(score), '-'.join(path_ids),'-'.join(path_communities), str(bool((source_node,target_node) in fold_relations))
+    return ML.vs[source_node]['fold'], ML.vs[source_node]['id'], ML.vs[target_node]['id'],str(score), '-'.join(path), str(bool((source_node,target_node) in fold_relations))
 
 if __name__ == '__main__':
     print(__title__)
@@ -71,8 +93,8 @@ if __name__ == '__main__':
 
     # Assign fold to source layer nodes
     print(f'Assigning fold to the nodes in layer "{source_layer}"')
-    #for i, n in enumerate([n for n in ML.vs if n['layer']==source_layer]):
-    #    n['fold'] = i % 10
+    for i, n in enumerate([n for n in ML.vs if n['layer']==source_layer]):
+        n['fold'] = i % 10
     # This snippet is used to validate if the script is predicting correctly
     with open('/home/cvigilv/Repos/schuellerlab/cvigilv/EXTRAS/correctFolds.csv') as folds_file:
         for line in folds_file:
@@ -83,7 +105,7 @@ if __name__ == '__main__':
     target_nodes = [n.index for n in ML.vs if n['layer']==target_layer]
     rel2pred     = config.get('Options', 'Relation to predict')
     n_processes  = config.getint('I/O', 'Number of parallel processes')
-    
+
     # Generate predictions
     out_file   = open(config.get('I/O','Output predictions file'),"w+")
     alpha      = config.getfloat('Options','Alpha value')
@@ -120,7 +142,7 @@ if __name__ == '__main__':
             Proccess = Pool(n_processes)
             Predictions_raw = Proccess.map(predictRelation, chunk)
             Proccess.close()
-            
+
             # Write predictions to output file
             for Prediction in Predictions_raw:
                 print('\t'.join([str(element) for element in Prediction]), file = out_file, flush=True)
