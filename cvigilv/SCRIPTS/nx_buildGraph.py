@@ -14,6 +14,7 @@ __title__   = 'buildGraph.py - Create multilayer graph for DTI predictions'
 __version__ = 0.2
 
 import sys
+import math
 import numpy as np
 import pandas as pd
 import networkx as nx
@@ -68,6 +69,12 @@ def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False, cutoff='Fal
         layer_name (str, optional):      Name of layer.
         cutoff (float or str, optional): Parameter to used for information reduction.
     """
+    def p_weight(pd_box):
+        if pd_box == 0.0:
+            return float(10)
+        else:
+            return -1*math.log(pd_box)
+
     # Create 'edgelist' dataframe from file or used dataframe given in arguments.
     if edgelist_file:
         edgelist = pd.read_csv(edgelist_file,
@@ -78,18 +85,24 @@ def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False, cutoff='Fal
         edgelist = df
 
     # Clean up dataframe.
-    edgelist             = edgelist.drop_duplicates(keep='first')
-    edgelist['weight']   = edgelist['weight'].fillna(value=1)
-    edgelist['relation'] = str(layer_name[0]*2).upper()
-    edgelist['z_weight']   = (edgelist['weight']-edgelist['weight'].mean())/edgelist['weight'].std(ddof=0)
+    edgelist                  = edgelist.drop_duplicates(keep='first')
+    edgelist['weight']        = 1-edgelist['weight'].fillna(value=1.0)
+    edgelist['sim']           = edgelist['weight']
+    edgelist['weight']        = edgelist['weight'].apply(p_weight)
+    #edgelist['similarity']    = edgelist['weight'].fillna(value=0)
+    #edgelist['distance']      = 1-edgelist['weight'].fillna(value=1)
+    #edgelist['p(similarity)'] = -1*math.log(edgelist['similarity'])
+    #edgelist['p(distance)']   = -1*math.log(1-edgelist['distance'])
+    edgelist['relation']      = str(layer_name[0]*2).upper()
 
     # Create graph from 'edgelist'.
+    edge_attributes = ['weight', 'relation']
     L = nx.from_pandas_edgelist(edgelist, \
             source='source', target='target', \
-            edge_attr=['weight','z_weight','relation'])
+            edge_attr=['weight','sim','relation'])
     L.remove_edges_from(list(nx.selfloop_edges(L)))
 
-    # Reduce edges from layer
+    '''# Reduce edges from layer
     if cutoff != 'False':
         # Get sparsest graph
         if cutoff == 'sparsest':
@@ -102,6 +115,7 @@ def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False, cutoff='Fal
             max_weight   = np.quantile(edge_weights, 1-float(cutoff))
 
         L.remove_edges_from([(u,v) for u,v,d in L.edges(data=True) if d['weight']>max_weight])
+    '''
 
     # Add name to graph and nodes.
     if '-' not in layer_name:
@@ -138,7 +152,7 @@ def MatrixToEdgelist(matrix_file, lookup_table, layer_name='Null',cutoff=False):
 
     edgelist = pd.DataFrame({'source': source, 'target': target, 'weight': weight})
     edgelist.to_csv(matrix_file+'.edgelist.tsv', sep='\t', header=None, index=False)
-    return EdgelistToLayer(df=edgelist, layer_name=layer_name,cutoff=cutoff)
+    return EdgelistToLayer(df=edgelist, layer_name=layer_name, cutoff=cutoff)
 
 if __name__ == '__main__':
     print(__title__)
