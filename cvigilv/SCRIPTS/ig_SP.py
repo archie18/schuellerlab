@@ -20,16 +20,9 @@ from tqdm import tqdm
 from multiprocessing import Pool
 from configparser import ConfigParser
 
-def dijkstra(source, target, weights):
-    pass
-
-
-
 def predictRelation(inputs):
     source_node = inputs[0]
     target_node = inputs[1]
-    step_node   = 'Null'
-    score       = -99
 
     # Get shortest path from source to target node
     try:
@@ -39,20 +32,26 @@ def predictRelation(inputs):
                                      output  = 'vpath')[0]
 
         # Calculate score of shortest path
-        path_ids         = [ML.vs[n]['id'] for n in path]
+        #path_ids         = [ML.vs[n]['id'] for n in path]
+        path_ids         = [str(n) for n in path]
         path_edges       = [ML.get_eid(u,v) for u,v in list(zip(path[:-1],path[1:]))]
         path_length      = len(path_edges)
-        path_communities = [str(i) for i in set([ML.vs[n]['community'] for n in path])]
-        path_weights     = [1-ML.es[e]['weight'] for e in path_edges \
-                                             if ML.es[e]['relation'] != rel2pred]
+        path_weights     = [ML.es[e]['sim'] for e in path_edges \
+                                            if ML.es[e]['relation'] != rel2pred]
 
-        # TODO: Split scoring function and declare both scores to evaluate if it works properly
-        score        = (np.prod(path_weights) ** (2.26 * path_length) * alpha) + (math.exp(1-len(path_communities)) * (1-alpha))
+        score            = np.prod(path_weights)
 
     except:
-        path = [source_node,'Null',target_node]
+        score = -99
+        path  = [source_node,'Null',target_node]
 
-    return ML.vs[source_node]['fold'], ML.vs[source_node]['id'], ML.vs[target_node]['id'],str(score), '-'.join(path_ids),'-'.join(path_communities), str(bool((source_node,target_node) in fold_relations))
+    return ML.vs[source_node]['fold'], \
+           ML.vs[source_node]['id'], \
+           ML.vs[target_node]['id'], \
+           str(score), \
+           '-'.join(path_ids), \
+           '-'.join([str(w) for w in path_weights]), \
+           str(bool((source_node,target_node) in fold_relations))
 
 if __name__ == '__main__':
     print(__title__)
@@ -109,11 +108,11 @@ if __name__ == '__main__':
         print(f'Fold {fold} "{rel2pred}" edges: {relations_eliminated}')
 
         # Calculate clusters/communities for graph
-        communities = ML.community_infomap(edge_weights='weight')
-        for n_comm, community in enumerate(communities):
-            for node in community:
-                ML.vs[node]['community'] = n_comm
-        print(f"Modularity for fold clustering: {communities.modularity}")
+        #communities = ML.community_infomap(edge_weights='weight')
+        #for n_comm, community in enumerate(communities):
+        #    for node in community:
+        #        ML.vs[node]['community'] = n_comm
+        #print(f"Modularity for fold clustering: {communities.modularity}")
 
         # Generate predictions in chunks
         for chunk in np.array_split(edges2predict, 1):
@@ -130,5 +129,5 @@ if __name__ == '__main__':
         # Add interlayer edges back to the multilayered graph.
         ML.add_edges(fold_relations)
         for u,v in fold_relations:
-            ML.es[ML.get_eid(u,v)]['weight']   = 1.0
+            ML.es[ML.get_eid(u,v)]['weight']   = float(10)
             ML.es[ML.get_eid(u,v)]['relation'] = rel2pred
