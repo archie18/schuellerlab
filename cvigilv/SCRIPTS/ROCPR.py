@@ -23,9 +23,8 @@ if __name__ == '__main__':
     for f in output_files:
         output_df   = pd.read_csv(f, sep='\t',index_col=False)
         output_df   = output_df[output_df['Score']!=-99]
-        output_df['Score'] = -1*output_df['Score']
 
-    ROC = ROC(output_df['TP'], output_df['Score'])
-    PR  = PR(output_df['TP'], output_df['Score'])
+        ROC_v = ROC(list(output_df['TP']), list(output_df['Score']))
+        PR_v  = PR(list(output_df['TP']), list(output_df['Score']))
 
-    print('\t'.join([f,str(ROC),str(PR)]))
+        print('\t'.join([f,str(ROC_v),str(PR_v)]))
