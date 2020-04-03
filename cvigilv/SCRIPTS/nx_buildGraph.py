@@ -45,10 +45,7 @@ def getDefaults(write=False):
             'Interactions 1 adjacency matrix'      : '',
             'Interactions 1 node lookup table'     : '',
             'Output graph file'                    : './graph.gpickle'}
-    config['Options'] = {'Community identifier' : False,
-            'Community mode'                    : '',
-            'Community resolution'              : '',
-            'Information cutoff'                : False}
+    config['Options'] = {'Edge weight'             : 'Tc'}
 
     if write:
         with open('build_example.ini','w+') as configfile:
@@ -70,10 +67,10 @@ def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False, cutoff='Fal
         cutoff (float or str, optional): Parameter to used for information reduction.
     """
     def p_weight(pd_box):
-        if pd_box == 0.0:
+        if float(pd_box) == 0.0:
             return float(10)
         else:
-            return -1*math.log(pd_box)
+            return -1*math.log(float(pd_box),10)
 
     # Create 'edgelist' dataframe from file or used dataframe given in arguments.
     if edgelist_file:
@@ -86,23 +83,26 @@ def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False, cutoff='Fal
 
     # Clean up dataframe.
     edgelist                  = edgelist.drop_duplicates(keep='first')
-    edgelist['weight']        = 1-edgelist['weight'].fillna(value=1.0)
-    edgelist['sim']           = edgelist['weight']
-    edgelist['weight']        = edgelist['weight'].apply(p_weight)
-    #edgelist['similarity']    = edgelist['weight'].fillna(value=0)
-    #edgelist['distance']      = 1-edgelist['weight'].fillna(value=1)
-    #edgelist['p(similarity)'] = -1*math.log(edgelist['similarity'])
-    #edgelist['p(distance)']   = -1*math.log(1-edgelist['distance'])
     edgelist['relation']      = str(layer_name[0]*2).upper()
 
+    if config.get('Options','Edge weight') == 'Tc':
+        # Tc from Dist
+        edgelist['weight']        = edgelist['weight'].fillna(value=1.0)
+        edgelist['sim']           = 1-edgelist['weight']
+    elif config.get('Options','Edge weight') == 'pTc':
+        # -log(Tc) from Dist
+        edgelist['weight']        = 1-edgelist['weight'].fillna(value=1.0)
+        edgelist['sim']           = edgelist['weight']
+        edgelist['weight']        = edgelist['weight'].apply(p_weight)
+
     # Create graph from 'edgelist'.
-    edge_attributes = ['weight', 'relation']
     L = nx.from_pandas_edgelist(edgelist, \
             source='source', target='target', \
             edge_attr=['weight','sim','relation'])
     L.remove_edges_from(list(nx.selfloop_edges(L)))
 
-    '''# Reduce edges from layer
+    
+    # Reduce edges from layer
     if cutoff != 'False':
         # Get sparsest graph
         if cutoff == 'sparsest':
@@ -112,16 +112,17 @@ def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False, cutoff='Fal
         # Get graph composed from x% of edges
         elif 0.0 < float(cutoff) < 1.0:
             edge_weights = [float(d['weight']) for u,v,d in L.edges(data=True)]
-            max_weight   = np.quantile(edge_weights, 1-float(cutoff))
+            max_weight   = float(cutoff)
 
-        L.remove_edges_from([(u,v) for u,v,d in L.edges(data=True) if d['weight']>max_weight])
-    '''
+        L.remove_edges_from([(u,v) for u,v,d in L.edges(data=True) if d['sim']>max_weight])
+   
 
     # Add name to graph and nodes.
     if '-' not in layer_name:
         L.name = layer_name
         nx.set_node_attributes(L, layer_name, 'layer')
 
+    nx.write_gpickle(L, f'./{layer_name}.gpickle')
     return L
 
 def MatrixToEdgelist(matrix_file, lookup_table, layer_name='Null',cutoff=False):
@@ -191,6 +192,7 @@ if __name__ == '__main__':
 
     # Connect layers with annotated interactions
     print('\nConnecting layers with annotated interactions')
+    relations = []
     for n_interactions in range(1, config.getint('I/O','Number of interactions between layers')+1):
         name           = config.get('I/O',f'Interactions {n_interactions} name')
         edgelist_file  = config.get('I/O',f'Interactions {n_interactions} edge list')
@@ -201,6 +203,7 @@ if __name__ == '__main__':
 
         I  = EdgelistToLayer(edgelist_file, layer_name=name)
         relation_type = name.upper().split('-')[0][0]+name.upper().split('-')[1][0]
+        relations.append(relation_type)
         nx.set_edge_attributes(I,relation_type,'relation')
         print(nx.info(I))
         ML = nx.compose(ML, I)
@@ -209,6 +212,27 @@ if __name__ == '__main__':
     isolates = nx.isolates(ML)
     print(f'Removing nodes without edges: {list(isolates)}')
     ML.remove_nodes_from(isolates)
+    
+    # Remove nodes without relationship between layers
+    notInterconnected = []
+    for n1,d in ML.nodes(data=True):
+        interconnected = False
+        for n2 in ML.neighbors(n1):
+            if ML[n1][n2]['relation'] in relations:
+                interconnected = True
+                break
+
+        if interconnected == False:
+            notInterconnected.append(n1)
+    
+    # Remove nodes without relationship between layers
+    cleanup = []
+    for n1,d in ML.nodes(data=True):
+        if not d:
+            cleanup.append(n1)
+
+    print(f'Removing nodes with errors: {list(cleanup)}')
+    ML.remove_nodes_from(cleanup+notInterconnected)
 
     # Print a summary of the multilayered graph
     print('\nMultilayered graph created')
