@@ -32,14 +32,17 @@ def predictRelation(inputs):
                                      output  = 'vpath')[0]
 
         # Calculate score of shortest path
-        #path_ids         = [ML.vs[n]['id'] for n in path]
-        path_ids         = [str(n) for n in path]
-        path_edges       = [ML.get_eid(u,v) for u,v in list(zip(path[:-1],path[1:]))]
-        path_length      = len(path_edges)
-        path_weights     = [ML.es[e]['sim'] for e in path_edges \
-                                            if ML.es[e]['relation'] != rel2pred]
-
-        score            = np.prod(path_weights)
+        path_ids        = [ML.vs[n]['id'] for n in path]
+        path_edges      = [ML.get_eid(u,v) for u,v in list(zip(path[:-1],path[1:]))]
+        path_length     = len(path_edges)
+            
+        if config.get('Options','Edge weight') == 'Tc':
+            path_similarity = [ML.es[e]['sim'] for e in path_edges if ML.es[e]['relation'] != rel2pred]
+            score           = sum(path_similarity)
+        elif config.get('Options','Edge weight') == 'pTc':
+            path_similarity = [ML.es[e]['sim'] for e in path_edges if ML.es[e]['relation'] != rel2pred]
+            score           = np.prod(path_similarity)
+        
 
     except:
         score = -99
@@ -50,7 +53,7 @@ def predictRelation(inputs):
            ML.vs[target_node]['id'], \
            str(score), \
            '-'.join(path_ids), \
-           '-'.join([str(w) for w in path_weights]), \
+           '-'.join([str(w) for w in path_similarity]), \
            str(bool((source_node,target_node) in fold_relations))
 
 if __name__ == '__main__':
@@ -70,13 +73,14 @@ if __name__ == '__main__':
 
     # Assign fold to source layer nodes
     print(f'Assigning fold to the nodes in layer "{source_layer}"')
-    #for i, n in enumerate([n for n in ML.vs if n['layer']==source_layer]):
-    #    n['fold'] = i % 10
+    for i, n in enumerate([n for n in ML.vs if n['layer']==source_layer]):
+        n['fold'] = i % 10
+    
     # This snippet is used to validate if the script is predicting correctly
-    with open('/home/cvigilv/Repos/schuellerlab/cvigilv/EXTRAS/correctFolds.csv') as folds_file:
-        for line in folds_file:
-            fold, node= line.rstrip().split(',')
-            ML.vs[ML.vs.find(id=node).index]["fold"] = int(fold)
+    #with open('/home/cvigilv/Repos/schuellerlab/cvigilv/EXTRAS/correctFolds.csv') as folds_file:
+    #    for line in folds_file:
+    #        fold, node= line.rstrip().split(',')
+    #        ML.vs[ML.vs.find(id=node).index]["fold"] = int(fold)
 
     # Get some data before generating folds
     target_nodes = [n.index for n in ML.vs if n['layer']==target_layer]
@@ -86,6 +90,8 @@ if __name__ == '__main__':
     # Generate predictions
     out_file   = open(config.get('I/O','Output predictions file'),"w+")
     alpha      = config.getfloat('Options','Alpha value')
+    print('\t'.join(['F','S','T','Score','P','W','TP']), file = out_file, flush=True)
+
     for fold in tqdm(range(10), total=10):
         time = datetime.datetime.now()
         print(f'Generating predictions for fold {fold}')
@@ -129,5 +135,8 @@ if __name__ == '__main__':
         # Add interlayer edges back to the multilayered graph.
         ML.add_edges(fold_relations)
         for u,v in fold_relations:
-            ML.es[ML.get_eid(u,v)]['weight']   = float(10)
+            if config.get('Options','Edge weight') == 'Tc':
+                ML.es[ML.get_eid(u,v)]['weight']   = 1.0    # Tc
+            elif config.get('Options','Edge weight') == 'pTc':
+                ML.es[ML.get_eid(u,v)]['weight']   = float(10) #-log(Tc)
             ML.es[ML.get_eid(u,v)]['relation'] = rel2pred
