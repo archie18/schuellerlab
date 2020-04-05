@@ -247,11 +247,11 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # Load file into dataframe and preprocess data
-    df = pd.read_csv(args.input, sep=args.sep, names=['S','T','weight'])
-    df = df.dropna(axis=1,how='all')
-    df = df.dropna()
-    df = df[df['S'] != df['T']]
-    #df['len'] = df['weight']
+    df           = pd.read_csv(args.input, sep=args.sep, names=['S','T','weight'])
+    df           = df.fillna(1)
+    df           = df[df['S'] != df['T']]
+    df['weight'] = df[df['weight']>0]
+    df['len']    = df['weight']
     df.sort_values(by =['S', 'T'], inplace = True)
     df.drop_duplicates(inplace=True)
 
