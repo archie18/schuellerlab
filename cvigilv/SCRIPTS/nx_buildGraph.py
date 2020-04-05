@@ -82,18 +82,15 @@ def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False, cutoff='Fal
         edgelist = df
 
     # Clean up dataframe.
-    edgelist                  = edgelist.drop_duplicates(keep='first')
-    edgelist['relation']      = str(layer_name[0]*2).upper()
+    edgelist             = edgelist.drop_duplicates(keep='first')
+    edgelist['relation'] = str(layer_name[0]*2).upper()
 
-    if config.get('Options','Edge weight') == 'Tc':
-        # Tc from Dist
-        edgelist['weight']        = edgelist['weight'].fillna(value=1.0)
-        edgelist['sim']           = 1-edgelist['weight']
-    elif config.get('Options','Edge weight') == 'pTc':
-        # -log(Tc) from Dist
-        edgelist['weight']        = 1-edgelist['weight'].fillna(value=1.0)
-        edgelist['sim']           = edgelist['weight']
-        edgelist['weight']        = edgelist['weight'].apply(p_weight)
+    # Edge weighting
+    edgelist['weight']   = edgelist['weight'].fillna(value=1.0)
+    edgelist['sim']      = 1-edgelist['weight']
+
+    if config.get('Options','Edge weight') == 'pTc':
+        edgelist['weight'] = edgelist['sim'].apply(p_weight)
 
     # Create graph from 'edgelist'.
     L = nx.from_pandas_edgelist(edgelist, \
@@ -101,7 +98,7 @@ def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False, cutoff='Fal
             edge_attr=['weight','sim','relation'])
     L.remove_edges_from(list(nx.selfloop_edges(L)))
 
-    
+
     # Reduce edges from layer
     if cutoff != 'False':
         # Get sparsest graph
@@ -115,7 +112,7 @@ def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False, cutoff='Fal
             max_weight   = float(cutoff)
 
         L.remove_edges_from([(u,v) for u,v,d in L.edges(data=True) if d['sim']>max_weight])
-   
+
 
     # Add name to graph and nodes.
     if '-' not in layer_name:
@@ -212,7 +209,7 @@ if __name__ == '__main__':
     isolates = nx.isolates(ML)
     print(f'Removing nodes without edges: {list(isolates)}')
     ML.remove_nodes_from(isolates)
-    
+
     # Remove nodes without relationship between layers
     notInterconnected = []
     for n1,d in ML.nodes(data=True):
@@ -224,7 +221,7 @@ if __name__ == '__main__':
 
         if interconnected == False:
             notInterconnected.append(n1)
-    
+
     # Remove nodes without relationship between layers
     cleanup = []
     for n1,d in ML.nodes(data=True):
