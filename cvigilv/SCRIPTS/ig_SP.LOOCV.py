@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 #
 # =============================================================
-# ig_SP.py
+# ig_SP.LOOCV.py
 # by Carlos Vigil, Andreas Schüller
 #
 # Método predictivo de interacciones proteína-ligando basado en
-# formalismo de redes, utilizando el camino más corto.
+# formalismo de redes, utilizando el camino más corto. LOOCV
+# para poder comparar el método con los datos informados por
+# Ba-alawi et al. (2016). --> DASPfind
 # =============================================================
 
 __version__ = 0.1
@@ -36,14 +38,9 @@ def predictRelation(inputs):
         path_edges      = [ML.get_eid(u,v) for u,v in list(zip(path[:-1],path[1:]))]
         path_length     = len(path_edges)
             
-        if config.get('Options','Edge weight') == 'Tc':
-            path_similarity = [ML.es[e]['sim'] for e in path_edges if ML.es[e]['relation'] != rel2pred]
-            score           = sum(path_similarity)
-        elif config.get('Options','Edge weight') == 'pTc':
-            path_similarity = [ML.es[e]['sim'] for e in path_edges if ML.es[e]['relation'] != rel2pred]
-            score           = np.prod(path_similarity)
+        path_similarity = [ML.es[e]['weight'] for e in path_edges]
+        score           = -1*sum(path_similarity)
         
-
     except:
         score = -99
         path  = [source_node,'Null',target_node]
@@ -70,18 +67,13 @@ if __name__ == '__main__':
     # Get source and target layers to generate predictions
     source_layer = config.get('Options','Source layer')
     target_layer = config.get('Options','Target layer')
+    source_nodes = [n for n in ML.vs if n['layer']==source_layer]
 
     # Assign fold to source layer nodes
     print(f'Assigning fold to the nodes in layer "{source_layer}"')
-    for i, n in enumerate([n for n in ML.vs if n['layer']==source_layer]):
-        n['fold'] = i % 10
+    for i, n in enumerate(source_nodes):
+        n['fold'] = i       # LOOCV
     
-    # This snippet is used to validate if the script is predicting correctly
-    #with open('/home/cvigilv/Repos/schuellerlab/cvigilv/EXTRAS/correctFolds.csv') as folds_file:
-    #    for line in folds_file:
-    #        fold, node= line.rstrip().split(',')
-    #        ML.vs[ML.vs.find(id=node).index]["fold"] = int(fold)
-
     # Get some data before generating folds
     target_nodes = [n.index for n in ML.vs if n['layer']==target_layer]
     rel2pred     = config.get('Options', 'Relation to predict')
@@ -89,12 +81,10 @@ if __name__ == '__main__':
 
     # Generate predictions
     out_file   = open(config.get('I/O','Output predictions file'),"w+")
-    alpha      = config.getfloat('Options','Alpha value')
-    print('\t'.join(['F','S','T','Score','P','W','TP']), file = out_file, flush=True)
+    #print('\t'.join(['F','S','T','Score','P','W','TP']), file = out_file, flush=True)
 
-    for fold in tqdm(range(10), total=10):
-        time = datetime.datetime.now()
-        print(f'Generating predictions for fold {fold}')
+    print(f'Generating predictions...')
+    for fold in tqdm(range(len(source_nodes)), total=len(source_nodes)):
         fold_source_nodes = [n.index for n in ML.vs \
                                      if  n['layer']==source_layer and \
                                          n['fold']==fold]
@@ -111,14 +101,6 @@ if __name__ == '__main__':
             fold_relations = fold_relations + relations
             relations_eliminated += len(relations)
             ML.delete_edges(relations)
-        print(f'Fold {fold} "{rel2pred}" edges: {relations_eliminated}')
-
-        # Calculate clusters/communities for graph
-        #communities = ML.community_infomap(edge_weights='weight')
-        #for n_comm, community in enumerate(communities):
-        #    for node in community:
-        #        ML.vs[node]['community'] = n_comm
-        #print(f"Modularity for fold clustering: {communities.modularity}")
 
         # Generate predictions in chunks
         for chunk in np.array_split(edges2predict, 1):
@@ -129,8 +111,6 @@ if __name__ == '__main__':
             # Write predictions to output file
             for Prediction in Predictions_raw:
                 print('\t'.join([str(element) for element in Prediction]), file = out_file, flush=True)
-
-        print(f'Fold {fold} done! Time elapsed: {datetime.datetime.now() - time}')
 
         # Add interlayer edges back to the multilayered graph.
         ML.add_edges(fold_relations)
