@@ -44,9 +44,9 @@ for f in sys.argv[1:]:
 
     df = pd.read_csv(f, sep='\t', index_col=False)
     print(df)
-    PR(df['TP'].values, df['Score'].values, label)
-    #ROC(df['TP'], df['Score'], label)
+    #PR(df['TP'].values, df['Score'].values, label)
+    ROC(df['TP'], df['Score'], label)
 
-plt.savefig('PR.png',dpi = 300)
-#plt.savefig('ROC.png',dpi = 300)
+#plt.savefig('PR.png',dpi = 300)
+plt.savefig('ROC.png',dpi = 300)
 plt.close('all')
