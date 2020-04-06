@@ -111,7 +111,7 @@ def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False, cutoff='Fal
             edge_weights = [float(d['weight']) for u,v,d in L.edges(data=True)]
             max_weight   = float(cutoff)
 
-        L.remove_edges_from([(u,v) for u,v,d in L.edges(data=True) if d['sim']>max_weight])
+        L.remove_edges_from([(u,v) for u,v,d in L.edges(data=True) if d['sim']>=max_weight])
 
 
     # Add name to graph and nodes.
