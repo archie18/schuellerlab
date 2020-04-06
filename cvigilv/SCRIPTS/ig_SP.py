@@ -6,12 +6,14 @@
 #
 # Método predictivo de interacciones proteína-ligando basado en
 # formalismo de redes, utilizando el camino más corto.
-# HISTORY:  0.0  CVV <++>   First version
-#           0.1  CVV <++>   <++>
-#           0.2  CVV 2020.04.05   Added docs, changed predictive method scoring function, cross-validation options, remove fold relations parallelized, cleaned up code
+#
+# HISTORY:  0.2.1  CVV 2020.04.06   Fixed fatal bug, added similarity cutoff, made predictions possible with "sim", "p_sim", "distance" & "p_distance" edge weights
+#           0.2    CVV 2020.04.05   Added docs, changed predictive method scoring function, cross-validation options, remove fold relations parallelized, cleaned up code
+#           0.1    CVV              <++>
+#           0.0    CVV              First version
 # =============================================================
 
-__version__ = 0.2
+__version__ = 0.2.1
 __title__   = f'nx_SP.py - Shortest path graph-based predictions. (v{__version__})'
 
 import os
@@ -23,6 +25,12 @@ from tqdm import tqdm
 from multiprocessing import Pool
 from configparser import ConfigParser
 
+edge_weights_options = {
+        'Distance'    = 'distance',
+        'pDistance'   = 'p_distance',
+        'Similarity'  = 'sim',
+        'pSimilarity' = 'p_sim'}
+
 def getFoldRelations(n1):
     """Get list of edges to predict in fold.
 
@@ -32,7 +40,7 @@ def getFoldRelations(n1):
     return [(n1, n2) for n2 in ML.neighborhood(n1) if ML.vs[n2]['layer'] == target_layer]
 
 def predictRelation(inputs):
-    """Predict protein-ligand interactions using Dijkstra shortest path algrithm.
+    """Predict protein-ligand interactions using Dijkstra shortest path algorithm.
 
     Find shortest path between a source node and a target node. Returns an ordered
     list with (i) fold ID, (ii) source node ID, (iii) target node ID, (iv) Dijkstra
@@ -50,13 +58,13 @@ def predictRelation(inputs):
         # Get shortest path from source to target node
         path = ML.get_shortest_paths(v       = source_node, \
                                      to      = target_node, \
-                                     weights = ML.es['weight'], \
+                                     weights = ML.es[weight_used], \
                                      output  = 'vpath')[0]
 
         # Calculate score and metrics of shortest path
         path_ids     = [ML.vs[n]['id'] for n in path]
         path_edges   = [ML.get_eid(u,v) for u,v in list(zip(path[:-1],path[1:]))]
-        path_weights = [ML.es[e]['weight'] for e in path_edges]
+        path_weights = [ML.es[e][weight_used] for e in path_edges]
         score        = -1*sum(path_weights)
         path_length  = len(path_weights)
 
@@ -104,7 +112,7 @@ if __name__ == '__main__':
     elif crossvalidation == 'LOOCV':
         for i, n in enumerate(source_nodes):
             n['fold']  = i
-        fold_count = i
+        fold_count = len(source_nodes)
     elif os.path.isfile(crossvalidation):
         with open(crossvalidation,'r') as folds_file:
             for line in folds_file:
@@ -117,13 +125,25 @@ if __name__ == '__main__':
             n['fold'] = i % 10
         fold_count = 10
 
+    # Reduce edges from layer
+    sim_cutoff = config.get('Options', 'Similarity cutoff')
+    if sim_cutoff != 'False':
+        if sim_cutoff == 'Sparsest':
+            mst_edges        = nx.maximum_spanning_edges(ML, weight='sim', data=True)
+            mst_edges_weight = [float(d['sim']) for u,v,d in mst_edges]
+            max_weight       = max(mst_edges_weight)
+        elif 0.0 < float(sim_cutoff) < 1.0:
+            max_weight   = float(sim_cutoff)
+
+        ML.remove_edges_from([(u,v) for u,v,d in ML.edges(data=True) if d['sim']<max_weight])
+
     # Generate predictions
     time        = datetime.datetime.now()
     out_file    = open(config.get('I/O','Output predictions file'),"w+")
     rel2pred    = config.get('Options', 'Relation to predict')
     n_processes = config.getint('I/O', 'Number of parallel processes')
     n_chunks    = config.getint('I/O', 'Number of chunks per process')
-    weight_used = config.get('Options','Edge weight')
+    weight_used = edge_weights_options[config.get('Options','Edge weight')]
 
     for fold in tqdm(range(fold_count), total=fold_count):
         print(f'Generating predictions for fold {fold}')
@@ -164,10 +184,11 @@ if __name__ == '__main__':
         # Add interlayer edges back to the multilayered graph.
         ML.add_edges(fold_relations)
         for u,v in fold_relations:
+            # Restore edge information to deleted DTI
             ML.es[ML.get_eid(u,v)]['relation'] = rel2pred
-            if weight_used == 'Distance':
-                ML.es[ML.get_eid(u,v)]['weight'] = float(1)
-            elif weight_used == 'pSimilarity':
-                ML.es[ML.get_eid(u,v)]['weight'] = float(10)
+            ML.es[ML.get_eid(u,v)]['distance']   = float(1)
+            ML.es[ML.get_eid(u,v)]['sim']        = float(1)
+            ML.es[ML.get_eid(u,v)]['p_distance'] = -1*math.log(1, 10)
+            ML.es[ML.get_eid(u,v)]['p_sim']      = -1*math.log(1, 10)
 
     print(f'Predictions done! Time elapsed: {datetime.datetime.now() - time}')
