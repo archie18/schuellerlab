@@ -33,8 +33,8 @@ def createGraph(df, type):
         type (str):            Type of graph.
     """
     # See if dataframe has attributes columns
-    attr_column=bool(len(df.columns)>2)
-    if attr_column:
+    attr_column=list(df.columns)
+    if len(attr_column)>2:
         if 'weight' in df.columns:
             df['len'] = df['weight']
         else:
@@ -250,9 +250,6 @@ if __name__ == '__main__':
     df           = pd.read_csv(args.input, sep=args.sep, names=['S','T','weight'])
     df           = df.fillna(1)
     df           = df[df['S'] != df['T']]
-    df['weight'] = df[df['weight']>0]
-    df['len']    = df['weight']
-    df.sort_values(by =['S', 'T'], inplace = True)
     df.drop_duplicates(inplace=True)
 
     # Create and draw graph
