@@ -1,17 +1,19 @@
-#!/usr/bin/env python3
-# = buildGraph.py ==============================================================
+#!/usr/bin/env python
 #
-# Build multilayered graph used in predictive model
-#
+# = nx_buildGraph.py ==============================================================
 # by Carlos Vigil, Andreas Schuller
 #
-# History
-# 0.1   CVV     First working version
-# 0.2   CVV     Added "information filtering" to layer creation
+# Constructor de red heterogenea para la predicción de interacciones
+# proteína-ligando. Recibe archivos de interacción con la distancia entre cada par
+# de nodos y devuelve archivo GRAPHML de la red construida.
+#
+# HISTORY:   0.2   CVV  2020.04.06  Edge weights now are "distance", "sim", "p_distance" & "p_sim" and removed information filtering at creation of graph (moved to prediction side of the method), fixed bugs
+#            0.1   CVV              Added "information filtering" to layer creation
+#            0.0   CVV              First version
 # ==============================================================================
 
-__title__   = 'buildGraph.py - Create multilayer graph for DTI predictions'
 __version__ = 0.2
+__title__   = f'nx_buildGraph.py - Create multilayer graph for DTI predictions. (v{__version__})'
 
 import sys
 import math
@@ -45,7 +47,6 @@ def getDefaults(write=False):
             'Interactions 1 adjacency matrix'      : '',
             'Interactions 1 node lookup table'     : '',
             'Output graph file'                    : './graph.gpickle'}
-    config['Options'] = {'Edge weight'             : 'Tc'}
 
     if write:
         with open('build_example.ini','w+') as configfile:
@@ -57,7 +58,7 @@ def getDefaults(write=False):
 def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False, cutoff='False'):
     """Convert edge list text file or dataframe into layer of network.
 
-    Read tab-separated edge list file to into memory and create a Layer of
+    Read tab-separated edge list file to memory and create a Layer of
     the multilayered graph used for DTI prediction.
 
     Args:
@@ -86,40 +87,22 @@ def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False, cutoff='Fal
     edgelist['relation'] = str(layer_name[0]*2).upper()
 
     # Edge weighting
-    edgelist['weight']   = edgelist['weight'].fillna(value=1.0)
-    edgelist['sim']      = 1-edgelist['weight']
-
-    if config.get('Options','Edge weight') == 'pTc':
-        edgelist['weight'] = edgelist['sim'].apply(p_weight)
+    edgelist['distance']   = edgelist['weight'].fillna(value=1.0)
+    edgelist['sim']        = 1-edgelist['weight'].fillna(value=0.0)
+    edgelist['p_distance'] = edgelist['distance'].apply(p_weight)
+    edgelist['p_sim']      = edgelist['sim'].apply(p_weight)
 
     # Create graph from 'edgelist'.
     L = nx.from_pandas_edgelist(edgelist, \
             source='source', target='target', \
-            edge_attr=['weight','sim','relation'])
+            edge_attr=['distance','sim','p_distance','p_sim','relation'])
     L.remove_edges_from(list(nx.selfloop_edges(L)))
-
-
-    # Reduce edges from layer
-    if cutoff != 'False':
-        # Get sparsest graph
-        if cutoff == 'sparsest':
-            mst_edges        = nx.minimum_spanning_edges(L, weight='weight', data=True)
-            mst_edges_weight = [float(d['weight']) for u,v,d in mst_edges]
-            max_weight       = max(mst_edges_weight)
-        # Get graph composed from x% of edges
-        elif 0.0 < float(cutoff) < 1.0:
-            edge_weights = [float(d['weight']) for u,v,d in L.edges(data=True)]
-            max_weight   = float(cutoff)
-
-        L.remove_edges_from([(u,v) for u,v,d in L.edges(data=True) if d['sim']>=max_weight])
-
 
     # Add name to graph and nodes.
     if '-' not in layer_name:
         L.name = layer_name
         nx.set_node_attributes(L, layer_name, 'layer')
 
-    nx.write_gpickle(L, f'./{layer_name}.gpickle')
     return L
 
 def MatrixToEdgelist(matrix_file, lookup_table, layer_name='Null',cutoff=False):
@@ -149,12 +132,11 @@ def MatrixToEdgelist(matrix_file, lookup_table, layer_name='Null',cutoff=False):
                     weight.append(float(w))
 
     edgelist = pd.DataFrame({'source': source, 'target': target, 'weight': weight})
-    edgelist.to_csv(matrix_file+'.edgelist.tsv', sep='\t', header=None, index=False)
+    edgelist.to_csv(matrix_file+'.edgelist', sep='\t', header=None, index=False)
     return EdgelistToLayer(df=edgelist, layer_name=layer_name, cutoff=cutoff)
 
 if __name__ == '__main__':
     print(__title__)
-    verbose = True
 
     # Read configuration file
     config = getDefaults()
@@ -169,7 +151,6 @@ if __name__ == '__main__':
         edgelist_file = config.get('I/O',f'Layer {n_layer} edge list')
         matrix_file   = config.get('I/O',f'Layer {n_layer} distance matrix')
         lookup_file   = config.get('I/O',f'Layer {n_layer} node lookup table')
-        info_cutoff   = config.get('Options','Information cutoff')
 
         # Create layer and assign node typing based in layer name
         print(f'Building layer #{n_layer}: {name}')
