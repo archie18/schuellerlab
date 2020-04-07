@@ -13,7 +13,7 @@
 #           0.0    CVV              First version
 # =============================================================
 
-__version__ = 0.2.1
+__version__ = '0.2.1'
 __title__   = f'nx_SP.py - Shortest path graph-based predictions. (v{__version__})'
 
 import os
@@ -26,10 +26,10 @@ from multiprocessing import Pool
 from configparser import ConfigParser
 
 edge_weights_options = {
-        'Distance'    = 'distance',
-        'pDistance'   = 'p_distance',
-        'Similarity'  = 'sim',
-        'pSimilarity' = 'p_sim'}
+        'Distance'    : 'distance',
+        'pDistance'   : 'p_distance',
+        'Similarity'  : 'sim',
+        'pSimilarity' : 'p_sim'}
 
 def getFoldRelations(n1):
     """Get list of edges to predict in fold.
@@ -76,12 +76,23 @@ def predictRelation(inputs):
         path_length  = 'NaN'
         score        = -99
 
+    '''
+    print(ML.vs[source_node]['fold'], \
+           ML.vs[source_node]['id'], \
+           ML.vs[target_node]['id'], \
+           str(score), \
+           '-'.join(path_ids), \
+           '-'.join([str(w) for w in path_weights]), \
+           str(bool((source_node,target_node) in fold_relations)), \
+           str(path_length))
+    '''
+
     return ML.vs[source_node]['fold'], \
            ML.vs[source_node]['id'], \
            ML.vs[target_node]['id'], \
            str(score), \
            '-'.join(path_ids), \
-           '-'.join([str(w) for w in path_similarity]), \
+           '-'.join([str(w) for w in path_weights]), \
            str(bool((source_node,target_node) in fold_relations)), \
            str(path_length)
 
@@ -135,7 +146,7 @@ if __name__ == '__main__':
         elif 0.0 < float(sim_cutoff) < 1.0:
             max_weight   = float(sim_cutoff)
 
-        ML.remove_edges_from([(u,v) for u,v,d in ML.edges(data=True) if d['sim']<max_weight])
+        ML.delete_edges([(u,v) for u,v,d in ML.edges(data=True) if d['sim']<max_weight])
 
     # Generate predictions
     time        = datetime.datetime.now()
@@ -146,7 +157,6 @@ if __name__ == '__main__':
     weight_used = edge_weights_options[config.get('Options','Edge weight')]
 
     for fold in tqdm(range(fold_count), total=fold_count):
-        print(f'Generating predictions for fold {fold}')
         fold_source_nodes = [n.index for n in ML.vs \
                                      if  n['layer']==source_layer and \
                                          n['fold']==fold]
@@ -161,8 +171,6 @@ if __name__ == '__main__':
         delete_edges2predict.close()
         fold_relations = [item for sublist in fold_relations for item in sublist]
         ML.delete_edges(fold_relations)
-
-        print(f'Fold {fold} "{rel2pred}" edges: {len(fold_relations)}')
 
         ## Calculate clusters/communities for graph
         #communities = ML.community_infomap(edge_weights='weight')
@@ -185,10 +193,10 @@ if __name__ == '__main__':
         ML.add_edges(fold_relations)
         for u,v in fold_relations:
             # Restore edge information to deleted DTI
-            ML.es[ML.get_eid(u,v)]['relation'] = rel2pred
+            ML.es[ML.get_eid(u,v)]['relation']   = rel2pred
             ML.es[ML.get_eid(u,v)]['distance']   = float(1)
-            ML.es[ML.get_eid(u,v)]['sim']        = float(1)
-            ML.es[ML.get_eid(u,v)]['p_distance'] = -1*math.log(1, 10)
-            ML.es[ML.get_eid(u,v)]['p_sim']      = -1*math.log(1, 10)
+            ML.es[ML.get_eid(u,v)]['sim']        = float(0)
+            ML.es[ML.get_eid(u,v)]['p_distance'] = float(0)
+            ML.es[ML.get_eid(u,v)]['p_sim']      = float(10)
 
     print(f'Predictions done! Time elapsed: {datetime.datetime.now() - time}')
