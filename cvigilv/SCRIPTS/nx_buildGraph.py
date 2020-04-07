@@ -55,7 +55,7 @@ def getDefaults(write=False):
         return config
 
 
-def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False, cutoff='False'):
+def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False):
     """Convert edge list text file or dataframe into layer of network.
 
     Read tab-separated edge list file to memory and create a Layer of
@@ -65,13 +65,12 @@ def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False, cutoff='Fal
         edgelist_file (str, optional):   Edge list file path.
         df (pandas DataFrame, optional): Edge list dataframe.
         layer_name (str, optional):      Name of layer.
-        cutoff (float or str, optional): Parameter to used for information reduction.
     """
     def p_weight(pd_box):
         if float(pd_box) == 0.0:
             return float(10)
         else:
-            return -1*math.log(float(pd_box),10)
+            return -1*math.log(float(pd_box))
 
     # Create 'edgelist' dataframe from file or used dataframe given in arguments.
     if edgelist_file:
@@ -88,7 +87,7 @@ def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False, cutoff='Fal
 
     # Edge weighting
     edgelist['distance']   = edgelist['weight'].fillna(value=1.0)
-    edgelist['sim']        = 1-edgelist['weight'].fillna(value=0.0)
+    edgelist['sim']        = 1-edgelist['distance']
     edgelist['p_distance'] = edgelist['distance'].apply(p_weight)
     edgelist['p_sim']      = edgelist['sim'].apply(p_weight)
 
@@ -105,7 +104,7 @@ def EdgelistToLayer(edgelist_file=False, df=False, layer_name=False, cutoff='Fal
 
     return L
 
-def MatrixToEdgelist(matrix_file, lookup_table, layer_name='Null',cutoff=False):
+def MatrixToEdgelist(matrix_file, lookup_table, layer_name='Null'):
     """Convert matrix into a layer of the network.
 
     Read a tab-delimited matrix text file into memory, using given lookup table
@@ -155,9 +154,9 @@ if __name__ == '__main__':
         # Create layer and assign node typing based in layer name
         print(f'Building layer #{n_layer}: {name}')
         if edgelist_file != '':
-            L = EdgelistToLayer(edgelist_file, layer_name=name, cutoff=info_cutoff)
+            L = EdgelistToLayer(edgelist_file, layer_name=name)
         elif matrix_file != '' and lookup_file != '':
-            L = MatrixToEdgelist(matrix_file, lookup_file, layer_name=name, cutoff=info_cutoff)
+            L = MatrixToEdgelist(matrix_file, lookup_file, layer_name=name)
         print(nx.info(L))
         Layers.append(L); Layers_names.append(name)
 
