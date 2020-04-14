@@ -138,20 +138,20 @@ if __name__ == '__main__':
 
     # Reduce edges from layer
     sim_cutoff = config.get('Options', 'Similarity cutoff')
+    rel2pred    = config.get('Options', 'Relation to predict')
     if sim_cutoff != 'False':
         if sim_cutoff == 'Sparsest':
-            mst_edges        = nx.maximum_spanning_edges(ML, weight='sim', data=True)
-            mst_edges_weight = [float(d['sim']) for u,v,d in mst_edges]
-            max_weight       = max(mst_edges_weight)
+            mst_edges        = ML.spanning_tree(weights='distance',return_tree=False)
+            mst_edges_weight = [ML.es[e]['sim'] for e in mst_edges if ML.es[e]['relation'] != rel2pred]
+            max_weight       = min(mst_edges_weight)
         elif 0.0 < float(sim_cutoff) < 1.0:
             max_weight   = float(sim_cutoff)
 
-        ML.delete_edges([(u,v) for u,v,d in ML.edges(data=True) if d['sim']<max_weight])
+        ML.delete_edges([e for e in ML.es if e['sim']<max_weight])
 
     # Generate predictions
     time        = datetime.datetime.now()
     out_file    = open(config.get('I/O','Output predictions file'),"w+")
-    rel2pred    = config.get('Options', 'Relation to predict')
     n_processes = config.getint('I/O', 'Number of parallel processes')
     n_chunks    = config.getint('I/O', 'Number of chunks per process')
     weight_used = edge_weights_options[config.get('Options','Edge weight')]
