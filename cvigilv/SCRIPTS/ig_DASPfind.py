@@ -44,19 +44,29 @@ def predictRelation(inputs):
                                     cutoff = config.getint('Options','Steps cutoff'))
 
     # Calculate score and metrics of shortest path
-    for path in paths:
-        path_weights = [ML.es[e]['sim'] for e in path]
-        path_length  = len(path_weights)
-        path_score   = np.prod(path_weights)**(2.26*path_length)
-        score += path_score
+    if len(paths) == 0:
+        return ML.vs[source_node]['fold'], \
+               ML.vs[source_node]['id'], \
+               ML.vs[target_node]['id'], \
+               str(-99), \
+               0, \
+               '', \
+               str(TP)
+    else:
 
-    return ML.vs[source_node]['fold'], \
-           ML.vs[source_node]['id'], \
-           ML.vs[target_node]['id'], \
-           str(score), \
-           len(paths), \
-           '', \
-           str(TP)
+        for path in paths:
+            path_weights = [ML.es[e]['sim'] for e in path]
+            path_length  = len(path_weights)
+            path_score   = np.prod(path_weights)**(2.26*path_length)
+            score += path_score
+
+        return ML.vs[source_node]['fold'], \
+               ML.vs[source_node]['id'], \
+               ML.vs[target_node]['id'], \
+               str(score), \
+               len(paths), \
+               '', \
+               str(TP)
 
 if __name__ == '__main__':
     print(__title__)
@@ -122,9 +132,8 @@ if __name__ == '__main__':
     out_file    = open(config.get('I/O','Output predictions file'),"w+")
     n_processes = config.getint('I/O', 'Number of parallel processes')
     n_chunks    = config.getint('I/O', 'Number of chunks per process')
-    weight_used = edge_weights_options[config.get('Options','Edge weight')]
 
-    source_nodes = [n.index for n in source_node]
+    source_nodes = [n.index for n in source_nodes]
     edges2predict= [(n1,n2) for n1 in source_nodes for n2 in target_nodes]
 
     # Iterate over all possible 'rel2pred' edges
