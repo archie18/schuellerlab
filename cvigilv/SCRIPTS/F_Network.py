@@ -1,5 +1,14 @@
 #!/usr/bin/env python
 # coding: utf-8
+# =============================================================
+# F_Network.py
+# by Carlos Vigil, Andreas Schüller
+#
+# Create pretty graph for dataset.
+#
+# HISTORY: 0.1 CVV 2020.04.17 Added dynamic legend creation, added highlighting for bipartite graphs
+#          0.0 CVV ¿?  First version
+# =============================================================
 
 import os
 import community as cmt
@@ -15,7 +24,7 @@ from networkx.drawing.nx_agraph import graphviz_layout
 from matplotlib.lines import Line2D
 from argparse import ArgumentParser
 
-__version__ = '0.0'
+__version__ = '0.1'
 __title__ = 'F_Network.py - version {}'.format(__version__)
 
 def createGraph(df, type):
@@ -122,7 +131,7 @@ def drawGraph(G, output, type, layout, figsize, highlight, community):
                     cmap       = plt.get_cmap('rainbow'),
                     node_shape = "o",
                     alpha      = 1.0)
-            legend = [Line2D([0],[0],marker='o',color='w',label='Node', markerfacecolor='black')]
+            legend.append(Line2D([0],[0],marker='o',color='w',label='Node', markerfacecolor='black'))
         else:
             if type == 'bipartite':
                 # Create list of nodes based in type
@@ -184,8 +193,8 @@ def drawGraph(G, output, type, layout, figsize, highlight, community):
                         alpha      = 1.0)
 
                 # Add legend entry
-                legend = [Line2D([0],[0],marker='o',color='w',label='Source', markerfacecolor='#6395c8', markeredgecolor='#296eb4'),
-                          Line2D([0],[0],marker='s',color='w',label='Target', markerfacecolor='#fdcb6a', markeredgecolor='#fdb833')]
+                legend.append(Line2D([0],[0],marker='o',color='w',label='Source', markerfacecolor='#6395c8', markeredgecolor='#296eb4'))
+                legend.append(Line2D([0],[0],marker='s',color='w',label='Target', markerfacecolor='#fdcb6a', markeredgecolor='#fdb833'))
             else:
                 # Draw nodes
                 nx.draw_networkx_nodes(g,
@@ -196,24 +205,53 @@ def drawGraph(G, output, type, layout, figsize, highlight, community):
                         node_shape = "o",
                         alpha      = 1.0)
 
-                legend = [Line2D([0],[0],marker='o',color='w',label='Node', markerfacecolor='#6395c8', markeredgecolor='#296eb4')]
+                legend.append(Line2D([0],[0],marker='o',color='w',label='Node', markerfacecolor='#6395c8', markeredgecolor='#296eb4'))
         # Draw highlighted nodes
         if highlight != None:
-            highlight = [n for n in highlight if n in g.nodes()]
-            nx.draw_networkx_nodes(g,
-                    pos,
-                    nodelist   = highlight,
-                    node_size  = 30,
-                    node_color = '#8159cc',
-                    edgecolors = '#5e4195',
-                    node_shape = "*",
-                    alpha      = 1.0)
-            legend.append(Line2D([0],[0],marker='*',color='w',label='Highlighted node', markerfacecolor='#8159cc', markeredgecolor='#5e4195'))
+            if type == 'bipartite':
+                # Create list of nodes based in type
+                s_hl_nodes = [n for n,d in g.nodes(data=True) if d['type_of_node']=='source' and n in highlight]
+                t_hl_nodes = [n for n,d in g.nodes(data=True) if d['type_of_node']=='target' and n in highlight]
+
+                # Draw bipartite nodes
+                nx.draw_networkx_nodes(g,
+                        pos,
+                        nodelist   = s_hl_nodes,
+                        node_size  = 10,
+                        node_color = '#8159cc',
+                        edgecolors = '#5e4195',
+                        node_shape = "o",
+                        alpha      = 1.0)
+                nx.draw_networkx_nodes(g,
+                        pos,
+                        nodelist   = t_hl_nodes,
+                        node_size  = 10,
+                        node_color = '#8159cc',
+                        edgecolors = '#5e4195',
+                        node_shape = "s",
+                        alpha      = 1.0)
+
+                # Add legend entry
+                legend.append(Line2D([0],[0],marker='o',color='w',label='Highlighted source', markerfacecolor='#8159cc', markeredgecolor='#5e4195'))
+                legend.append(Line2D([0],[0],marker='s',color='w',label='Highlighted target', markerfacecolor='#8159cc', markeredgecolor='#5e4195'))
+
+
+            else:
+                highlight_nodes = [n for n in highlight if n in g.nodes()]
+                nx.draw_networkx_nodes(g,
+                        pos,
+                        nodelist   = highlight_nodes,
+                        node_size  = 500,
+                        node_color = '#8159cc',
+                        edgecolors = '#5e4195',
+                        node_shape = "*",
+                        alpha      = 1.0)
+                legend.append(Line2D([0],[0],marker='*',color='w',label='Highlighted node', markerfacecolor='#8159cc', markeredgecolor='#5e4195'))
 
     plt.axis('off')
 
     legend.append(Line2D([0], [0], color='black', lw=1, label='Edge'))
-    plt.legend(title='Objects',handles=legend, bbox_to_anchor=(1.05,1), loc="upper left")
+    plt.legend(handles=legend,title='Objects', bbox_to_anchor=(1.05,1), loc="upper left")
     plt.savefig(output, bbox_inches='tight', dpi = 300)
     plt.cla()
 
