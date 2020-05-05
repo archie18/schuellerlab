@@ -38,23 +38,31 @@ def predictRelation(inputs):
     target_node = inputs[1]
     score = 0
 
-    # Get shortest path from source to target node
+    # Get all simple paths from source node to target node
     paths = ML.get_all_simple_paths(v      = source_node, \
                                     to     = target_node, \
                                     cutoff = config.getint('Options','Steps cutoff'))
 
-    # Calculate score and metrics of shortest path
+    # Calculate score and metrics for prediction
     if len(paths) == 0:
+        # If no path found, use dummy values
+        path_ids     = [source_node,'Null',target_node]
+        path_edges   = 'NaN'
+        path_weights = 'NaN'
+        path_length  = 'NaN'
+        score        = 0
+
         return ML.vs[source_node]['fold'], \
                ML.vs[source_node]['id'], \
                ML.vs[target_node]['id'], \
-               str(-99), \
+               str(0), \
                0, \
                '', \
                str(TP)
-    else:
 
+    else:
         for path in paths:
+            path_edges   = [ML.get_eid(u,v) for u,v in list(zip(path[:-1],path[1:]))]
             path_weights = [ML.es[e]['sim'] for e in path]
             path_length  = len(path_weights)
             path_score   = np.prod(path_weights)**(2.26*path_length)
@@ -67,6 +75,7 @@ def predictRelation(inputs):
                len(paths), \
                '', \
                str(TP)
+
 
 if __name__ == '__main__':
     print(__title__)
@@ -81,7 +90,7 @@ if __name__ == '__main__':
     rel2pred    = config.get('Options', 'Relation to predict')
 
     # Set LT relation to 1
-    print('Changing {rel2pred} similarity weight for')
+    print(f'Changing {rel2pred} similarity weight for 1')
     for e in ML.es:
         if e['relation'] == 'LT':
             e['sim'] = 1
