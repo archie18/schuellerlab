@@ -132,7 +132,7 @@ def MatrixToEdgelist(matrix_file, lookup_table, layer_name='Null'):
 
     edgelist = pd.DataFrame({'source': source, 'target': target, 'weight': weight})
     edgelist.to_csv(matrix_file+'.edgelist', sep='\t', header=None, index=False)
-    return EdgelistToLayer(df=edgelist, layer_name=layer_name, cutoff=cutoff)
+    return EdgelistToLayer(df=edgelist, layer_name=layer_name)
 
 if __name__ == '__main__':
     print(__title__)
