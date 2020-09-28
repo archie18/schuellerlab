@@ -65,7 +65,7 @@ if __name__ == '__main__':
     source_layer     = config.get('Options', 'Source layer')
     target_layer     = config.get('Options', 'Target layer')
     rel2pred         = config.get('Options', 'Relation to predict')
-    n_processes      = 2
+    n_processes      = 4
 
     # Read multilayered graph into memory and get some info from it
     print('Reading multilayered graph into memory')

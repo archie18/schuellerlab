@@ -275,13 +275,14 @@ def main():
             print("Comenzando a leer archivo "+filename+" Waiting ...")
             sys.stdout.flush()
             for line in file:
-                foo = {'False':0, 'True':1}
+                foo = {'False':0.0, 'True':1.0}
                 tokens = line.rstrip().split('\t')
                 fold = tokens[0]
                 ligid = tokens[1]
                 targid = tokens[2]
                 yp = float(tokens[3])
-                yt = foo[tokens[6]] ## Change: int to float
+                #yt = foo[tokens[6]] ## Change: int to float
+                yt = float(tokens[6]) ## Change: int to float
                 
                 # Set groupby variable according to mode
                 if args.mode == 0:
@@ -294,7 +295,7 @@ def main():
                     groupby = targid # Group by target
                     
                 # Fill containers
-                if yp != -99 and (not args.filter or idx < len(filenames)-1 or ligid in filterids):
+                if yp != 0 and (not args.filter or idx < len(filenames)-1 or ligid in filterids):
                     #print("Ligand: "+ligid)
                     #print("Target: "+targid)
                     #print("Fold: "+str(fold))

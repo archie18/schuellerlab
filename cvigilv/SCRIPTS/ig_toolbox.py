@@ -30,10 +30,10 @@ def getFoldRelations(G, n1):
 
 # Calculate clusters/communities for graph
 def getCommunities(Graph):
-    communities = G.community_infomap(edge_weights='weight')
+    communities = Graph.community_infomap(edge_weights='weight')
     for n_comm, community in enumerate(communities):
         for node in community:
-            G.vs[node]['community'] = n_comm
+            Graph.vs[node]['community'] = n_comm
 
 # Scoring functions
 def ScoringFunction(score_func, path_nodes, path_edges, weights='distance', alpha=1.0):
@@ -157,7 +157,7 @@ def DASPfind(G, node_pair, fold_annotations, cutoff=3):
         score = 0
         for path in paths:
             path_edges   = [G.get_eid(u,v) for u,v in list(zip(path[:-1],path[1:]))]
-            path_weights = [G.es[e]['sim'] for e in path]
+            path_weights = [G.es[e]['sim'] for e in path_edges]
             path_length  = len(path_weights)
             path_score   = np.prod(path_weights)**(2.26*path_length)
             score        += path_score

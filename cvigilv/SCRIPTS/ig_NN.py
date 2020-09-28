@@ -14,6 +14,7 @@ __title__   = f'nx_SP.py - Shortest path graph-based predictions. (v{__version__
 
 import sys
 import math
+import random
 import datetime
 import numpy as np
 import pandas as pd
@@ -80,7 +81,11 @@ if __name__ == '__main__':
 
     # Assign fold to source layer nodes
     print(f'Assigning fold to the nodes in layer "{source_layer}"')
-    for i, n in enumerate([n for n in ML.vs if n['layer']==source_layer]):
+    seed      = config.getint('Options','Seed')
+    EDGES = [n for n in ML.vs if n['layer']==source_layer]
+    random.seed(seed)
+    random.shuffle(EDGES)
+    for i, n in enumerate(EDGES):
         n['fold'] = i % 10
     # This snippet is used to validate if the script is predicting correctly
     #with open('/home/cvigilv/Repos/schuellerlab/cvigilv/EXTRAS/correctFolds.csv') as folds_file:
