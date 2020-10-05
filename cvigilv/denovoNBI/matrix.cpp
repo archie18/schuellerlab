@@ -3,13 +3,13 @@
 using namespace std;
 
 // Initialize a matrix of size MxN with a default value of X
-Matrix::Matrix(unsigned int rowSize, unsigned int colSize, double initialValue){
+Matrix::Matrix(unsigned rowSize, unsigned colSize, double initialValue){
 	m_rowSize = rowSize;
 	m_colSize = colSize;
-	m_matrix.resize(rowSize);
+	m_data.resize(rowSize);
 
 	for (unsigned i = 0; i < rowSize; i++){
-		m_matrix[i].resize(colSize, initialValue);
+		m_data[i].resize(colSize, initialValue);
 	}
 }
 
@@ -54,14 +54,14 @@ Matrix::Matrix(const char * fileName){
 	// Populate matrix with values stores in temporary vector
 	int j;
 	idx = 0;
-	m_matrix.resize(rowSize);
-	for (unsigned i = 0; i < m_matrix.size(); i++){
-		m_matrix[i].resize(colSize);
+	m_data.resize(rowSize);
+	for (unsigned i = 0; i < m_data.size(); i++){
+		m_data[i].resize(colSize);
 	}
 
 	for (int i = 0; i < rowSize; i++){
 		for (j = 0; j < colSize; j++){
-			this->m_matrix[i][j] = vector_A[idx];
+			this->m_data[i][j] = vector_A[idx];
 			idx++;
 		}
 	}
@@ -71,22 +71,26 @@ Matrix::Matrix(const char * fileName){
 	delete [] vector_A;		// Delete temporary vector
 }
 
-// Initialize a matrix of size MxN with a probability of having an edge of P
-Matrix Matrix::Random(unsigned rowSize, unsigned colSize, double probability){
-	Matrix R(m_colSize, m_rowSize, 0.0);
-	unsigned i,j;
+// Populate matrix with ones with a given probability
+Matrix Matrix::Randomize(double probability) const{
+	if (probability >= 0.0 && probability <= 1.0){
+		Matrix R(m_colSize, m_rowSize, 0.0);
+		unsigned i,j;
 
-	for (i = 0; i < m_rowSize; i++) {
-		for (j = 0; j < m_colSize; j++) {
-			int randomNumber = rand() % 100;
+		for (i = 0; i < m_rowSize; i++) {
+			for (j = 0; j < m_colSize; j++) {
+				double randomNumber = (rand() % 100) / 100;
 			
-			if (randomNumber < probability*100){
-				R(i,j) = this->m_matrix[i][j] + 1;
-			};
+				if (randomNumber < probability){
+					R(i,j) = 1;
+				};
+			}
 		}
+		return R;
+	} else {
+		cout << "[ERROR] Randomizer probability must be between 0.0 and 1.0" << endl;
+		return 0;
 	}
-	
-	return R;
 }
 
 // Write matrix to file
@@ -97,7 +101,7 @@ void Matrix::write(const char * filePath, const char separator = ' ') const{
 
 	for (i = 0; i < m_rowSize; i++) {
 		for (j = 0; j < m_colSize; j++) {
-			outputFile << this->m_matrix[i][j] << separator;
+			outputFile << this->m_data[i][j] << separator;
 		}
 		outputFile << endl;
 	}
@@ -112,7 +116,7 @@ Matrix Matrix::operator+(Matrix &B){
 
 	for (i = 0; i < m_rowSize; i++){
 		for (j = 0; j < m_colSize; j++){
-			Sum(i,j) = this->m_matrix[i][j] + B(i,j);
+			Sum(i,j) = this->m_data[i][j] + B(i,j);
 		}
 	}
 	return Sum;
@@ -125,7 +129,7 @@ Matrix Matrix::operator-(Matrix & B){
 
 	for (i = 0; i < m_rowSize; i++){
 		for (j = 0; j < m_colSize; j++){
-			Difference(i,j) = this->m_matrix[i][j] - B(i,j);
+			Difference(i,j) = this->m_data[i][j] - B(i,j);
 		}
 	}
 	
@@ -145,7 +149,7 @@ Matrix Matrix::operator*(Matrix & B){
 				temp = 0.0;
 				for (k = 0; k < m_colSize; k++)
 				{
-					temp += m_matrix[i][k] * B(k,j);
+					temp += m_data[i][k] * B(k,j);
 				}
 				Product(i,j) = temp;
 			}
@@ -162,7 +166,7 @@ Matrix Matrix::transpose(){
 
 	for (unsigned i = 0; i < m_colSize; i++){
 		for (unsigned j = 0; j < m_rowSize; j++) {
-			Transpose(i,j) = this->m_matrix[j][i];
+			Transpose(i,j) = this->m_data[j][i];
 		}
 	}
 
@@ -176,7 +180,7 @@ Matrix Matrix::operator+(double constant){
 
 	for (i = 0; i < m_rowSize; i++){
 		for (j = 0; j < m_colSize; j++){
-			Result(i,j) = this->m_matrix[i][j] + constant;
+			Result(i,j) = this->m_data[i][j] + constant;
 		}
 	}
 
@@ -190,7 +194,7 @@ Matrix Matrix::operator-(double constant){
 
 	for (i = 0; i < m_rowSize; i++){
 		for (j = 0; j < m_colSize; j++){
-			Result(i,j) = this->m_matrix[i][j] - constant;
+			Result(i,j) = this->m_data[i][j] - constant;
 		}
 	}
 
@@ -204,7 +208,7 @@ Matrix Matrix::operator*(double constant){
 
 	for (i = 0; i < m_rowSize; i++){
 		for (j = 0; j < m_colSize; j++){
-			Result(i,j) = this->m_matrix[i][j] * constant;
+			Result(i,j) = this->m_data[i][j] * constant;
 		}
 	}
 
@@ -220,7 +224,7 @@ Matrix Matrix::operator/(double constant){
 	{
 		for (j = 0; j < m_colSize; j++)
 		{
-			Result(i,j) = this->m_matrix[i][j] / constant;
+			Result(i,j) = this->m_data[i][j] / constant;
 		}
 	}
 	return Result;
@@ -228,7 +232,7 @@ Matrix Matrix::operator/(double constant){
 
 // Returns value of given location when asked in the form A(x,y)
 double& Matrix::operator()(const unsigned & rowNumber, const unsigned & columnNumber){
-	return this->m_matrix[rowNumber][columnNumber];
+	return this->m_data[rowNumber][columnNumber];
 };
 
 // Return number of rows in matrix
@@ -249,10 +253,10 @@ tuple<unsigned, unsigned> Matrix::getSize() const {
 */
 
 // Pretty print the matrix
-void Matrix::print() const {
-	for (unsigned i = 0; i < m_rowSize; i++) {
-		for (unsigned j = 0; j < m_colSize; j++) {
-			cout << this -> m_matrix[i][j] << " ";
+void Matrix::print() const{
+	for (int i = 0; i < m_rowSize; i++) {
+		for (int j = 0; j < m_colSize; j++) {
+			cout << this -> m_data[i][j] << " ";
 		}
 		cout << endl;
 	}
@@ -265,7 +269,7 @@ vector<unsigned> Matrix::neighbours(const unsigned & vertex,const char span = 'r
 	switch (span){
 		case 'c': // Neighbours spanning columns
 			for (int neighbour = 0; neighbour < this->m_rowSize; neighbour++){
-				if (this->m_matrix[neighbour][vertex] != 0){
+				if (this->m_data[neighbour][vertex] != 0){
 					neighbours.push_back(neighbour);
 				}
 			}
@@ -273,7 +277,7 @@ vector<unsigned> Matrix::neighbours(const unsigned & vertex,const char span = 'r
 
 		case 'r': // Neighbours spanning rows
 			for (int neighbour = 0; neighbour < this->m_colSize; neighbour++){
-				if (this->m_matrix[vertex][neighbour] != 0){
+				if (this->m_data[vertex][neighbour] != 0){
 					neighbours.push_back(neighbour);
 				}
 			}
