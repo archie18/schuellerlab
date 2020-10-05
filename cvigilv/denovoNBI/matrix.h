@@ -22,7 +22,7 @@ class Matrix {
 	
 	public:
 		// Matrix constructors
-		Matrix(unsigned, unsigned, double);
+		Matrix(unsigned int, unsigned int, double);
 		Matrix(const char *);
 
 		// Matriz Generators

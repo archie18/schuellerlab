@@ -3,7 +3,7 @@
 using namespace std;
 
 // Initialize a matrix of size MxN with a default value of X
-Matrix::Matrix(unsigned rowSize, unsigned colSize, double initialValue){
+Matrix::Matrix(unsigned int rowSize, unsigned int colSize, double initialValue){
 	m_rowSize = rowSize;
 	m_colSize = colSize;
 	m_matrix.resize(rowSize);
