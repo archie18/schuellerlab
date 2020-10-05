@@ -18,15 +18,15 @@ class Matrix {
 	private:
 		unsigned m_rowSize;
 		unsigned m_colSize;
-		vector<vector<double> > m_matrix;
+		vector<vector<double> > m_data;
 	
 	public:
 		// Matrix constructors
-		Matrix(unsigned int, unsigned int, double);
+		Matrix(unsigned, unsigned, double);
 		Matrix(const char *);
 
 		// Matriz Generators
-		Matrix Random(unsigned, unsigned, double) const;
+		Matrix Randomize(double) const;
 
 		// Matrix IO
 		void write(const char *, const char) const;
