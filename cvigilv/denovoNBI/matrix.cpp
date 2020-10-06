@@ -71,25 +71,35 @@ Matrix::Matrix(const char * fileName){
 	delete [] vector_A;		// Delete temporary vector
 }
 
+// Copy Constructor
+Matrix::Matrix(const Matrix &B){
+    this->m_colSize = B.getColumns();
+    this->m_rowSize = B.getRows();
+    this->m_data = B.m_data;
+}
+
+// Matrix destructor
+Matrix::~Matrix(){
+	// Don't know how to destruct this kind of data structures
+}
+
 // Populate matrix with ones with a given probability
-Matrix Matrix::Randomize(double probability) const{
+void Matrix::Randomize(double probability){
 	if (probability >= 0.0 && probability <= 1.0){
-		Matrix R(m_colSize, m_rowSize, 0.0);
 		unsigned i,j;
+		int P_e = probability*100;
 
 		for (i = 0; i < m_rowSize; i++) {
 			for (j = 0; j < m_colSize; j++) {
-				double randomNumber = (rand() % 100) / 100;
+				int randomNumber = rand() % 100;
 			
-				if (randomNumber < probability){
-					R(i,j) = 1;
+				if (randomNumber < P_e){
+					m_data[i][j] = 1;
 				};
 			}
 		}
-		return R;
 	} else {
 		cout << "[ERROR] Randomizer probability must be between 0.0 and 1.0" << endl;
-		return 0;
 	}
 }
 
@@ -111,7 +121,7 @@ void Matrix::write(const char * filePath, const char separator = ' ') const{
 
 // Addition of two matrices
 Matrix Matrix::operator+(Matrix &B){
-	Matrix Sum(m_colSize, m_rowSize, 0.0);
+	Matrix Sum(m_rowSize, m_colSize, 0.0);
 	unsigned i,j;
 
 	for (i = 0; i < m_rowSize; i++){
@@ -124,7 +134,7 @@ Matrix Matrix::operator+(Matrix &B){
 
 // Subtraction of two matrices
 Matrix Matrix::operator-(Matrix & B){
-	Matrix Difference(m_colSize, m_rowSize, 0.0);
+	Matrix Difference(m_rowSize, m_colSize, 0.0);
 	unsigned i,j;
 
 	for (i = 0; i < m_rowSize; i++){
@@ -187,6 +197,7 @@ Matrix Matrix::operator+(double constant){
 	return Result;
 }
 
+
 // Element-wise substraction between matrix and constant
 Matrix Matrix::operator-(double constant){
 	Matrix Result(m_rowSize,m_colSize,0.0);
@@ -230,6 +241,49 @@ Matrix Matrix::operator/(double constant){
 	return Result;
 }
 
+// Element-wise addition between matrix and constant
+void Matrix::operator+=(double constant){
+	unsigned i,j;
+
+	for (i = 0; i < m_rowSize; i++){
+		for (j = 0; j < m_colSize; j++){
+			this->m_data[i][j] += constant;
+		}
+	}
+}
+
+// Element-wise substraction between matrix and constant
+void Matrix::operator-=(double constant){
+	unsigned i,j;
+
+	for (i = 0; i < m_rowSize; i++){
+		for (j = 0; j < m_colSize; j++){
+			this->m_data[i][j] -= constant;
+		}
+	}
+}
+
+// Element-wise product between matrix and constant
+void Matrix::operator*=(double constant){
+	unsigned i,j;
+
+	for (i = 0; i < m_rowSize; i++){
+		for (j = 0; j < m_colSize; j++){
+			this->m_data[i][j] *= constant;
+		}
+	}
+}
+
+// Element-wise division between matrix and constant
+void Matrix::operator/=(double constant){
+	unsigned i,j;
+
+	for (i = 0; i < m_rowSize; i++){
+		for (j = 0; j < m_colSize; j++){
+			this->m_data[i][j] /= constant;
+		}
+	}
+}
 // Returns value of given location when asked in the form A(x,y)
 double& Matrix::operator()(const unsigned & rowNumber, const unsigned & columnNumber){
 	return this->m_data[rowNumber][columnNumber];
@@ -244,13 +298,6 @@ unsigned Matrix::getRows() const{
 unsigned Matrix::getColumns() const{
 	return this->m_colSize;
 };
-
-// Return a tuple of the number of rows and columns in matrix
-/*
-tuple<unsigned, unsigned> Matrix::getSize() const {
-	return make_tuple(this->m_rowSize, this->m_colSize);
-};
-*/
 
 // Pretty print the matrix
 void Matrix::print() const{
@@ -291,4 +338,15 @@ vector<unsigned> Matrix::neighbours(const unsigned & vertex,const char span = 'r
 unsigned Matrix::degree(const int & vertex, const char span = 'r') const{
 	vector<unsigned> neighbour_list = neighbours(vertex, span);
 	return neighbour_list.size();
+}
+
+// Get total number of edges
+unsigned Matrix::getAllEdges() const{
+	unsigned numberEdges = 0;
+	
+	for (unsigned row = 0; row < this->m_rowSize; row++){
+		numberEdges += degree(row);
+	}
+
+	return numberEdges;
 }

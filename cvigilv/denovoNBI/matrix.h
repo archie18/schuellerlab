@@ -24,9 +24,13 @@ class Matrix {
 		// Matrix constructors
 		Matrix(unsigned, unsigned, double);
 		Matrix(const char *);
+		Matrix(const Matrix &);
+
+		// Matrix destructors
+		~Matrix();
 
 		// Matriz Generators
-		Matrix Randomize(double) const;
+		void Randomize(double);
 
 		// Matrix IO
 		void write(const char *, const char) const;
@@ -42,6 +46,10 @@ class Matrix {
 		Matrix operator-(double);
 		Matrix operator*(double);
 		Matrix operator/(double);
+		void operator+=(double);
+		void operator-=(double);
+		void operator*=(double);
+		void operator/=(double);
 
 		// Aesthetic methods
 		double& operator()(const unsigned &, const unsigned &);
@@ -53,6 +61,7 @@ class Matrix {
 		// Graph methods
 		vector<unsigned> neighbours(const unsigned &, const char) const;
 		unsigned degree(const int &, const char) const;
+		unsigned getAllEdges() const;
 };
 
 #endif /* defined(__EE_242_Project_2__matrix__) */
